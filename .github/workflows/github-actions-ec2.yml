@@ -19,6 +19,8 @@ jobs:
           distribution: 'temurin'
       - name: Build with Maven
         run: mvn clean package
+      - name: list stuff
+        run: ls -al && pwd
   upload:
     name: SCP files to server
     needs: build
