@@ -20,7 +20,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
       - name: list stuff
-        run: ls -al && pwd
+        run: ls -al && pwd && ls -al ./target
       - name: SCP files via ssh key
         uses: appleboy/scp-action@master
         with:
@@ -39,5 +39,5 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
           SCRIPT_AFTER: |
+            killall java &&
             java -jar web-service-0.0.1-SNAPSHOT.jar &
-  
