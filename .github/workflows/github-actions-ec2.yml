@@ -47,5 +47,5 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
           SCRIPT_AFTER: |
-            java -jar web-service-0.0.1-SNAPSHOT.jar
+            java -jar web-service-0.0.1-SNAPSHOT.jar &
 
