@@ -27,7 +27,7 @@ public class VersionService {
         return AppVersionFactory.build(latestVersion);
     }
 
-    public static String getAppVersionFromFile(final String bundleId) throws IOException {
+    protected String getAppVersionFromFile(final String bundleId) throws IOException {
         String path = String.format("./version-properties/%s.properties", bundleId);
         Properties mainProperties = new Properties();
         FileInputStream file = new FileInputStream(path);
