@@ -28,11 +28,11 @@ public class VersionService {
     }
 
     protected String getAppVersionFromFile(final String bundleId) throws IOException {
-        String path = String.format("./version-properties/%s.properties", bundleId);
+        String path = "./version-properties/app-version.properties";
         Properties mainProperties = new Properties();
         FileInputStream file = new FileInputStream(path);
         mainProperties.load(file);
         file.close();
-        return mainProperties.getProperty("app.version");
+        return mainProperties.getProperty(String.format("%s.version", bundleId));
     }
 }
