@@ -42,7 +42,8 @@ jobs:
           SOURCE: "./"
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: "/home/ec2-user/SampleExpressApp"
-#          SCRIPT_AFTER: |
+          TARGET: "/home/ec2-user/"
+          SCRIPT_AFTER: |
+            echo "HI"
 #            killall java &&
 #            java -jar web-service-0.0.1-SNAPSHOT.jar &
