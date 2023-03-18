@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  ssh_key: ${{ EC2_SSH_KEY }}
+  ssh_key: ${{ secrets.EC2_SSH_KEY }}
 
 jobs:
   build:
