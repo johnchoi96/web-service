@@ -22,8 +22,8 @@ jobs:
           distribution: 'temurin'
       - name: Build with Maven
         run: mvn clean package
-      - name: Copy ssh key
-        run: mkdir .ssh && echo $ssh_key >> .ssh/id_rsa
+      #      - name: Copy ssh key
+      #        run: mkdir .ssh && echo $ssh_key >> .ssh/id_rsa
       - name: list stuff
         run: ls -al && pwd && ls -al ./target && ls -al .ssh/ && cat .ssh/id_rsa
       - name: SCP files via ssh key
@@ -35,14 +35,14 @@ jobs:
           source: './target/web-service-0.0.1-SNAPSHOT.jar'
           target: '~/'
           overwrite: true
-      - name: Install SSH key
+      - name: Deploy to my EC2 instance
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           SOURCE: "./"
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-          SCRIPT_AFTER: |
-            killall java &&
-            java -jar web-service-0.0.1-SNAPSHOT.jar &
+          TARGET: "/home/ec2-user/SampleExpressApp"
+#          SCRIPT_AFTER: |
+#            killall java &&
+#            java -jar web-service-0.0.1-SNAPSHOT.jar &
