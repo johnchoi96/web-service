@@ -25,7 +25,7 @@ jobs:
       #      - name: Copy ssh key
       #        run: mkdir .ssh && echo $ssh_key >> .ssh/id_rsa
       - name: list stuff
-        run: ls -al && pwd && ls -al ./target && ls -al .ssh/ && cat .ssh/id_rsa
+        run: ls -al && pwd && ls -al ./target
       - name: SCP files via ssh key
         uses: appleboy/scp-action@master
         with:
