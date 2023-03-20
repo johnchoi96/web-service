@@ -49,4 +49,4 @@ jobs:
 
       - name: SSH into EC2 instance and start Spring Boot app
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup java -jar target/web-service-0.0.1-SNAPSHOT.jar &; exit"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup java -jar target/$JAR_FILE &" -o ServerAliveInterval=60 -o ServerAliveCountMax=1
