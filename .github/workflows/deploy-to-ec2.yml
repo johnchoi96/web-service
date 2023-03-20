@@ -58,4 +58,4 @@ jobs:
 
       - name: Start web service
         if: always()
-        run: ssh staging 'java -jar target/$JAR_FILE &'
+        run: ssh staging 'nohup java -jar target/$JAR_FILE &'
