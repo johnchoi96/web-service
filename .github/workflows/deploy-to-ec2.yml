@@ -48,7 +48,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: "/home/ec2-user/"
-          SCRIPT_AFTER: |
+          SCRIPT_BEFORE: |
             echo "HI" >> something.txt
 #            killall java &&
 #            java -jar web-service-0.0.1-SNAPSHOT.jar &
