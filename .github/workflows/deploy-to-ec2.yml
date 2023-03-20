@@ -57,4 +57,5 @@ jobs:
         run: ssh staging 'killall java'
 
       - name: Start web service
+        if: always()
         run: ssh staging 'java -jar target/$JAR_FILE &'
