@@ -59,6 +59,6 @@ jobs:
         run: ssh staging 'rm $JAR_FILE'
       - name: Move executable JAR to root
         if: always()
-        run: ssh staging 'mv target/$JAR_FILE ~/'
+        run: ssh staging 'cp target/$JAR_FILE ~/'
       - name: Start web service
         run: ssh staging 'java -jar $JAR_FILE'
