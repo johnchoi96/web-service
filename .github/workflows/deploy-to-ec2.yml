@@ -35,6 +35,11 @@ jobs:
           source: './target/web-service-0.0.1-SNAPSHOT.jar'
           target: '~/'
           overwrite: true
+  run:
+    name: SSH to EC2
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to my EC2 instance
         uses: easingthemes/ssh-deploy@v2.1.5
         env:
@@ -44,6 +49,6 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: "/home/ec2-user/"
           SCRIPT_AFTER: |
-            echo "HI"
+            echo "HI" >> something.txt
 #            killall java &&
 #            java -jar web-service-0.0.1-SNAPSHOT.jar &
