@@ -35,20 +35,36 @@ jobs:
           source: './target/web-service-0.0.1-SNAPSHOT.jar'
           target: '~/'
           overwrite: true
-  run:
-    name: SSH to EC2
-    needs: build
+  deploy:
+    name: "Deploy to staging"
     runs-on: ubuntu-latest
+    needs: build
     steps:
-      - name: Deploy to my EC2 instance
-        uses: easingthemes/ssh-deploy@v2.1.5
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SOURCE: "./"
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: "/home/ec2-user/"
-          SCRIPT_BEFORE: |
-            echo "HI" >> something.txt
-#            killall java &&
-#            java -jar web-service-0.0.1-SNAPSHOT.jar &
+          SSH_USER: ${{ secrets.USERNAME }}
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_HOST: ${{ secrets.HOST_DNS }}
+
+      - name: echo something
+        run: ssh staging 'echo "HI" >> something.txt'
+#      - name: Stop the server
+#        run: ssh staging 'sudo systemctl stop my-application'
+#
+#      - name: Check out the source
+#        run: ssh staging 'cd my-application && git fetch && git reset --hard origin/master'
+#
+#      - name: Start the server
+#        if: ${{ always() }}
+#        run: ssh staging 'sudo systemctl start my-application'
