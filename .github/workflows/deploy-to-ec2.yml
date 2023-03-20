@@ -55,6 +55,7 @@ jobs:
       - name: Stop web service
         run: ssh staging 'killall java'
       - name: pwd
+        if: always()
         run: ssh staging 'pwd >> output.txt'
       - name: Delete existing JAR file
         if: always()
