@@ -56,11 +56,12 @@ jobs:
           SSH_USER: ${{ secrets.USERNAME }}
           SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
           SSH_HOST: ${{ secrets.HOST_DNS }}
-      - name: test1
-        run: ssh staging 'echo "HI" >> something.txt'
-      - name: test2
-        run: ssh staging 'echo "HELLO" >> something2.txt'
-#      - name: Stop the server
-#        run: ssh staging 'killall java'
-#      - name: Start the server
-#        run: ssh staging 'java -jar web-service-0.0.1-SNAPSHOT.jar'
+          JAR_FILE: web-service-0.0.1-SNAPSHOT.jar
+      - name: Stop web service
+        run: ssh staging 'killall java'
+      - name: Delete existing JAR file
+        run: ssh staging 'rm $JAR_FILE'
+      - name: Move executable JAR to root
+        run: ssh staging 'mv target/$JAR_FILE ../'
+      - name: Start web service
+        run: ssh staging 'java -jar $JAR_FILE'
