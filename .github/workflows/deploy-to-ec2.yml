@@ -54,11 +54,13 @@ jobs:
           SSH_HOST: ${{ secrets.HOST_DNS }}
       - name: Stop web service
         run: ssh staging 'killall java'
+      - name: pwd
+        run: ssh staging 'pwd >> output.txt'
       - name: Delete existing JAR file
         if: always()
         run: ssh staging 'rm $JAR_FILE'
       - name: Move executable JAR to root
         if: always()
-        run: ssh staging 'cp -r ~/target/$JAR_FILE ~/'
+        run: ssh staging 'cd target/ && cp $JAR_FILE ../ && cd ..'
       - name: Start web service
         run: ssh staging 'java -jar $JAR_FILE'
