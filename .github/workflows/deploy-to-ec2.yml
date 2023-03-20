@@ -56,15 +56,11 @@ jobs:
           SSH_USER: ${{ secrets.USERNAME }}
           SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
           SSH_HOST: ${{ secrets.HOST_DNS }}
-
-      - name: echo something
+      - name: test1
         run: ssh staging 'echo "HI" >> something.txt'
+      - name: test2
+        run: ssh staging 'echo "HELLO" >> something2.txt'
 #      - name: Stop the server
-#        run: ssh staging 'sudo systemctl stop my-application'
-#
-#      - name: Check out the source
-#        run: ssh staging 'cd my-application && git fetch && git reset --hard origin/master'
-#
+#        run: ssh staging 'killall java'
 #      - name: Start the server
-#        if: ${{ always() }}
-#        run: ssh staging 'sudo systemctl start my-application'
+#        run: ssh staging 'java -jar web-service-0.0.1-SNAPSHOT.jar'
