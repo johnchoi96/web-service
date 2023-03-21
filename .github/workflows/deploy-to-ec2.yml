@@ -30,7 +30,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           HOST: ${{ secrets.HOST_DNS }}
           KEY: ${{ secrets.EC2_SSH_KEY }}
-          source: './target/$JAR_FILE'
+          source: './target/web-service-0.0.1-SNAPSHOT.jar'
           target: '~/'
           overwrite: true
 
