@@ -13,11 +13,11 @@ import java.io.IOException;
 public class EmailService {
 
     public boolean sendEmail(final EmailRequest request, final String apiKey) {
-        String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
+        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
         final Email from = new Email(EMAIL_ADDRESS);
         final Email to = new Email(EMAIL_ADDRESS);
-        final Content content = new Content("text/plain", EmailBodyFactory.build(request.getSubject(), request.getBody()));
+        final Content content = new Content("text/plain", EmailBodyFactory.build(request));
         final String EMAIL_SUBJECT = "Message from Web App";
         final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
 
@@ -28,6 +28,7 @@ public class EmailService {
             emailRequest.setEndpoint("mail/send");
             emailRequest.setBody(mail.build());
             final Response response = sg.api(emailRequest);
+            log.debug("Response status code: {}", response.getStatusCode());
             return response.getStatusCode() >= 200 && response.getStatusCode() < 300;
         } catch (IOException e) {
             log.error(e.getMessage(), e);
