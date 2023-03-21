@@ -8,7 +8,7 @@
 ### Version `/api/version`
 
 * [GET] `/app`
-    - RequestParam: `bundleId`
+    - RequestParam: `appName`
 
 ### Email `/api/email`
 

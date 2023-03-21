@@ -1,38 +1,47 @@
 package io.github.johnchoi96.webservice.services;
 
+import io.github.johnchoi96.webservice.configs.ConcealThisVersionConfiguration;
+import io.github.johnchoi96.webservice.configs.VoaVersionConfiguration;
 import io.github.johnchoi96.webservice.factories.AppVersionFactory;
 import io.github.johnchoi96.webservice.models.AppVersion;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Locale;
-import java.util.Properties;
-import java.util.Set;
+import java.util.Map;
 
 @Service
 public class VersionService {
 
-    private final Set<String> knownBundleIds = Set.of(
-            "io.github.johnchoi96.concealthis",
-            "io.github.johnchoi96.voa"
+    protected enum AppNames {
+        ConcealThis,
+        VOA
+    }
+
+    @Autowired
+    private ConcealThisVersionConfiguration concealThisVersionConfiguration;
+
+    @Autowired
+    private VoaVersionConfiguration voaVersionConfiguration;
+
+    private final Map<String, AppNames> knownAppNames = Map.of(
+            "concealthis", AppNames.ConcealThis,
+            "voa", AppNames.VOA
     );
 
-    public AppVersion getLatestVersion(@NonNull final String bundleId) throws IOException {
-        if (!knownBundleIds.contains(bundleId.toLowerCase(Locale.US))) {
+    public AppVersion getLatestVersion(@NonNull final String appName) {
+        if (!knownAppNames.containsKey(appName.toLowerCase(Locale.US))) {
             return null;
         }
-        final String latestVersion = getAppVersionFromFile(bundleId.toLowerCase(Locale.US));
+        final String latestVersion = getAppVersionFromFile(knownAppNames.get(appName.toLowerCase(Locale.US)));
         return AppVersionFactory.build(latestVersion);
     }
 
-    protected String getAppVersionFromFile(final String bundleId) throws IOException {
-        String path = "./version-properties/app-version.properties";
-        Properties mainProperties = new Properties();
-        FileInputStream file = new FileInputStream(path);
-        mainProperties.load(file);
-        file.close();
-        return mainProperties.getProperty(String.format("%s.version", bundleId));
+    protected String getAppVersionFromFile(final AppNames appName) {
+        return switch (appName) {
+            case ConcealThis -> concealThisVersionConfiguration.getVersion();
+            case VOA -> voaVersionConfiguration.getVersion();
+        };
     }
 }

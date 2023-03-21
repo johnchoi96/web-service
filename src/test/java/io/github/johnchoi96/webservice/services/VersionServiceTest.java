@@ -6,11 +6,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 public class VersionServiceTest {
@@ -26,20 +24,20 @@ public class VersionServiceTest {
 
 
     @Test
-    void testGetLatestVersionWithValidBundleId() throws IOException {
+    void testGetLatestVersionWithValidBundleId() {
         final String versionString = "valid-version";
-        doReturn(versionString).when(service).getAppVersionFromFile(anyString());
-        final String bundleId = "io.github.johnchoi96.voa";
-        var appVersion = service.getLatestVersion(bundleId);
+        doReturn(versionString).when(service).getAppVersionFromFile(any());
+        final String appName = "voa";
+        var appVersion = service.getLatestVersion(appName);
         assertEquals(versionString, appVersion.getVersion());
     }
 
     @Test
-    void testGetLatestVersionWithInvalidBundleId() throws IOException {
+    void testGetLatestVersionWithInvalidBundleId() {
         final String versionString = "valid-version";
-        doReturn(versionString).when(service).getAppVersionFromFile(anyString());
-        final String bundleId = "invalid-bundle-id";
-        var appVersion = service.getLatestVersion(bundleId);
+        doReturn(versionString).when(service).getAppVersionFromFile(any());
+        final String appName = "invalid-bundle-id";
+        var appVersion = service.getLatestVersion(appName);
         assertNull(appVersion);
     }
 }
