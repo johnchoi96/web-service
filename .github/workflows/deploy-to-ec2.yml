@@ -21,9 +21,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Make API Keys YML
-        run: echo ${{ secrets.APIKEYS_YML }} >> src/main/resources/apikeys.yml
-
       - name: Build with Maven
         run: mvn clean package
 

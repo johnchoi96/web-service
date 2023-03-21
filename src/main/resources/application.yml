@@ -3,7 +3,8 @@ server:
 
 spring:
   config:
-    import: optional:classpath:apikeys.yml
+    import:
+      optional:file:yamls/apikeys.yml, optional:file:yamls/app-versions.yml
 
 logging:
   level:
