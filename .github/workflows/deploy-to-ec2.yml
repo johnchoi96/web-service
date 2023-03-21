@@ -21,6 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Make API Keys YML
+        run: echo ${{ secrets.APIKEYS_YML }} >> src/main/resources/apikeys.yml
+
       - name: Build with Maven
         run: mvn clean package
 
@@ -30,7 +33,7 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           HOST: ${{ secrets.HOST_DNS }}
           KEY: ${{ secrets.EC2_SSH_KEY }}
-          source: './target/web-service-0.0.1-SNAPSHOT.jar'
+          source: './target/$JAR_FILE'
           target: '~/'
           overwrite: true
 
