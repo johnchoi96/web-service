@@ -8,9 +8,4 @@ spring:
 
 logging:
   level:
-    org:
-      springframework:
-        boot:
-          context:
-            config:
-              ConfigFileApplicationListener: info
+    root: INFO
