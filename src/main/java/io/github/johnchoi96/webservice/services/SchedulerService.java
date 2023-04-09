@@ -12,8 +12,11 @@ public class SchedulerService {
     @Autowired
     private PetfinderClient petfinderClient;
 
+    @Autowired
+    private EmailService emailService;
+
     @Scheduled(cron = "* * 9 ? * SUN,WED,FRI *") // Sundays, Wednesdays, and Fridays at 9am
     public void findShibaInuIn43235() throws JsonProcessingException {
-        petfinderClient.findShibaNear43235();
+        emailService.sendEmailForPetfinder(petfinderClient.findShibaNear43235());
     }
 }

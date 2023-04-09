@@ -7,56 +7,56 @@ import java.util.List;
 
 @Data
 public class AnimalsItem {
-	private String gender;
+    private String gender;
 
-	private Object distance;
+    private Double distance;
 
-	@JsonProperty(value = "_links")
-	private Links links;
+    @JsonProperty(value = "_links")
+    private Links links;
 
-	private String statusChangedAt;
+    private String statusChangedAt;
 
-	private String description;
+    private String description;
 
-	private Object organizationAnimalId;
+    private Object organizationAnimalId;
 
-	private List<Object> videos;
+    private List<Object> videos;
 
-	private String type;
+    private String type;
 
-	private List<PhotosItem> photos;
+    private List<PhotosItem> photos;
 
-	private Colors colors;
+    private Colors colors;
 
-	private Breeds breeds;
+    private Breeds breeds;
 
-	private Contact contact;
+    private Contact contact;
 
-	private int id;
+    private int id;
 
-	private String publishedAt;
+    private String publishedAt;
 
-	private PrimaryPhotoCropped primaryPhotoCropped;
+    private PrimaryPhotoCropped primaryPhotoCropped;
 
-	private String url;
+    private String url;
 
-	private List<Object> tags;
+    private List<Object> tags;
 
-	private Object coat;
+    private String coat;
 
-	private Environment environment;
+    private Environment environment;
 
-	private String size;
+    private String size;
 
-	private String species;
+    private String species;
 
-	private String organizationId;
+    private String organizationId;
 
-	private String name;
+    private String name;
 
-	private Attributes attributes;
+    private Attributes attributes;
 
-	private String age;
+    private String age;
 
-	private String status;
+    private String status;
 }
