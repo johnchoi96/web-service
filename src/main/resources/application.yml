@@ -9,9 +9,3 @@ spring:
 logging:
   level:
     root: INFO
-
-petfinder:
-  clientId: SbUrYY8IRMRjCQ0hgMtu5aFtOCgqy6HgKyoQYxyw6JJ9tW1znc
-  clientSecret: n0nlsnxrJCd5LCyansg9g0Mn1q1549ucSspa1vXg
-  bearerToken:
-    uri: https://api.petfinder.com/v2/oauth2/token

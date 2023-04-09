@@ -14,6 +14,6 @@ public class SchedulerService {
 
     @Scheduled(cron = "* * 9 ? * SUN,WED,FRI *") // Sundays, Wednesdays, and Fridays at 9am
     public void findShibaInuIn43235() throws JsonProcessingException {
-        petfinderClient.sendRequest();
+        petfinderClient.findShibaNear43235();
     }
 }

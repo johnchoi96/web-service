@@ -19,7 +19,7 @@ public class PetfinderController {
     private PetfinderClient petfinderClient;
 
     @GetMapping(value = "/shiba/43235", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getShiba43235() throws JsonProcessingException {
-        return ResponseEntity.ok(petfinderClient.sendRequest());
+    public ResponseEntity<?> findShibaNear43235() throws JsonProcessingException {
+        return ResponseEntity.ok(petfinderClient.findShibaNear43235());
     }
 }
