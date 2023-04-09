@@ -9,7 +9,7 @@ public class EmailBodyFactoryTest {
 
     @Test
     public void buildWithAllThreeFields() {
-        final String actual = EmailBodyFactory.build(getCompleteRequest());
+        final String actual = EmailBodyFactory.buildBodyFromWebApp(getCompleteRequest());
         String THREE_FIELDS_EMAIL = """
                 Subject: TEST_SUBJECT
                             
@@ -23,7 +23,7 @@ public class EmailBodyFactoryTest {
 
     @Test
     public void buildWithNullContactInfo() {
-        final String actual = EmailBodyFactory.build(getRequestWithNoContactInfo());
+        final String actual = EmailBodyFactory.buildBodyFromWebApp(getRequestWithNoContactInfo());
         String TWO_FIELDS_EMAIL = """
                 Subject: TEST_SUBJECT
                             
