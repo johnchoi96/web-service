@@ -12,7 +12,7 @@
 
 ### Email `/api/email`
 
-* [POST] `/send`
+* [POST] `/contactme`
     - RequestBody (JSON)
       ```
       {
@@ -21,3 +21,7 @@
         "contactInfo": "OPTIONAL CONTACT INFO HERE"
       }
       ```
+* [GET] `/contactme`
+    - RequestParam: `subject`
+    - RequestParam: `body`
+    - RequestParam: `email` (optional)
