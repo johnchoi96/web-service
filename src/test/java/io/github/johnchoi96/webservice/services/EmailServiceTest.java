@@ -36,13 +36,13 @@ public class EmailServiceTest {
     @Disabled
     void testSendEmail() throws IOException {
         doReturn(getDummyResponse(200)).when(sendGrid).api(any());
-        assertTrue(emailService.sendEmail(getCompleteRequest(), "DUMMY_API_KEY"));
+        assertTrue(emailService.sendEmailForContactMe(getCompleteRequest()));
     }
 
     @Test
     void testSendEmailWithBadResponse() throws IOException {
         doReturn(getDummyResponse(400)).when(sendGrid).api(any());
-        assertFalse(emailService.sendEmail(getCompleteRequest(), "DUMMY_API_KEY"));
+        assertFalse(emailService.sendEmailForContactMe(getCompleteRequest()));
     }
 
     private Response getDummyResponse(final int statusCode) {

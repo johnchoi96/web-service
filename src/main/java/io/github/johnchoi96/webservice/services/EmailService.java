@@ -18,7 +18,8 @@ public class EmailService {
     @Autowired
     private SendGridApiConfiguration sendGridApiConfiguration;
 
-    public boolean sendEmail(final EmailRequest request, final String apiKey) {
+    public boolean sendEmailForContactMe(final EmailRequest request) {
+        final String apiKey = sendGridApiConfiguration.getApiKey();
         final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
         final Email from = new Email(EMAIL_ADDRESS);

@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/email")
@@ -23,9 +20,18 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping(value = "/send", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendEmail(@RequestBody final EmailRequest request) {
-        if (emailService.sendEmail(request, sendGridApiConfiguration.getApiKey())) {
+    @PostMapping(value = "/contactme", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendEmailForContactMe(@RequestBody final EmailRequest request) {
+        if (emailService.sendEmailForContactMe(request)) {
+            return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(value = "/contactme", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendEmailForContactMe(@RequestParam("subject") final String subject, @RequestParam("body") final String body, @RequestParam(value = "email", required = false) final String email) {
+        final EmailRequest request = EmailRequest.builder().subject(subject).body(body).contactInfo(email).build();
+        if (emailService.sendEmailForContactMe(request)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
         }
         return ResponseEntity.badRequest().build();
