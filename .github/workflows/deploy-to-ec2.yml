@@ -54,7 +54,7 @@ jobs:
 
       - name: SSH into EC2 instance and kill the web service app
         run: |
-          ssh -o StrictHostKeyChecking=no -f -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup killall java &"
+          ssh -o StrictHostKeyChecking=no -f -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup killall -9 java &"
 
   deploy:
     name: Start the Web Service on EC2
