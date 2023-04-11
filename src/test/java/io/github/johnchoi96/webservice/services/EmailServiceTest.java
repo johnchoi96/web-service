@@ -2,6 +2,7 @@ package io.github.johnchoi96.webservice.services;
 
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
+import io.github.johnchoi96.webservice.configs.SendGridApiConfiguration;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +24,9 @@ public class EmailServiceTest {
     @Mock
     private SendGrid sendGrid;
 
+    @Mock
+    private SendGridApiConfiguration sendGridApiConfiguration;
+
     @InjectMocks
     @Autowired
     private EmailService emailService;
@@ -30,6 +34,8 @@ public class EmailServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        doReturn("API_KEY").when(sendGridApiConfiguration).getApiKey();
     }
 
     @Test
