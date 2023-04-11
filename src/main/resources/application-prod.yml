@@ -6,6 +6,11 @@ server:
     key-password: springboot
     enabled: true
 
+spring:
+  config:
+    import:
+      optional:file:yamls/apikeys.yml, optional:file:yamls/app-versions.yml
+
 logging:
   level:
     root: INFO
