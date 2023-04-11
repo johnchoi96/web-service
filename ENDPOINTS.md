@@ -4,6 +4,7 @@
 
 * [GET] `/helloWorld`
 * [GET] `/ping`
+* [GET] `/uptime`
 
 ### Version `/api/version`
 
