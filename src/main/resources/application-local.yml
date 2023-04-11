@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+spring:
+  config:
+    import:
+      optional:file:yamls/apikeys.yml, optional:file:yamls/app-versions.yml
+
 logging:
   level:
     root: INFO

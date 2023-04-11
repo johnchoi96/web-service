@@ -1,5 +1,3 @@
 spring:
   config:
     name: application-local
-    import:
-      optional:file:yamls/apikeys.yml, optional:file:yamls/app-versions.yml
