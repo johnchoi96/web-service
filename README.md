@@ -11,3 +11,7 @@
 ## Endpoints
 
 * [Documentation](ENDPOINTS.md)
+
+## Public IP/DNS
+
+* WIP: no elastic IP is assigned for now
