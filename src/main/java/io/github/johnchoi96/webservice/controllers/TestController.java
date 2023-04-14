@@ -1,6 +1,8 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import io.github.johnchoi96.webservice.components.Uptime;
+import io.github.johnchoi96.webservice.factories.UptimeFactory;
+import io.github.johnchoi96.webservice.models.uptime.UptimeResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,7 +33,7 @@ public class TestController {
     }
 
     @GetMapping(value = "/uptime", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> uptime() {
-        return ResponseEntity.ok(String.format("Start time: %s\nUptime:\n%s\n", uptime.getStartTime(), uptime.getUptime()));
+    public ResponseEntity<UptimeResponse> uptime() {
+        return ResponseEntity.ok(UptimeFactory.build(uptime.getStartTime(), uptime.getUptime()));
     }
 }
