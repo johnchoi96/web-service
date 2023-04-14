@@ -1,10 +1,14 @@
 package io.github.johnchoi96.webservice.models.petfinder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-public class Links{
-	private Organization organization;
-	private Self self;
-	private Type type;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Links {
+    private Organization organization;
+
+    private Self self;
+
+    private Type type;
 }

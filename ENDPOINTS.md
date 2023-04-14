@@ -26,3 +26,8 @@
     - RequestParam: `subject`
     - RequestParam: `body`
     - RequestParam: `email` (optional)
+
+### Petfinder `/api/petfinder`
+
+* [GET] `/all`
+* [GET] `/filtered`
