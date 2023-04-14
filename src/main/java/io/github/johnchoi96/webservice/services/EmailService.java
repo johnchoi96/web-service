@@ -1,10 +1,10 @@
 package io.github.johnchoi96.webservice.services;
 
 import com.sendgrid.*;
-import io.github.johnchoi96.webservice.configs.SendGridApiConfiguration;
 import io.github.johnchoi96.webservice.factories.EmailBodyFactory;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.models.petfinder.AnimalsItem;
+import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +17,10 @@ import java.util.List;
 public class EmailService {
 
     @Autowired
-    private SendGridApiConfiguration sendGridApiConfiguration;
+    private SendGridApiProperties sendGridApiProperties;
 
     public boolean sendEmailForContactMe(final EmailRequest request) {
-        final String apiKey = sendGridApiConfiguration.getApiKey();
+        final String apiKey = sendGridApiProperties.getApiKey();
         final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
         final Email from = new Email(EMAIL_ADDRESS);
@@ -45,7 +45,7 @@ public class EmailService {
     }
 
     public void sendEmailForPetfinder(final List<AnimalsItem> petfinderResponse) {
-        final String apiKey = sendGridApiConfiguration.getApiKey();
+        final String apiKey = sendGridApiProperties.getApiKey();
         final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
         final Email from = new Email(EMAIL_ADDRESS);

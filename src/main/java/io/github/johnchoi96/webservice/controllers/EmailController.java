@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
-import io.github.johnchoi96.webservice.configs.SendGridApiConfiguration;
 import io.github.johnchoi96.webservice.models.EmailRequest;
+import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
 import io.github.johnchoi96.webservice.services.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
 
     @Autowired
-    private SendGridApiConfiguration sendGridApiConfiguration;
+    private SendGridApiProperties sendGridApiProperties;
 
     @Autowired
     private EmailService emailService;
