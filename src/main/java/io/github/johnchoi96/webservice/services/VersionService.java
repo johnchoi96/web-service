@@ -1,9 +1,9 @@
 package io.github.johnchoi96.webservice.services;
 
-import io.github.johnchoi96.webservice.configs.ConcealThisVersionConfiguration;
-import io.github.johnchoi96.webservice.configs.VoaVersionConfiguration;
 import io.github.johnchoi96.webservice.factories.AppVersionFactory;
 import io.github.johnchoi96.webservice.models.AppVersion;
+import io.github.johnchoi96.webservice.properties.ConcealThisVersionProperties;
+import io.github.johnchoi96.webservice.properties.VoaVersionProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ public class VersionService {
     }
 
     @Autowired
-    private ConcealThisVersionConfiguration concealThisVersionConfiguration;
+    private ConcealThisVersionProperties concealThisVersionProperties;
 
     @Autowired
-    private VoaVersionConfiguration voaVersionConfiguration;
+    private VoaVersionProperties voaVersionProperties;
 
     private final Map<String, AppNames> knownAppNames = Map.of(
             "concealthis", AppNames.ConcealThis,
@@ -40,8 +40,8 @@ public class VersionService {
 
     protected String getAppVersionFromFile(final AppNames appName) {
         return switch (appName) {
-            case ConcealThis -> concealThisVersionConfiguration.getVersion();
-            case VOA -> voaVersionConfiguration.getVersion();
+            case ConcealThis -> concealThisVersionProperties.getVersion();
+            case VOA -> voaVersionProperties.getVersion();
         };
     }
 }

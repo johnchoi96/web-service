@@ -1,9 +1,9 @@
 package io.github.johnchoi96.webservice;
 
-import io.github.johnchoi96.webservice.configs.ConcealThisVersionConfiguration;
-import io.github.johnchoi96.webservice.configs.PetfinderApiConfiguration;
-import io.github.johnchoi96.webservice.configs.SendGridApiConfiguration;
-import io.github.johnchoi96.webservice.configs.VoaVersionConfiguration;
+import io.github.johnchoi96.webservice.properties.ConcealThisVersionProperties;
+import io.github.johnchoi96.webservice.properties.PetfinderApiProperties;
+import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
+import io.github.johnchoi96.webservice.properties.VoaVersionProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,10 +12,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableConfigurationProperties({
-        SendGridApiConfiguration.class,
-        ConcealThisVersionConfiguration.class,
-        VoaVersionConfiguration.class,
-        PetfinderApiConfiguration.class
+        SendGridApiProperties.class,
+        ConcealThisVersionProperties.class,
+        VoaVersionProperties.class,
+        PetfinderApiProperties.class
 })
 public class WebServiceApplication {
 

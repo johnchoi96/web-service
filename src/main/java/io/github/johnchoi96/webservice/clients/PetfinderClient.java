@@ -3,9 +3,9 @@ package io.github.johnchoi96.webservice.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import io.github.johnchoi96.webservice.configs.PetfinderApiConfiguration;
 import io.github.johnchoi96.webservice.configs.auth.BearerToken;
 import io.github.johnchoi96.webservice.models.petfinder.PetfinderResponse;
+import io.github.johnchoi96.webservice.properties.PetfinderApiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -24,7 +24,7 @@ import java.util.Set;
 public class PetfinderClient {
 
     @Autowired
-    private PetfinderApiConfiguration petfinderApiConfiguration;
+    private PetfinderApiProperties petfinderApiProperties;
 
     private HttpHeaders createHttpHeadersWithBearerToken(final String token) {
         HttpHeaders headers = new HttpHeaders();
@@ -40,9 +40,9 @@ public class PetfinderClient {
     }
 
     public List<PetfinderResponse> findAllDogsNear43235(final Set<String> breeds) throws JsonProcessingException {
-        final String clientId = petfinderApiConfiguration.getClientId();
-        final String clientSecret = petfinderApiConfiguration.getClientSecret();
-        final String tokenUri = petfinderApiConfiguration.getBearerToken().getUri();
+        final String clientId = petfinderApiProperties.getClientId();
+        final String clientSecret = petfinderApiProperties.getClientSecret();
+        final String tokenUri = petfinderApiProperties.getBearerToken().getUri();
 
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = BearerToken.getPetfinderBearerToken(tokenUri, clientId, clientSecret);
