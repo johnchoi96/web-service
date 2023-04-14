@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.johnchoi96.webservice.clients.PetfinderClient;
+import io.github.johnchoi96.webservice.services.PetfinderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class PetfinderController {
 
     @Autowired
-    private PetfinderClient petfinderClient;
+    private PetfinderService petfinderService;
 
-    @GetMapping(value = "/shiba/43235", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findShibaNear43235() throws JsonProcessingException {
-        return ResponseEntity.ok(petfinderClient.findShibaNear43235());
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findDogsNear43235() throws JsonProcessingException {
+        return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
+    }
+
+    @GetMapping(value = "/filtered", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> findFilteredDogsNear43235() throws JsonProcessingException {
+        return ResponseEntity.ok(petfinderService.findFilteredDogs());
     }
 }

@@ -1,13 +1,20 @@
 package io.github.johnchoi96.webservice.models.petfinder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-public class Address{
-	private String country;
-	private Object address2;
-	private String city;
-	private Object address1;
-	private String postcode;
-	private String state;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Address {
+    private String country;
+
+    private String address2;
+
+    private String city;
+
+    private String address1;
+
+    private String postcode;
+
+    private String state;
 }

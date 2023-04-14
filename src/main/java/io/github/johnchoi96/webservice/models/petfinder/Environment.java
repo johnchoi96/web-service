@@ -1,10 +1,14 @@
 package io.github.johnchoi96.webservice.models.petfinder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-public class Environment{
-	private boolean cats;
-	private Object children;
-	private boolean dogs;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Environment {
+    private Boolean cats;
+
+    private Boolean children;
+
+    private Boolean dogs;
 }

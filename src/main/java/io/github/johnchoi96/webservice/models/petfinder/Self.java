@@ -1,8 +1,10 @@
 package io.github.johnchoi96.webservice.models.petfinder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
-public class Self{
-	private String href;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Self {
+    private String href;
 }

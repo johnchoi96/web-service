@@ -7,8 +7,10 @@ import io.github.johnchoi96.webservice.configs.VoaVersionConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties({
         SendGridApiConfiguration.class,
         ConcealThisVersionConfiguration.class,
