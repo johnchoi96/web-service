@@ -23,7 +23,7 @@ public class EmailBodyFactory {
             sb.append("Item: [\n");
             sb.append(String.format("\tName: %s\n", animal.getName()));
             sb.append(String.format("\tGender: %s\n", animal.getGender()));
-            sb.append(String.format("\tDistance: %f.2 miles from Columbus OH\n", animal.getDistance()));
+            sb.append(String.format("\tDistance: %.2f miles from Columbus OH\n", animal.getDistance()));
             sb.append(String.format("\tAddress: %s, %s\n", animal.getContact().getAddress().getCity(), animal.getContact().getAddress().getState()));
             sb.append(String.format("\tMixed: %s\n", animal.getBreeds().getMixed() ? "yes" : "no"));
             sb.append(String.format("\tColor: %s\n", animal.getColors().getPrimary()));
