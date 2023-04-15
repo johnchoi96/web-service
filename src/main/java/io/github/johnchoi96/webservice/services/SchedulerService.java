@@ -14,8 +14,8 @@ public class SchedulerService {
     private PetfinderService petfinderService;
 
 
-    // Sundays, Wednesdays, and Fridays at 3pm in EST
-    @Scheduled(cron = "0 0 15 ? * SUN,WED,FRI", zone = "America/New_York")
+    // Sundays, Wednesdays, and Fridays at 12pm in EST
+    @Scheduled(cron = "0 0 12 ? * SUN,WED,FRI", zone = "America/New_York")
     public void findDogsNear43235() throws JsonProcessingException {
         log.info("Starting job for findDogsNear43235()");
         petfinderService.findFilteredDogsAndReport();
