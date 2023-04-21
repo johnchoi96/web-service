@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -71,6 +72,9 @@ public class EmailService {
 
     public boolean sendEmailForContactMe(final EmailRequest request, final String appId) {
         if (!requestAllowed(appId)) {
+            log.info("Number of requests exceeded. Next request available at {}",
+                    latestTimestamp.plusSeconds(60 * 60)
+                            .atZone(ZoneId.of("America/New_York")));
             return false;
         }
         final String apiKey = sendGridApiProperties.getApiKey();
