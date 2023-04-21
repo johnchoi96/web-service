@@ -4,7 +4,6 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
-import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,9 +28,6 @@ public class EmailServiceTest {
 
     @Mock
     private SendGridApiProperties sendGridApiProperties;
-
-    @Mock
-    private WebAppMetadataProperties webAppMetadataProperties;
 
     @InjectMocks
     @Autowired
