@@ -2,8 +2,8 @@ package io.github.johnchoi96.webservice.services;
 
 import io.github.johnchoi96.webservice.factories.AppVersionFactory;
 import io.github.johnchoi96.webservice.models.AppVersion;
-import io.github.johnchoi96.webservice.properties.ConcealThisVersionProperties;
-import io.github.johnchoi96.webservice.properties.VoaVersionProperties;
+import io.github.johnchoi96.webservice.properties.metadata.ConcealThisVersionProperties;
+import io.github.johnchoi96.webservice.properties.metadata.VoaVersionProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;

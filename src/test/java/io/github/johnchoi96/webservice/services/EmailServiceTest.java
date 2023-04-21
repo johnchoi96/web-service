@@ -3,7 +3,7 @@ package io.github.johnchoi96.webservice.services;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import io.github.johnchoi96.webservice.models.EmailRequest;
-import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
+import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -42,13 +42,13 @@ public class EmailServiceTest {
     @Disabled
     void testSendEmail() throws IOException {
         doReturn(getDummyResponse(200)).when(sendGrid).api(any());
-        assertTrue(emailService.sendEmailForContactMe(getCompleteRequest()));
+        assertTrue(emailService.sendEmailForContactMe(getCompleteRequest(), "johnchoi-portfolio"));
     }
 
     @Test
     void testSendEmailWithBadResponse() throws IOException {
         doReturn(getDummyResponse(400)).when(sendGrid).api(any());
-        assertFalse(emailService.sendEmailForContactMe(getCompleteRequest()));
+        assertFalse(emailService.sendEmailForContactMe(getCompleteRequest(), "johnchoi-portfolio"));
     }
 
     private Response getDummyResponse(final int statusCode) {

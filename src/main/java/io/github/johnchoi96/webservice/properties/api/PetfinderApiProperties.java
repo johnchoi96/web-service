@@ -1,4 +1,4 @@
-package io.github.johnchoi96.webservice.properties;
+package io.github.johnchoi96.webservice.properties.api;
 
 import io.github.johnchoi96.webservice.configs.PetfinderBearerToken;
 import lombok.Getter;

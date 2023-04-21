@@ -1,7 +1,6 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import io.github.johnchoi96.webservice.models.EmailRequest;
-import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
 import io.github.johnchoi96.webservice.services.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +14,26 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
 
     @Autowired
-    private SendGridApiProperties sendGridApiProperties;
-
-    @Autowired
     private EmailService emailService;
 
     @PostMapping(value = "/contactme", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendEmailForContactMe(@RequestBody final EmailRequest request) {
-        if (emailService.sendEmailForContactMe(request)) {
+    public ResponseEntity<?> sendEmailForContactMe(
+            @RequestParam("appId") final String appId,
+            @RequestBody final EmailRequest request) {
+        if (emailService.sendEmailForContactMe(request, appId)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
         }
         return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/contactme", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendEmailForContactMe(@RequestParam("subject") final String subject, @RequestParam("body") final String body, @RequestParam(value = "email", required = false) final String email) {
+    public ResponseEntity<?> sendEmailForContactMe(
+            @RequestParam("appId") final String appId,
+            @RequestParam("subject") final String subject,
+            @RequestParam("body") final String body,
+            @RequestParam(value = "email", required = false) final String email) {
         final EmailRequest request = EmailRequest.builder().subject(subject).body(body).contactInfo(email).build();
-        if (emailService.sendEmailForContactMe(request)) {
+        if (emailService.sendEmailForContactMe(request, appId)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
         }
         return ResponseEntity.badRequest().build();

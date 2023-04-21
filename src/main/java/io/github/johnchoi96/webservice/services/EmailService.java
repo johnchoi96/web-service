@@ -4,13 +4,18 @@ import com.sendgrid.*;
 import io.github.johnchoi96.webservice.factories.EmailBodyFactory;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.models.petfinder.AnimalsItem;
-import io.github.johnchoi96.webservice.properties.SendGridApiProperties;
+import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
+import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -19,7 +24,55 @@ public class EmailService {
     @Autowired
     private SendGridApiProperties sendGridApiProperties;
 
-    public boolean sendEmailForContactMe(final EmailRequest request) {
+    @Autowired
+    private WebAppMetadataProperties webAppMetadataProperties;
+
+    private Instant latestTimestamp;
+
+    private final int TIME_LIMIT_HOURS = 1;
+
+    private final int REQUEST_LIMIT = 10;
+
+    private int numOfRequests;
+
+    private List<String> allowedAppIds;
+
+    @PostConstruct
+    private void init() {
+        allowedAppIds = Stream.of(webAppMetadataProperties.getAppId())
+                .map(String::toLowerCase).toList();
+    }
+
+    private boolean requestAllowed(final String appId) {
+        if (!allowedAppIds.contains(appId.toLowerCase())) {
+            return false;
+        }
+        if (latestTimestamp == null) {
+            latestTimestamp = Instant.now();
+            numOfRequests = 0;
+        } else {
+            // check if timestamp was more than an TIME_LIMIT_HOURS ago
+            var duration = Duration.between(latestTimestamp, Instant.now());
+            if (duration.toHoursPart() < TIME_LIMIT_HOURS) {
+                // check if numOfRequests does not exceed REQUEST_LIMIT
+                if (numOfRequests >= REQUEST_LIMIT) {
+                    return false;
+                }
+            } else {
+                // if it has been more than TIME_LIMIT_HOURS, reset timestamp
+                // and numOfRequests
+                latestTimestamp = Instant.now();
+                numOfRequests = 0;
+            }
+        }
+        numOfRequests++;
+        return true;
+    }
+
+    public boolean sendEmailForContactMe(final EmailRequest request, final String appId) {
+        if (!requestAllowed(appId)) {
+            return false;
+        }
         final String apiKey = sendGridApiProperties.getApiKey();
         final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 

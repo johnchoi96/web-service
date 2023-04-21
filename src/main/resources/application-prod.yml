@@ -9,7 +9,7 @@ server:
 spring:
   config:
     import:
-      optional:file:yamls/apikeys.yml, optional:file:yamls/app-versions.yml
+      optional:file:yamls/apikeys.yml, optional:file:yamls/app-metadata.yml
 
 logging:
   level:
