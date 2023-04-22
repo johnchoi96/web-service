@@ -9,5 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "voa")
 public class VoaVersionProperties {
 
+    private String appId;
+
     private String version;
 }

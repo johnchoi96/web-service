@@ -9,5 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "concealthis")
 public class ConcealThisVersionProperties {
 
+    private String appId;
+
     private String version;
 }
