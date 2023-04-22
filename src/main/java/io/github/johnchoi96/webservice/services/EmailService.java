@@ -72,9 +72,14 @@ public class EmailService {
 
     public boolean sendEmailForContactMe(final EmailRequest request, final String appId) {
         if (!requestAllowed(appId)) {
-            log.info("Number of requests exceeded. Next request available at {}",
-                    latestTimestamp.plusSeconds(60 * 60)
-                            .atZone(ZoneId.of("America/New_York")));
+            if (latestTimestamp == null) {
+                log.info("Request was not allowed");
+            } else {
+                log.info("Number of requests exceeded. Next request available at {}",
+                        latestTimestamp.plusSeconds(60 * 60)
+                                .atZone(ZoneId.of("America/New_York")));
+            }
+
             return false;
         }
         final String apiKey = sendGridApiProperties.getApiKey();
