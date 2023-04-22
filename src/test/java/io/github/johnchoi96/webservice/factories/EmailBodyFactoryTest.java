@@ -36,17 +36,10 @@ public class EmailBodyFactoryTest {
     }
 
     private EmailRequest getCompleteRequest() {
-        final EmailRequest request = new EmailRequest();
-        request.setSubject("TEST_SUBJECT");
-        request.setBody("TEST_BODY");
-        request.setContactInfo("TEST_CONTACT_INFO");
-        return request;
+        return new EmailRequest("TEST_SUBJECT", "TEST_BODY", "TEST_CONTACT_INFO");
     }
 
     private EmailRequest getRequestWithNoContactInfo() {
-        final EmailRequest request = new EmailRequest();
-        request.setSubject("TEST_SUBJECT");
-        request.setBody("TEST_BODY");
-        return request;
+        return new EmailRequest("TEST_SUBJECT", "TEST_BODY", null);
     }
 }

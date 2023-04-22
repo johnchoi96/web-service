@@ -14,6 +14,7 @@
 ### Email `/api/email`
 
 * [POST] `/contactme`
+    - RequestParam: `appId`
     - RequestBody (JSON)
       ```
       {
@@ -23,6 +24,7 @@
       }
       ```
 * [GET] `/contactme`
+    - RequestParam: `appId`
     - RequestParam: `subject`
     - RequestParam: `body`
     - RequestParam: `email` (optional)

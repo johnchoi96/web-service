@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.configs.auth.BearerToken;
 import io.github.johnchoi96.webservice.models.petfinder.PetfinderResponse;
-import io.github.johnchoi96.webservice.properties.PetfinderApiProperties;
+import io.github.johnchoi96.webservice.properties.api.PetfinderApiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
