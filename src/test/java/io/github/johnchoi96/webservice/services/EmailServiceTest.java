@@ -1,11 +1,11 @@
 package io.github.johnchoi96.webservice.services;
 
+import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 public class EmailServiceTest {
 
@@ -35,21 +35,34 @@ public class EmailServiceTest {
 
     private final String DUMMY_APP_ID = "dummy-app-id";
 
+    private final String API_KEY = "API_KEY";
+
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
 
-        doReturn("API_KEY").when(sendGridApiProperties).getApiKey();
+        doReturn(API_KEY).when(sendGridApiProperties).getApiKey();
         final Field field = EmailService.class.getDeclaredField("allowedAppIds");
         field.setAccessible(true);
         field.set(emailService, List.of(DUMMY_APP_ID));
     }
 
     @Test
-    @Disabled
-    void testSendEmail() throws IOException {
-        doReturn(getDummyResponse(200)).when(sendGrid).api(any());
-        assertTrue(emailService.sendEmailForContactMe(getCompleteRequest(), DUMMY_APP_ID));
+    void testSendEmail() throws IOException, NoSuchFieldException, IllegalAccessException {
+        var mockedSendGrid = mock(SendGrid.class);
+        var mockedSendGridApiProp = mock(SendGridApiProperties.class);
+        doReturn(API_KEY).when(mockedSendGridApiProp).getApiKey();
+        EmailService service = spy(new EmailService());
+        doReturn(mockedSendGrid).when(service).makeSendGrid(API_KEY);
+        doReturn(getDummyResponse(200)).when(mockedSendGrid).api(any(Request.class));
+
+        Field field = EmailService.class.getDeclaredField("allowedAppIds");
+        field.setAccessible(true);
+        field.set(service, List.of(DUMMY_APP_ID));
+        field = EmailService.class.getDeclaredField("sendGridApiProperties");
+        field.setAccessible(true);
+        field.set(service, mockedSendGridApiProp);
+        assertTrue(service.sendEmailForContactMe(getCompleteRequest(), DUMMY_APP_ID));
     }
 
     @Test

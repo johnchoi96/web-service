@@ -70,6 +70,10 @@ public class EmailService {
         return true;
     }
 
+    protected SendGrid makeSendGrid(final String apiKey) {
+        return new SendGrid(apiKey);
+    }
+
     public boolean sendEmailForContactMe(final EmailRequest request, final String appId) {
         if (!requestAllowed(appId)) {
             if (latestTimestamp == null) {
@@ -91,7 +95,7 @@ public class EmailService {
         final String EMAIL_SUBJECT = "Message from Web App";
         final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
 
-        final SendGrid sg = new SendGrid(apiKey);
+        final SendGrid sg = makeSendGrid(apiKey);
         final Request emailRequest = new Request();
         try {
             emailRequest.setMethod(Method.POST);
