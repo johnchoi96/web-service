@@ -20,11 +20,13 @@ public class PetfinderController {
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findDogsNear43235() throws JsonProcessingException {
+        log.info("GET /api/petfinder/all");
         return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
     }
 
     @GetMapping(value = "/filtered", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findFilteredDogsNear43235() throws JsonProcessingException {
+        log.info("GET /api/petfinder/filtered");
         return ResponseEntity.ok(petfinderService.findFilteredDogs());
     }
 }

@@ -20,6 +20,7 @@ public class EmailController {
     public ResponseEntity<?> sendEmailForContactMe(
             @RequestParam("appId") final String appId,
             @RequestBody final EmailRequest request) {
+        log.info("POST /api/email/contactme");
         if (emailService.sendEmailForContactMe(request, appId)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
         }
@@ -32,6 +33,7 @@ public class EmailController {
             @RequestParam("subject") final String subject,
             @RequestParam("body") final String body,
             @RequestParam(value = "email", required = false) final String email) {
+        log.info("GET /api/email/contactme");
         final EmailRequest request = EmailRequest.builder().subject(subject).body(body).contactInfo(email).build();
         if (emailService.sendEmailForContactMe(request, appId)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
