@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.properties;
 
-import io.github.johnchoi96.webservice.properties.metadata.ConcealThisVersionProperties;
-import io.github.johnchoi96.webservice.properties.metadata.VoaVersionProperties;
+import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MetadataTest {
 
     @Autowired
-    private ConcealThisVersionProperties concealThisVersionProperties;
+    private ConcealThisMetadataProperties concealThisVersionProperties;
 
     @Autowired
-    private VoaVersionProperties voaVersionProperties;
+    private VoaMetadataProperties voaVersionProperties;
 
     @Autowired
     private WebAppMetadataProperties webAppMetadataProperties;
@@ -39,6 +39,6 @@ public class MetadataTest {
     public void testWebAppMetadataProperty() {
         assertNotNull(webAppMetadataProperties);
         assertNotNull(webAppMetadataProperties.getAppId());
-//        assertNotNull(webAppMetadataProperties.getVersion());
+        assertNotNull(webAppMetadataProperties.getVersion());
     }
 }
