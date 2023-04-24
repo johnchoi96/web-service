@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class Properties {
+public abstract class MetadataProperties {
 
     private String appId;
 
