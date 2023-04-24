@@ -5,7 +5,7 @@ import io.github.johnchoi96.webservice.factories.EmailBodyFactory;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.models.petfinder.AnimalsItem;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
-import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class EmailService {
     private SendGridApiProperties sendGridApiProperties;
 
     @Autowired
-    private WebAppMetadataMetadataProperties webAppMetadataProperties;
+    private WebAppMetadataProperties webAppMetadataProperties;
 
     private Instant latestTimestamp;
 

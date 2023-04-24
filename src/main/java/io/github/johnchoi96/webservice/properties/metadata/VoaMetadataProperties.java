@@ -6,6 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "webapp")
-public class WebAppMetadataMetadataProperties extends MetadataProperties {
+@ConfigurationProperties(prefix = "voa")
+public class VoaMetadataProperties extends MetadataProperties {
 }

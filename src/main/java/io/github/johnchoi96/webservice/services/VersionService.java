@@ -2,9 +2,9 @@ package io.github.johnchoi96.webservice.services;
 
 import io.github.johnchoi96.webservice.factories.AppVersionFactory;
 import io.github.johnchoi96.webservice.models.AppVersion;
-import io.github.johnchoi96.webservice.properties.metadata.ConcealThisVersionMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.MetadataProperties;
-import io.github.johnchoi96.webservice.properties.metadata.VoaVersionMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -17,10 +17,10 @@ import java.util.Map;
 public class VersionService {
 
     @Autowired
-    private ConcealThisVersionMetadataProperties concealThisVersionProperties;
+    private ConcealThisMetadataProperties concealThisVersionProperties;
 
     @Autowired
-    private VoaVersionMetadataProperties voaVersionProperties;
+    private VoaMetadataProperties voaVersionProperties;
 
     private Map<String, MetadataProperties> knownAppNames;
 

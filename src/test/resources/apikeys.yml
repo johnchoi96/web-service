@@ -1,0 +1,8 @@
+sendgrid:
+  apiKey: dummy-sendgrid-apikey
+
+petfinder:
+  clientId: dummy-petfinder-client-id
+  clientSecret: dummy-petfinder-client-secret
+  bearerToken:
+    uri: dummy-petfinder-bearer-token-uri

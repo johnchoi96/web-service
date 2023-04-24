@@ -7,5 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "concealthis")
-public class ConcealThisVersionMetadataProperties extends MetadataProperties {
+public class ConcealThisMetadataProperties extends MetadataProperties {
 }

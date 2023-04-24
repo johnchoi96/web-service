@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.services;
 
-import io.github.johnchoi96.webservice.properties.metadata.ConcealThisVersionMetadataProperties;
-import io.github.johnchoi96.webservice.properties.metadata.VoaVersionMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,11 +20,11 @@ public class VersionServiceTest {
 
     @Mock
     @Autowired
-    private ConcealThisVersionMetadataProperties concealThisVersionProperties;
+    private ConcealThisMetadataProperties concealThisVersionProperties;
 
     @Mock
     @Autowired
-    private VoaVersionMetadataProperties voaVersionProperties;
+    private VoaMetadataProperties voaVersionProperties;
 
     @Autowired
     @InjectMocks
