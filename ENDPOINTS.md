@@ -9,7 +9,7 @@
 ### Version `/api/version`
 
 * [GET] `/app`
-    - RequestParam: `appName`
+    - RequestParam: `appId`
 
 ### Email `/api/email`
 
