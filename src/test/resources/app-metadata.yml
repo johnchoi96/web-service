@@ -1,9 +1,9 @@
 concealthis:
-  appId: io.github.johnchoi96.ConcealThis
-  version: 4.2.1
+  appId: concealthis-app-id
+  version: 1.2.3
 voa:
-  appId: io.github.johnchoi96.VOA
-  version: 2.0
+  appId: voa-app-id
+  version: a.b
 webapp:
-  appId: johnchoi-portfolio
-  version: 0.1.0
+  appId: webapp-id
+  version: 6.7.8-a

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -24,21 +25,27 @@ public class MetadataTest {
     @Test
     public void testConcealThisProperty() {
         assertNotNull(concealThisVersionProperties);
-        assertNotNull(concealThisVersionProperties.getAppId());
-        assertNotNull(concealThisVersionProperties.getVersion());
+        final String DUMMY_APP_ID = "concealthis-app-id";
+        final String DUMMY_VERSION = "1.2.3";
+        assertEquals(DUMMY_APP_ID, concealThisVersionProperties.getAppId());
+        assertEquals(DUMMY_VERSION, concealThisVersionProperties.getVersion());
     }
 
     @Test
     public void testVoaVersionProperty() {
         assertNotNull(voaVersionProperties);
-        assertNotNull(voaVersionProperties.getAppId());
-        assertNotNull(voaVersionProperties.getVersion());
+        final String DUMMY_APP_ID = "voa-app-id";
+        final String DUMMY_VERSION = "a.b";
+        assertEquals(DUMMY_APP_ID, voaVersionProperties.getAppId());
+        assertEquals(DUMMY_VERSION, voaVersionProperties.getVersion());
     }
 
     @Test
     public void testWebAppMetadataProperty() {
         assertNotNull(webAppMetadataProperties);
-        assertNotNull(webAppMetadataProperties.getAppId());
-        assertNotNull(webAppMetadataProperties.getVersion());
+        final String DUMMY_APP_ID = "webapp-id";
+        final String DUMMY_VERSION = "6.7.8-a";
+        assertEquals(DUMMY_APP_ID, webAppMetadataProperties.getAppId());
+        assertEquals(DUMMY_VERSION, webAppMetadataProperties.getVersion());
     }
 }
