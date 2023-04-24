@@ -20,9 +20,9 @@ public class VersionController {
     private VersionService versionService;
 
     @GetMapping(value = "/app", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AppVersion> getAppVersion(@RequestParam("appName") final String appName) {
+    public ResponseEntity<AppVersion> getAppVersion(@RequestParam("appId") final String appId) {
         log.info("GET /api/version/app");
-        final AppVersion appVersion = versionService.getLatestVersion(appName);
+        final AppVersion appVersion = versionService.getLatestVersion(appId);
         if (appVersion == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(appVersion);
     }
