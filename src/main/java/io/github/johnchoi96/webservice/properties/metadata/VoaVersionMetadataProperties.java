@@ -6,10 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "concealthis")
-public class ConcealThisVersionProperties {
-
-    private String appId;
-
-    private String version;
+@ConfigurationProperties(prefix = "voa")
+public class VoaVersionMetadataProperties extends MetadataProperties {
 }
