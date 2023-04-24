@@ -6,3 +6,4 @@ voa:
   version: 2.0
 webapp:
   appId: johnchoi-portfolio
+  version: 0.1.0

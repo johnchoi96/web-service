@@ -6,8 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "webapp")
-public class WebAppMetadataProperties {
-
-    private String appId;
+@ConfigurationProperties(prefix = "concealthis")
+public class ConcealThisVersionMetadataProperties extends MetadataProperties {
 }
