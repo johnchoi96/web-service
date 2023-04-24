@@ -7,9 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "concealthis")
-public class ConcealThisVersionProperties {
-
-    private String appId;
-
-    private String version;
+public class ConcealThisVersionProperties extends Properties {
 }

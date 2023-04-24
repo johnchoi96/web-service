@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doReturn;
@@ -28,37 +31,32 @@ public class VersionServiceTest {
     private VersionService versionService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
         MockitoAnnotations.openMocks(this);
 
         doReturn("conceal-version").when(concealThisVersionProperties).getVersion();
         doReturn("voa-version").when(voaVersionProperties).getVersion();
+        doReturn("conceal-id").when(concealThisVersionProperties).getAppId();
+        doReturn("voa-id").when(voaVersionProperties).getAppId();
+        final Field field = VersionService.class.getDeclaredField("knownAppNames");
+        field.setAccessible(true);
+        field.set(versionService, Map.of(
+                concealThisVersionProperties.getAppId(), concealThisVersionProperties,
+                voaVersionProperties.getAppId(), voaVersionProperties));
     }
-    
+
     @Test
-    void testGetLatestVersionWithValidBundleId() {
+    void testGetLatestVersionWithValidAppId() {
         final String versionString = "voa-version";
-        final String appName = "voa";
-        var appVersion = versionService.getLatestVersion(appName);
+        final String appId = "voa-id";
+        var appVersion = versionService.getLatestVersion(appId);
         assertEquals(versionString, appVersion.getVersion());
     }
 
     @Test
-    void testGetLatestVersionWithInvalidBundleId() {
-        final String appName = "invalid-bundle-id";
-        var appVersion = versionService.getLatestVersion(appName);
+    void testGetLatestVersionWithInvalidAppId() {
+        final String appId = "invalid-bundle-id";
+        var appVersion = versionService.getLatestVersion(appId);
         assertNull(appVersion);
-    }
-
-    @Test
-    void testGetConcealAppVersionFromFile() {
-        final String expected = "conceal-version";
-        assertEquals(expected, versionService.getAppVersionFromFile(VersionService.AppNames.ConcealThis));
-    }
-
-    @Test
-    void testGetVoaAppVersionFromFile() {
-        final String expected = "voa-version";
-        assertEquals(expected, versionService.getAppVersionFromFile(VersionService.AppNames.VOA));
     }
 }

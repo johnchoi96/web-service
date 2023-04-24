@@ -7,7 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "webapp")
-public class WebAppMetadataProperties {
-
-    private String appId;
+public class WebAppMetadataProperties extends Properties {
 }

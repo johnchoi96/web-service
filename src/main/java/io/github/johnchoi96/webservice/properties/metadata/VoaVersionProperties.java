@@ -7,9 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "voa")
-public class VoaVersionProperties {
-
-    private String appId;
-
-    private String version;
+public class VoaVersionProperties extends Properties {
 }
