@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="WebServiceApplication" type="Application" factoryName="Application">
+    <envs>
+      <env name="spring.profiles.active" value="local" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="io.github.johnchoi96.webservice.WebServiceApplication" />
     <module name="web-service" />
     <method v="2">

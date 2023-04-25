@@ -1,15 +1,9 @@
 server:
-  port: 8080
   ssl:
     key-store: certs/springboot.p12
     key-store-password: springboot
     key-password: springboot
     enabled: true
-
-spring:
-  config:
-    import:
-      optional:file:secrets/apikeys.yml, app-metadata.yml
 
 logging:
   level:
