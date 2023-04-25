@@ -2,6 +2,7 @@ package io.github.johnchoi96.webservice.services;
 
 import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,6 +27,10 @@ public class VersionServiceTest {
     @Autowired
     private VoaMetadataProperties voaVersionProperties;
 
+    @Mock
+    @Autowired
+    private WebAppMetadataProperties webAppMetadataProperties;
+
     @Autowired
     @InjectMocks
     private VersionService versionService;
@@ -38,6 +43,8 @@ public class VersionServiceTest {
         doReturn("voa-version").when(voaVersionProperties).getVersion();
         doReturn("conceal-id").when(concealThisVersionProperties).getAppId();
         doReturn("voa-id").when(voaVersionProperties).getAppId();
+        doReturn("webapp-id").when(webAppMetadataProperties).getAppId();
+        doReturn("webapp-version").when(webAppMetadataProperties).getVersion();
         final Field field = VersionService.class.getDeclaredField("knownAppNames");
         field.setAccessible(true);
         field.set(versionService, Map.of(

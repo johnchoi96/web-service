@@ -5,6 +5,7 @@ import io.github.johnchoi96.webservice.models.AppVersion;
 import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.MetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
+import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -22,13 +23,17 @@ public class VersionService {
     @Autowired
     private VoaMetadataProperties voaVersionProperties;
 
+    @Autowired
+    private WebAppMetadataProperties webAppMetadataProperties;
+
     private Map<String, MetadataProperties> knownAppNames;
 
     @PostConstruct
     private void init() {
         knownAppNames = Map.of(
                 concealThisVersionProperties.getAppId().toLowerCase(), concealThisVersionProperties,
-                voaVersionProperties.getAppId().toLowerCase(), voaVersionProperties
+                voaVersionProperties.getAppId().toLowerCase(), voaVersionProperties,
+                webAppMetadataProperties.getAppId().toLowerCase(), webAppMetadataProperties
         );
     }
 
