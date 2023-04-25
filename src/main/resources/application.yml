@@ -1,5 +1,7 @@
 spring:
   config:
-    name: application-local
     import:
       optional:file:secrets/apikeys.yml, app-metadata.yml
+
+server:
+  port: 8080

@@ -75,4 +75,4 @@ jobs:
 
       - name: SSH into EC2 instance and start Spring Boot app
         run: |
-          ssh -o StrictHostKeyChecking=no -f -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup java -jar target/$JAR_FILE --spring.config.name=application-prod &"
+          ssh -o StrictHostKeyChecking=no -f -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup java -jar target/$JAR_FILE --spring.profiles.active=prod &"
