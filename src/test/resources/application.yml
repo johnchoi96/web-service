@@ -9,3 +9,6 @@ server:
 logging:
   level:
     root: INFO
+
+scheduler:
+  enabled: false
