@@ -13,8 +13,7 @@
 * [Documentation](ENDPOINTS.md)
 
 ## Public IP/DNS
-
-* WIP: no elastic IP is assigned for now
+* https://ec2-3-130-128-69.us-east-2.compute.amazonaws.com
 
 ## How to run this application
 
