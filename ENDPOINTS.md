@@ -33,3 +33,4 @@
 
 * [GET] `/all`
 * [GET] `/filtered`
+    - RequestParam: `limit` (optional)

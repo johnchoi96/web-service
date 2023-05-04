@@ -1,14 +1,16 @@
-package io.github.johnchoi96.webservice.models.petfinder;
+package io.github.johnchoi96.webservice.models.petfinder.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Colors {
+public class Breeds {
     private String secondary;
 
-    private String tertiary;
+    private Boolean mixed;
 
     private String primary;
+
+    private Boolean unknown;
 }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.configs.auth.BearerToken;
-import io.github.johnchoi96.webservice.models.petfinder.PetfinderResponse;
+import io.github.johnchoi96.webservice.models.petfinder.response.PetfinderResponse;
 import io.github.johnchoi96.webservice.properties.api.PetfinderApiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +40,7 @@ public class PetfinderClient {
     }
 
     public List<PetfinderResponse> findAllDogsNear43235(final Set<String> breeds) throws JsonProcessingException {
+        log.info("Starting PetfinderClient.findAllDogsNear43235(Set<String>)");
         final String clientId = petfinderApiProperties.getClientId();
         final String clientSecret = petfinderApiProperties.getClientSecret();
         final String tokenUri = petfinderApiProperties.getBearerToken().getUri();
@@ -62,6 +63,7 @@ public class PetfinderClient {
             log.info("Querying page {} out of {}", currentPage++, finalPage);
             responseList.add(response);
         } while (currentPage <= finalPage);
+        log.info("Finished PetfinderClient.findAllDogsNear43235(Set<String>)");
         return responseList;
     }
 }
