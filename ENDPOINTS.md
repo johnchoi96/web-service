@@ -1,5 +1,9 @@
 # Endpoints
 
+### Root `/`
+
+* [GET] `/`
+
 ### Test `/api/test`
 
 * [GET] `/helloWorld`
