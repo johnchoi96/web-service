@@ -4,7 +4,11 @@ import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import lombok.experimental.UtilityClass;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @UtilityClass
 public class EmailBodyFactory {
