@@ -22,7 +22,7 @@ public class SchedulerService {
     public void findDogsNear43235() throws JsonProcessingException {
         if (schedulerEnabled) {
             log.info("Starting job for findDogsNear43235()");
-            final Integer limit = 50;
+            final Integer limit = 100;
             petfinderService.findFilteredDogsAndReport(limit);
             log.info("Finished job for findDogsNear43235()");
         }
