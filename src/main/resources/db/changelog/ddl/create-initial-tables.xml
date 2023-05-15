@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
-    <changeSet id="create-sample-table" author="John Choi">
+    <changeSet id="create-sample-table" author="John Choi" failOnError="true">
         <sql>
             create table SAMPLE (
             ID INT AUTO_INCREMENT PRIMARY KEY,
