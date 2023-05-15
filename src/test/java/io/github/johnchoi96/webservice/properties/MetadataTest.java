@@ -3,15 +3,20 @@ package io.github.johnchoi96.webservice.properties;
 import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
+import liquibase.integration.spring.SpringLiquibase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class MetadataTest {
+
+    @MockBean
+    private SpringLiquibase liquibase;
 
     @Autowired
     private ConcealThisMetadataProperties concealThisVersionProperties;
