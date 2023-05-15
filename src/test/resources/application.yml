@@ -2,6 +2,16 @@ spring:
   config:
     import:
       apikeys.yml, app-metadata.yml
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://web-service-db.cnwckavej6dv.us-east-2.rds.amazonaws.com:3306/webservicedb-test
+    username: test
+    password: testpassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  liquibase:
+    enabled: false
 
 server:
   port: 8080
