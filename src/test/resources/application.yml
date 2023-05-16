@@ -2,8 +2,8 @@ spring:
   config:
     import:
       apikeys.yml, app-metadata.yml
-#  liquibase:
-#    enabled: false
+  liquibase:
+    enabled: false
 
 server:
   port: 8080
