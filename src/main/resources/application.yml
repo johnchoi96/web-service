@@ -1,7 +1,10 @@
 spring:
   config:
     import:
-      optional:file:secrets/apikeys.yml, app-metadata.yml
+      optional:file:secrets/apikeys.yml, app-metadata.yml, optional:file:secrets/database.yml
+  jpa:
+    hibernate:
+      ddl-auto: create
 
 server:
   port: 8080

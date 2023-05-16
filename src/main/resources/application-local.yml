@@ -1,6 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:mysql://web-service-db.cnwckavej6dv.us-east-2.rds.amazonaws.com:3306/webservicedb-local
+    username: ${database.username}
+    password: ${database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
 logging:
   level:
     root: INFO  # ERROR, WARN, INFO, DEBUG, or TRACE.
 
 scheduler:
   enabled: false
+
+liquibase:
+  databaseChangeLogTableName: DATABASECHANGELOG
+  changeLogFile: classpath:/db/changelog/changelog.xml
+  url: jdbc:mysql://web-service-db.cnwckavej6dv.us-east-2.rds.amazonaws.com:3306/webservicedb-local
+  username: ${database.username}
+  password: ${database.password}
