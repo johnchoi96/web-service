@@ -68,20 +68,24 @@ public class EmailBodyFactory {
                 <html><body>
                 <h3>Gold Price is lower today!</h3>
                 <p>
-                    Previous Gold Rate on %s: %.2f
+                    Previous Gold Rate on %s: $%.2f
                     <br />
-                    Today's Gold Rate on %s: %.2f
+                    Today's Gold Rate on %s: $%.2f
+                    <br />
+                    Difference: $%.2f
                     <br />
                     For more info, <a href='%s'>Click Here</a>
                     <br />
                 </p>
                 </body></html>
                 """;
+        var priceDifference = prev.getRates().getUsd() - today.getRates().getUsd();
         return String.format(message,
                 prevDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
                 prev.getRates().getUsd(),
                 todayDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
                 today.getRates().getUsd(),
+                priceDifference,
                 googleLink);
     }
 }

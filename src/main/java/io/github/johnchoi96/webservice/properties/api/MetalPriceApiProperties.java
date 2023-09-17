@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "metal_price")
+@ConfigurationProperties(prefix = "metal-price")
 public class MetalPriceApiProperties {
     private String apiKey;
 }

@@ -38,3 +38,7 @@
 * [GET] `/all`
 * [GET] `/filtered`
     - RequestParam: `limit` (optional)
+
+### Metal Price `/api/metal-price`
+
+* [GET] `/trigger-report`

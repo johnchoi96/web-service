@@ -36,6 +36,8 @@ public class MetalPriceService {
         // get today's rate
         var todayRate = metalPriceClient.getLatestGoldRate();
         // if today's rate is lower than the previous rate, send email
+        log.info(String.format("Prev rate: $%.2f, today's rate: $%.2f",
+                previousRate.getRates().getUsd(), todayRate.getRates().getUsd()));
         if (todayRate.getRates().getUsd() < previousRate.getRates().getUsd()) {
             // send email
             log.info("Today's rate is lower so triggering an email");
