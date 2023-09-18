@@ -1,0 +1,69 @@
+package io.github.johnchoi96.webservice.services;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.johnchoi96.webservice.clients.MetalPriceClient;
+import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
+import io.github.johnchoi96.webservice.models.metalprice.Rates;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDate;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+public class MetalPriceServiceTest {
+
+    @Mock
+    @Autowired
+    private MetalPriceClient metalPriceClient;
+
+    @Mock
+    @Autowired
+    private EmailService emailService;
+
+    @InjectMocks
+    @Autowired
+    private MetalPriceService metalPriceService;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testAnalyzeGoldPriceAndReportValidDay() throws JsonProcessingException {
+        final LocalDate date = LocalDate.of(2023, 9, 14);
+        doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
+        doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
+        doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
+
+        metalPriceService.analyzeGoldPriceAndReport(date);
+        verify(metalPriceClient, times(1)).getGoldRateForDate(any());
+        verify(emailService, times(1)).sendEmailForMetalPrice(any(), any(), any(), any());
+    }
+
+    @Test
+    void testAnalyzeGoldPriceAndReportInvalidDay() throws JsonProcessingException {
+        final LocalDate date = LocalDate.of(2023, 9, 17);
+        doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
+        doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
+        doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
+
+        metalPriceService.analyzeGoldPriceAndReport(date);
+        verify(metalPriceClient, times(0)).getGoldRateForDate(any());
+        verify(emailService, times(0)).sendEmailForMetalPrice(any(), any(), any(), any());
+    }
+
+    private MetalPriceResponse getDummyRate(final double usdRate) {
+        final MetalPriceResponse response = new MetalPriceResponse();
+        final Rates rate = new Rates();
+        rate.setUsd(usdRate);
+        response.setRates(rate);
+        return response;
+    }
+}

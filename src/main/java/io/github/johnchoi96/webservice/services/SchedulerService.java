@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class SchedulerService {
     public void fetchGoldPriceInfo() throws JsonProcessingException {
         if (schedulerEnabled) {
             log.info("Starting job for fetchGoldPriceInfo()");
-            metalPriceService.analyzeGoldPriceAndReport();
+            metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
             log.info("Finished job for fetchGoldPriceInfo()");
         }
     }

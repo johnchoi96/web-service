@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping(value = "/api/metal-price")
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class MetalPriceController {
 
     @GetMapping(value = "/trigger-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> metalPrice() throws JsonProcessingException {
-        metalPriceService.analyzeGoldPriceAndReport();
+        metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
         return ResponseEntity.ok().build();
     }
 }

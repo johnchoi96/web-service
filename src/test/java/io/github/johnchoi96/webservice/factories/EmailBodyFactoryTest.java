@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EmailBodyFactoryTest {
 
     @Test
-    public void buildWithAllThreeFields() {
+    void buildWithAllThreeFields() {
         final String actual = EmailBodyFactory.buildBodyFromWebApp(getCompleteRequest());
         String THREE_FIELDS_EMAIL = """
                 Subject: TEST_SUBJECT
@@ -26,7 +26,7 @@ public class EmailBodyFactoryTest {
     }
 
     @Test
-    public void buildWithNullContactInfo() {
+    void buildWithNullContactInfo() {
         final String actual = EmailBodyFactory.buildBodyFromWebApp(getRequestWithNoContactInfo());
         String TWO_FIELDS_EMAIL = """
                 Subject: TEST_SUBJECT
@@ -40,7 +40,7 @@ public class EmailBodyFactoryTest {
     }
 
     @Test
-    public void buildForMetalPriceIncreased() {
+    void buildForMetalPriceIncreased() {
         final LocalDate prevDate = LocalDate.of(2023, 9, 14);
         final LocalDate todayDate = LocalDate.of(2023, 9, 15);
         final MetalPriceResponse prevRate = getDummyPrevRate();
@@ -65,7 +65,7 @@ public class EmailBodyFactoryTest {
     }
 
     @Test
-    public void buildForMetalPriceDecreased() {
+    void buildForMetalPriceDecreased() {
         final LocalDate prevDate = LocalDate.of(2023, 9, 14);
         final LocalDate todayDate = LocalDate.of(2023, 9, 15);
         final MetalPriceResponse prevRate = getDummyTodayRate();

@@ -17,9 +17,8 @@ public class MetalPriceService {
 
     private final EmailService emailService;
 
-    public void analyzeGoldPriceAndReport() throws JsonProcessingException {
+    public void analyzeGoldPriceAndReport(final LocalDate today) throws JsonProcessingException {
         // get today's day of the week
-        var today = LocalDate.now();
         var day = today.getDayOfWeek();
 
         var previousDate = switch (day) {
