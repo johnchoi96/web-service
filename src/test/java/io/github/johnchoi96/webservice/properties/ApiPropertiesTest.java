@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.properties;
 
+import io.github.johnchoi96.webservice.properties.api.MetalPriceApiProperties;
 import io.github.johnchoi96.webservice.properties.api.PetfinderApiProperties;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,9 @@ public class ApiPropertiesTest {
     @Autowired
     private SendGridApiProperties sendGridApiProperties;
 
+    @Autowired
+    private MetalPriceApiProperties metalPriceApiProperties;
+
     @Test
     void testPetfinderApiProperty() {
         assertNotNull(petfinderApiProperties);
@@ -34,5 +38,12 @@ public class ApiPropertiesTest {
         assertNotNull(sendGridApiProperties);
         final String DUMMY_SENDGRID_API_KEY = "dummy-sendgrid-apikey";
         assertEquals(DUMMY_SENDGRID_API_KEY, sendGridApiProperties.getApiKey());
+    }
+
+    @Test
+    void testMetalPriceApiProperty() {
+        assertNotNull(metalPriceApiProperties);
+        final String DUMMY_METAL_PRICE_API_KEY = "dummy-metal-price-apikey";
+        assertEquals(DUMMY_METAL_PRICE_API_KEY, metalPriceApiProperties.getApiKey());
     }
 }

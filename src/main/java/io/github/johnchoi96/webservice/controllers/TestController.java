@@ -20,7 +20,7 @@ public class TestController {
 
     @Autowired
     private Uptime uptime;
-
+    
     @GetMapping(value = "/helloWorld", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> helloWorld() {
         log.info("GET /api/test/helloWorld");
