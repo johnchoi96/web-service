@@ -6,3 +6,6 @@ petfinder:
   clientSecret: dummy-petfinder-client-secret
   bearerToken:
     uri: dummy-petfinder-bearer-token-uri
+
+metal-price:
+  apiKey: dummy-metal-price-apikey
