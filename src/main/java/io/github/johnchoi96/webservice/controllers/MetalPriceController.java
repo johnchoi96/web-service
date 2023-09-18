@@ -21,8 +21,13 @@ public class MetalPriceController {
     private final MetalPriceService metalPriceService;
 
     @GetMapping(value = "/trigger-report", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> metalPrice() throws JsonProcessingException {
-        metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> metalPrice() {
+        try {
+            metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
+            return ResponseEntity.ok().build();
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 }
