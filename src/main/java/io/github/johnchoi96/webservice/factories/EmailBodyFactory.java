@@ -79,7 +79,7 @@ public class EmailBodyFactory {
                 </p>
                 </body></html>
                 """;
-        var priceDifference = prev.getRates().getUsd() - today.getRates().getUsd();
+        var priceDifference = today.getRates().getUsd() - prev.getRates().getUsd();
         return String.format(message,
                 prevDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
                 prev.getRates().getUsd(),
