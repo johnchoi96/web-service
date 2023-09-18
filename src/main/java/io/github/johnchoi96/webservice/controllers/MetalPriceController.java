@@ -26,7 +26,7 @@ public class MetalPriceController {
             metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
             return ResponseEntity.ok().build();
         } catch (JsonProcessingException e) {
-            log.error(e.getMessage());
+            log.error(e.getLocalizedMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
