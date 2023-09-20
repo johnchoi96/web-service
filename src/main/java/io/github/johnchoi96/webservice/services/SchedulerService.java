@@ -32,7 +32,7 @@ public class SchedulerService {
         }
     }
 
-    @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI")
+    @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI", zone = "America/New_York")
     public void fetchGoldPriceInfo() throws JsonProcessingException {
         if (schedulerEnabled) {
             log.info("Starting job for fetchGoldPriceInfo()");
