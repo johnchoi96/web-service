@@ -2,10 +2,16 @@ package io.github.johnchoi96.webservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.johnchoi96.webservice.clients.PetfinderClient;
-import io.github.johnchoi96.webservice.models.petfinder.filters.*;
+import io.github.johnchoi96.webservice.models.petfinder.filters.BreedFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.GermanShepherdDogFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.HuskyFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.JindoFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.ShibaInuFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.SiberianHuskyFilter;
+import io.github.johnchoi96.webservice.models.petfinder.filters.WhiteGermanShepherdFilter;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import io.github.johnchoi96.webservice.models.petfinder.response.PetfinderResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,13 +19,12 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class PetfinderService {
 
-    @Autowired
-    private PetfinderClient petfinderClient;
+    private final PetfinderClient petfinderClient;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
     private final Set<String> breeds = Set.of("Shiba Inu",
             "Husky", "Siberian Husky", "German Shepherd Dog",

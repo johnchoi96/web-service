@@ -7,7 +7,7 @@ import io.github.johnchoi96.webservice.properties.metadata.MetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +15,14 @@ import java.util.Locale;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class VersionService {
 
-    @Autowired
-    private ConcealThisMetadataProperties concealThisVersionProperties;
+    private final ConcealThisMetadataProperties concealThisVersionProperties;
 
-    @Autowired
-    private VoaMetadataProperties voaVersionProperties;
+    private final VoaMetadataProperties voaVersionProperties;
 
-    @Autowired
-    private WebAppMetadataProperties webAppMetadataProperties;
+    private final WebAppMetadataProperties webAppMetadataProperties;
 
     private Map<String, MetadataProperties> knownAppNames;
 

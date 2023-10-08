@@ -3,8 +3,8 @@ package io.github.johnchoi96.webservice.controllers;
 import io.github.johnchoi96.webservice.components.Uptime;
 import io.github.johnchoi96.webservice.factories.UptimeFactory;
 import io.github.johnchoi96.webservice.models.uptime.UptimeResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +16,11 @@ import java.time.Instant;
 @RestController
 @RequestMapping(value = "/api/test")
 @Slf4j
+@RequiredArgsConstructor
 public class TestController {
 
-    @Autowired
-    private Uptime uptime;
-    
+    private final Uptime uptime;
+
     @GetMapping(value = "/helloWorld", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> helloWorld() {
         log.info("GET /api/test/helloWorld");
