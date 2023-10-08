@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.configs.auth.BearerToken;
 import io.github.johnchoi96.webservice.models.petfinder.response.PetfinderResponse;
 import io.github.johnchoi96.webservice.properties.api.PetfinderApiProperties;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,10 +21,10 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PetfinderClient {
 
-    @Autowired
-    private PetfinderApiProperties petfinderApiProperties;
+    private final PetfinderApiProperties petfinderApiProperties;
 
     private HttpHeaders createHttpHeadersWithBearerToken(final String token) {
         HttpHeaders headers = new HttpHeaders();
