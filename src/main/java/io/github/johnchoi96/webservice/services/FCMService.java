@@ -15,20 +15,22 @@ public class FCMService {
 
     private final FirebaseMessaging fcm;
 
-    public void sendNotification() throws FirebaseMessagingException {
+    private final String NOTIFICATION_TOPIC = "jc-alerts";
+
+    public void sendTestNotification() throws FirebaseMessagingException {
 
         Notification notification = Notification
                 .builder()
-                .setTitle("notification title from rest serv")
-                .setBody("notification body from rest serv")
+                .setTitle("Notification title from rest server")
+                .setBody("Notification body from rest server")
                 .build();
         Message msg = Message.builder()
-                .setTopic("jc-alert")
+                .setTopic(NOTIFICATION_TOPIC)
                 .setNotification(notification)
                 .putData("body", "some data")
                 .build();
 
         String id = fcm.send(msg);
-        log.info(id);
+        log.info("Notification sent with id: {}", id);
     }
 }

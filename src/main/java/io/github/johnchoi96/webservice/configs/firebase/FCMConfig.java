@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class FCMConfig {
 
     @Bean
-    FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
+    public FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
         return FirebaseMessaging.getInstance(firebaseApp);
     }
 }

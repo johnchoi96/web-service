@@ -18,7 +18,7 @@ public class FirebaseAppConfig {
     private final FirebaseProperties firebaseProperties;
 
     @Bean
-    FirebaseApp firebaseApp(GoogleCredentials credentials) {
+    public FirebaseApp firebaseApp(GoogleCredentials credentials) {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();
@@ -27,7 +27,7 @@ public class FirebaseAppConfig {
     }
 
     @Bean
-    GoogleCredentials googleCredentials() throws IOException {
+    public GoogleCredentials googleCredentials() throws IOException {
         if (firebaseProperties.getServiceAccount() != null) {
             try (InputStream is = firebaseProperties.getServiceAccount().getInputStream()) {
                 return GoogleCredentials.fromStream(is);

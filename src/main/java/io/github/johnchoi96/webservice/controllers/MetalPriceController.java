@@ -22,6 +22,7 @@ public class MetalPriceController {
 
     @GetMapping(value = "/trigger-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> metalPrice() {
+        log.info("GET /api/metal-price/trigger-report");
         try {
             metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
             return ResponseEntity.ok().build();
