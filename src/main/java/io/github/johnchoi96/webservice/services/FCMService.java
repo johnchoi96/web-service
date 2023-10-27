@@ -4,9 +4,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -15,22 +18,41 @@ public class FCMService {
 
     private final FirebaseMessaging fcm;
 
-    private final String NOTIFICATION_TOPIC = "jc-alerts";
-
     public void sendTestNotification() throws FirebaseMessagingException {
 
-        Notification notification = Notification
+        final Notification notification = Notification
                 .builder()
-                .setTitle("Notification title from rest server")
-                .setBody("Notification body from rest server")
+                .setTitle("Test Notification title from rest server")
+                .setBody("Test Notification body from rest server")
                 .build();
-        Message msg = Message.builder()
-                .setTopic(NOTIFICATION_TOPIC)
+        final Message msg = Message.builder()
+                .setTopic(FCMTopic.ALL.name())
                 .setNotification(notification)
-                .putData("body", "some data")
+                .putData("body", "Test data")
                 .build();
 
-        String id = fcm.send(msg);
+        final String id = fcm.send(msg);
+        log.info("Notification sent with id: {}", id);
+    }
+
+    public void sendNotification(
+            final FCMTopic topic,
+            final String notificationTitle,
+            final String notificationBody,
+            final Map<String, String> data
+    ) throws FirebaseMessagingException {
+        final Notification notification = Notification
+                .builder()
+                .setTitle(notificationTitle)
+                .setBody(notificationBody)
+                .build();
+        final Message msg = Message.builder()
+                .setTopic(topic.name())
+                .setNotification(notification)
+                .putAllData(data)
+                .build();
+
+        final String id = fcm.send(msg);
         log.info("Notification sent with id: {}", id);
     }
 }

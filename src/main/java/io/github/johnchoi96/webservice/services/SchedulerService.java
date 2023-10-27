@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,11 +24,11 @@ public class SchedulerService {
 
     // Sundays, Mondays, Wednesdays, and Fridays at 9am in EST
     @Scheduled(cron = "0 0 9 ? * SUN,MON,WED,FRI", zone = "America/New_York")
-    public void findDogsNear43235() throws JsonProcessingException {
+    public void findDogsNear43235() throws JsonProcessingException, FirebaseMessagingException {
         if (schedulerEnabled) {
             log.info("Starting job for findDogsNear43235()");
             final Integer limit = 100;
-            petfinderService.findFilteredDogsAndReport(limit);
+            petfinderService.findFilteredDogsAndNotify(limit);
             log.info("Finished job for findDogsNear43235()");
         }
     }
