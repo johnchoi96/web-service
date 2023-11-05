@@ -1,16 +1,19 @@
 package io.github.johnchoi96.webservice.properties;
 
+import io.github.johnchoi96.webservice.configs.MockedBeansConfigs;
 import io.github.johnchoi96.webservice.properties.api.MetalPriceApiProperties;
 import io.github.johnchoi96.webservice.properties.api.PetfinderApiProperties;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@Import(MockedBeansConfigs.class)
 public class ApiPropertiesTest {
 
     @Autowired
