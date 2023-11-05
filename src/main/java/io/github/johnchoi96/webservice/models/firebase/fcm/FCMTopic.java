@@ -1,5 +1,8 @@
 package io.github.johnchoi96.webservice.models.firebase.fcm;
 
+import lombok.Getter;
+
+@Getter
 public enum FCMTopic {
 
     ALL("jc-alerts-all"),

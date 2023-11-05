@@ -26,7 +26,7 @@ public class FCMService {
                 .setBody("Test Notification body from rest server")
                 .build();
         final Message msg = Message.builder()
-                .setTopic(FCMTopic.ALL.name())
+                .setTopic(FCMTopic.METALPRICE.getValue())
                 .setNotification(notification)
                 .putData("body", "Test data")
                 .build();
@@ -47,7 +47,7 @@ public class FCMService {
                 .setBody(notificationBody)
                 .build();
         final Message msg = Message.builder()
-                .setTopic(topic.name())
+                .setTopic(topic.getValue())
                 .setNotification(notification)
                 .putAllData(data)
                 .build();
