@@ -30,10 +30,4 @@ public class PetfinderController {
         log.info("GET /api/petfinder/filtered");
         return ResponseEntity.ok(petfinderService.findFilteredDogs(limit));
     }
-
-    @GetMapping(value = "/send", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> send() throws Exception {
-        petfinderService.findFilteredDogsAndNotify(5);
-        return ResponseEntity.ok().build();
-    }
 }

@@ -18,15 +18,14 @@ public class FCMService {
 
     private final FirebaseMessaging fcm;
 
-    public void sendTestNotification() throws FirebaseMessagingException {
-
+    public void sendTestNotification(final FCMTopic topic) throws FirebaseMessagingException {
         final Notification notification = Notification
                 .builder()
                 .setTitle("Test Notification title from rest server")
                 .setBody("Test Notification body from rest server")
                 .build();
         final Message msg = Message.builder()
-                .setTopic(FCMTopic.METALPRICE.getValue())
+                .setTopic(topic.getValue())
                 .setNotification(notification)
                 .putData("body", "Test data")
                 .build();
