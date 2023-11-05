@@ -3,18 +3,20 @@ package io.github.johnchoi96.webservice.configs;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @TestConfiguration
+@RequiredArgsConstructor
 public class MockedBeansConfigs {
 
     @MockBean
-    private GoogleCredentials googleCredentials;
+    private final GoogleCredentials googleCredentials;
 
     @MockBean
-    private FirebaseApp firebaseApp;
+    private final FirebaseApp firebaseApp;
 
     @MockBean
-    private FirebaseMessaging firebaseMessaging;
+    private final FirebaseMessaging firebaseMessaging;
 }
