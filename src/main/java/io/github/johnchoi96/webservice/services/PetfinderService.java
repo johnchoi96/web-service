@@ -18,9 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -44,11 +42,10 @@ public class PetfinderService {
     public void findFilteredDogsAndNotify(final Integer limit) throws JsonProcessingException, FirebaseMessagingException {
         var filteredList = findFilteredDogs(limit);
         emailService.sendEmailForPetfinder(filteredList);
-        final Map<String, String> data = new HashMap<>();
-        data.put("body", FCMBodyFactory.buildBodyForPetfinder(filteredList));
+        final StringBuilder petfinderBody = FCMBodyFactory.buildBodyForPetfinder(filteredList);
         final String notificationTitle = "Message from Web Service for Petfinder";
         final String notificationBody = "Tap to see the filtered list of 43235 dogs!";
-        fcmService.sendNotification(FCMTopic.PETFINDER, notificationTitle, notificationBody, data);
+        fcmService.sendNotification(FCMTopic.PETFINDER, notificationTitle, notificationBody, petfinderBody, true, false);
     }
 
     public List<AnimalsItem> findFilteredDogs(final Integer limit) throws JsonProcessingException {

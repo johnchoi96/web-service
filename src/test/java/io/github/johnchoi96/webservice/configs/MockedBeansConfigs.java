@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.configs;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +20,7 @@ public class MockedBeansConfigs {
 
     @MockBean
     private final FirebaseMessaging firebaseMessaging;
+
+    @MockBean
+    private final Firestore firestore;
 }

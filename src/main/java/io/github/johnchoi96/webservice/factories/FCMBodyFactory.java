@@ -11,7 +11,7 @@ import java.util.Map;
 @UtilityClass
 public class FCMBodyFactory {
 
-    public String buildBodyForPetfinder(final List<AnimalsItem> response) {
+    public StringBuilder buildBodyForPetfinder(final List<AnimalsItem> response) {
         // categorize breeds
         Map<String, List<AnimalsItem>> breedsMap = new HashMap<>();
         for (final AnimalsItem item : response) {
@@ -46,6 +46,6 @@ public class FCMBodyFactory {
             sb.append("</ol>");
         });
         sb.append("</body></html>");
-        return sb.toString();
+        return sb;
     }
 }
