@@ -5,9 +5,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.models.auth.BearerTokenResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.UtilityClass;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @UtilityClass
@@ -30,7 +33,6 @@ public class BearerToken {
         private String clientSecret;
     }
 
-    @Bean
     public String getPetfinderBearerToken(final String uri, final String clientId, final String clientSecret) throws JsonProcessingException {
         final RestTemplate restTemplate = new RestTemplate();
         final PetfinderPost postObj = PetfinderPost

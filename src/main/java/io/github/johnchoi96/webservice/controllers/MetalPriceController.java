@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.services.MetalPriceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,11 @@ public class MetalPriceController {
 
     @GetMapping(value = "/trigger-report", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> metalPrice() {
+        log.info("GET /api/metal-price/trigger-report");
         try {
-            metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
+            metalPriceService.analyzeGoldPriceAndNotify(LocalDate.now());
             return ResponseEntity.ok().build();
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | FirebaseMessagingException e) {
             log.error(e.getLocalizedMessage());
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

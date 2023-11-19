@@ -42,3 +42,9 @@
 ### Metal Price `/api/metal-price`
 
 * [GET] `/trigger-report`
+
+### FCM `/api/v1/fcm`
+
+* [GET] `/send-test-notification/{topic}`
+    - RequestParam: `key`
+    - PathVariable `topic`: target notification topic

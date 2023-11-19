@@ -1,7 +1,9 @@
 package io.github.johnchoi96.webservice;
 
+import io.github.johnchoi96.webservice.configs.MockedBeansConfigs;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
 
@@ -9,12 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@Import(MockedBeansConfigs.class)
 class WebServiceApplicationTests {
-
-    @Test
-    void contextLoads() {
-        WebServiceApplication.main(new String[]{});
-    }
 
     @Test
     void verifyMainClassId() {

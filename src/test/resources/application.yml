@@ -1,7 +1,7 @@
 spring:
   config:
     import:
-      apikeys.yml, app-metadata.yml
+      apikeys.yml, app-metadata.yml, admin-keys.yml
 
 server:
   port: 8080

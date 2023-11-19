@@ -35,5 +35,6 @@ build/
 ### macOS temp files ###
 .DS_Store
 
-### Secret YAML files ###
-/secrets/apikeys.yml
+### Secret files ###
+/secrets/
+

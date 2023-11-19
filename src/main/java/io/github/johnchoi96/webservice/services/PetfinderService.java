@@ -1,7 +1,10 @@
 package io.github.johnchoi96.webservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.clients.PetfinderClient;
+import io.github.johnchoi96.webservice.factories.FCMBodyFactory;
+import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import io.github.johnchoi96.webservice.models.petfinder.filters.BreedFilter;
 import io.github.johnchoi96.webservice.models.petfinder.filters.GermanShepherdDogFilter;
 import io.github.johnchoi96.webservice.models.petfinder.filters.HuskyFilter;
@@ -26,6 +29,8 @@ public class PetfinderService {
 
     private final EmailService emailService;
 
+    private final FCMService fcmService;
+
     private final Set<String> breeds = Set.of("Shiba Inu",
             "Husky", "Siberian Husky", "German Shepherd Dog",
             "White German Shepherd", "Jindo");
@@ -34,9 +39,13 @@ public class PetfinderService {
         return petfinderClient.findAllDogsNear43235(breeds);
     }
 
-    public void findFilteredDogsAndReport(final Integer limit) throws JsonProcessingException {
+    public void findFilteredDogsAndNotify(final Integer limit) throws JsonProcessingException, FirebaseMessagingException {
         var filteredList = findFilteredDogs(limit);
         emailService.sendEmailForPetfinder(filteredList);
+        final StringBuilder petfinderBody = FCMBodyFactory.buildBodyForPetfinder(filteredList);
+        final String notificationTitle = "Message from Web Service for Petfinder";
+        final String notificationBody = "Tap to see the filtered list of 43235 dogs!";
+        fcmService.sendNotification(FCMTopic.PETFINDER, notificationTitle, notificationBody, petfinderBody, true, false);
     }
 
     public List<AnimalsItem> findFilteredDogs(final Integer limit) throws JsonProcessingException {

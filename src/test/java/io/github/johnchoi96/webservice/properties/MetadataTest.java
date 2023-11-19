@@ -1,16 +1,19 @@
 package io.github.johnchoi96.webservice.properties;
 
+import io.github.johnchoi96.webservice.configs.MockedBeansConfigs;
 import io.github.johnchoi96.webservice.properties.metadata.ConcealThisMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.VoaMetadataProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
+@Import(MockedBeansConfigs.class)
 public class MetadataTest {
 
     @Autowired

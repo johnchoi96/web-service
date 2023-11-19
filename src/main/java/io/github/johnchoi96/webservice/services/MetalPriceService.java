@@ -1,7 +1,10 @@
 package io.github.johnchoi96.webservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.clients.MetalPriceClient;
+import io.github.johnchoi96.webservice.factories.FCMBodyFactory;
+import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,9 @@ public class MetalPriceService {
 
     private final EmailService emailService;
 
-    public void analyzeGoldPriceAndReport(final LocalDate today) throws JsonProcessingException {
+    private final FCMService fcmService;
+
+    public void analyzeGoldPriceAndNotify(final LocalDate today) throws JsonProcessingException, FirebaseMessagingException {
         // get today's day of the week
         var day = today.getDayOfWeek();
 
@@ -41,6 +46,11 @@ public class MetalPriceService {
             // send email
             log.info("Today's rate is lower so triggering an email");
             emailService.sendEmailForMetalPrice(previousDate, today, previousRate, todayRate);
+            // send notification
+            final String notificationTitle = "Message from Web Service for MetalPrice";
+            final String notificationBody = "Tap to see today's Gold Rate!";
+            final StringBuilder metalpriceBody = FCMBodyFactory.buildBodyForMetalPrice(previousDate, today, previousRate, todayRate);
+            fcmService.sendNotification(FCMTopic.METALPRICE, notificationTitle, notificationBody, metalpriceBody, true, false);
         }
     }
 }
