@@ -34,10 +34,10 @@ public class SchedulerService {
     }
 
     @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI", zone = "America/New_York")
-    public void fetchGoldPriceInfo() throws JsonProcessingException {
+    public void fetchGoldPriceInfo() throws JsonProcessingException, FirebaseMessagingException {
         if (schedulerEnabled) {
             log.info("Starting job for fetchGoldPriceInfo()");
-            metalPriceService.analyzeGoldPriceAndReport(LocalDate.now());
+            metalPriceService.analyzeGoldPriceAndNotify(LocalDate.now());
             log.info("Finished job for fetchGoldPriceInfo()");
         }
     }

@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.clients.MetalPriceClient;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.metalprice.Rates;
@@ -36,25 +37,25 @@ public class MetalPriceServiceTest {
     }
 
     @Test
-    void testAnalyzeGoldPriceAndReportValidDay() throws JsonProcessingException {
+    void testAnalyzeGoldPriceAndReportValidDay() throws JsonProcessingException, FirebaseMessagingException {
         final LocalDate date = LocalDate.of(2023, 9, 14);
         doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
         doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
         doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
 
-        metalPriceService.analyzeGoldPriceAndReport(date);
+        metalPriceService.analyzeGoldPriceAndNotify(date);
         verify(metalPriceClient, times(1)).getGoldRateForDate(any());
         verify(emailService, times(1)).sendEmailForMetalPrice(any(), any(), any(), any());
     }
 
     @Test
-    void testAnalyzeGoldPriceAndReportInvalidDay() throws JsonProcessingException {
+    void testAnalyzeGoldPriceAndReportInvalidDay() throws JsonProcessingException, FirebaseMessagingException {
         final LocalDate date = LocalDate.of(2023, 9, 17);
         doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
         doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
         doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
 
-        metalPriceService.analyzeGoldPriceAndReport(date);
+        metalPriceService.analyzeGoldPriceAndNotify(date);
         verify(metalPriceClient, times(0)).getGoldRateForDate(any());
         verify(emailService, times(0)).sendEmailForMetalPrice(any(), any(), any(), any());
     }
