@@ -48,7 +48,7 @@ public class MetalPriceService {
             emailService.sendEmailForMetalPrice(previousDate, today, previousRate, todayRate);
             // send notification
             final String notificationTitle = "Message from Web Service for MetalPrice";
-            final String notificationBody = "Tap to see the gold rate of today!";
+            final String notificationBody = "Tap to see today's Gold Rate!";
             final StringBuilder metalpriceBody = FCMBodyFactory.buildBodyForMetalPrice(previousDate, today, previousRate, todayRate);
             fcmService.sendNotification(FCMTopic.METALPRICE, notificationTitle, notificationBody, metalpriceBody, true, false);
         }
