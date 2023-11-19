@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -42,8 +44,17 @@ public class FCMService {
     ) throws FirebaseMessagingException {
         // First, try to add notification data to Cloud Firestore
         String notificationId;
+        final Map<String, Object> notificationMetadata = Map.of(
+                "notification-title", notificationTitle,
+                "notification-body", notificationBody,
+                "message", message.toString(),
+                "isHtml", isHtml,
+                "timestamp", Instant.now().toString(),
+                "topic", topic.getValue(),
+                "test-notification", testNotification
+        );
         try {
-            notificationId = cloudFirestoreService.addNotificationPayload(message, topic, isHtml, testNotification);
+            notificationId = cloudFirestoreService.addNotificationPayload(notificationMetadata);
         } catch (final ExecutionException e) {
             log.error("Error occurred during computation. Notification will not be sent.", e);
             return;

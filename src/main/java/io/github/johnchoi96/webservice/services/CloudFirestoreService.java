@@ -5,14 +5,12 @@ import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
-import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -32,24 +30,12 @@ public class CloudFirestoreService {
         collectionRef = db.collection(DB_COLLECTION);
     }
 
-    public String addNotificationPayload(
-            final StringBuilder message,
-            final FCMTopic topic,
-            final boolean isHtml,
-            final boolean test
-    ) throws ExecutionException, InterruptedException {
+    public String addNotificationPayload(final Map<String, Object> notificationMetadata) throws ExecutionException, InterruptedException {
         final String notificationId = generateUuid();
-        final String timestamp = Instant.now().toString();
         final DocumentReference docRef = collectionRef.document(notificationId);
-        final Map<String, Object> data = Map.of(
-                "message", message.toString(),
-                "isHtml", isHtml,
-                "timestamp", timestamp,
-                "topic", topic.getValue(),
-                "test-notification", test
-        );
+
         // asynchronously write data
-        final ApiFuture<WriteResult> result = docRef.set(data);
+        final ApiFuture<WriteResult> result = docRef.set(notificationMetadata);
         log.info("Update time: {}", result.get().getUpdateTime());
         return notificationId;
     }
