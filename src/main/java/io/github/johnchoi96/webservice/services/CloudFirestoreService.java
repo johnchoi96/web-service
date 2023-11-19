@@ -32,7 +32,7 @@ public class CloudFirestoreService {
         collectionRef = db.collection(DB_COLLECTION);
     }
 
-    public String addData(
+    public String addNotificationPayload(
             final StringBuilder message,
             final FCMTopic topic,
             final boolean isHtml,

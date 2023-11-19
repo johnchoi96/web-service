@@ -36,14 +36,14 @@ public class FCMService {
             final FCMTopic topic,
             final String notificationTitle,
             final String notificationBody,
-            final StringBuilder data,
+            final StringBuilder message,
             final boolean isHtml,
             final boolean testNotification
     ) throws FirebaseMessagingException {
         // First, try to add notification data to Cloud Firestore
         String notificationId;
         try {
-            notificationId = cloudFirestoreService.addData(data, topic, isHtml, testNotification);
+            notificationId = cloudFirestoreService.addNotificationPayload(message, topic, isHtml, testNotification);
         } catch (final ExecutionException e) {
             log.error("Error occurred during computation. Notification will not be sent.", e);
             return;
