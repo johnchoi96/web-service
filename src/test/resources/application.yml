@@ -12,3 +12,7 @@ logging:
 
 scheduler:
   enabled: false
+
+gcp:
+  firebase:
+    serviceAccountPath: dummy-service-account-path
