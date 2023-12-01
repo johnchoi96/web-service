@@ -62,6 +62,10 @@ public class FCMService {
             log.error("Current thread interrupted. Notification will not be sent.", e);
             return;
         }
+        final Map<String, String> messageData = Map.of(
+                "notification-id", notificationId,
+                "test-notification", Boolean.toString(testNotification)
+        );
         final Notification notification = Notification
                 .builder()
                 .setTitle(notificationTitle)
@@ -70,7 +74,7 @@ public class FCMService {
         final Message msg = Message.builder()
                 .setTopic(topic.getValue())
                 .setNotification(notification)
-                .putData("notification-id", notificationId)
+                .putAllData(messageData)
                 .build();
 
         final String id = fcm.send(msg);
