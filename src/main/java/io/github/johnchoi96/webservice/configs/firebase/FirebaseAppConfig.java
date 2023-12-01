@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,8 +31,8 @@ public class FirebaseAppConfig {
 
     @Bean
     public GoogleCredentials googleCredentials() throws IOException {
-        if (firebaseProperties.getServiceAccount() != null) {
-            try (InputStream is = firebaseProperties.getServiceAccount().getInputStream()) {
+        if (firebaseProperties != null) {
+            try (InputStream is = new FileInputStream(firebaseProperties.getServiceAccountPath())) {
                 return GoogleCredentials.fromStream(is);
             } catch (IOException e) {
                 throw new RuntimeException(e);
