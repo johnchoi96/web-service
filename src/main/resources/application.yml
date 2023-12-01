@@ -8,4 +8,4 @@ server:
 
 gcp:
   firebase:
-    serviceAccount: secrets/firebase-service-account.json
+    serviceAccountPath: secrets/firebase-service-account.json
