@@ -30,16 +30,11 @@ public class FirebaseAppConfig {
     }
 
     @Bean
-    public GoogleCredentials googleCredentials() throws IOException {
-        if (firebaseProperties != null) {
-            try (InputStream is = new FileInputStream(firebaseProperties.getServiceAccountPath())) {
-                return GoogleCredentials.fromStream(is);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            // Use standard credentials chain. Useful when running inside GKE
-            return GoogleCredentials.getApplicationDefault();
+    public GoogleCredentials googleCredentials() {
+        try (InputStream is = new FileInputStream(firebaseProperties.getServiceAccountPath())) {
+            return GoogleCredentials.fromStream(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
