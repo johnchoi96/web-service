@@ -7,7 +7,7 @@ server:
 
 logging:
   level:
-    root: ERROR  # ERROR, WARN, INFO, DEBUG, or TRACE.
+    root: DEBUG  # ERROR, WARN, INFO, DEBUG, or TRACE.
 
 scheduler:
   enabled: true
