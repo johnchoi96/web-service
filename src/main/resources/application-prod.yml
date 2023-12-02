@@ -14,4 +14,4 @@ scheduler:
 
 gcp:
   firebase:
-    serviceAccountPath: /home/ec2-user/secrets/firebase-service-account.json
+    serviceAccountPath: secrets/firebase-service-account.json
