@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 
@@ -35,6 +36,7 @@ public class FirebaseAppConfig {
 
     @Bean
     @Order(1)
+    @Lazy(false)
     public GoogleCredentials googleCredentials() {
         log.info("FirebaseProperties: {}", firebaseProperties.getServiceAccountPath());
         try (InputStream is = new ClassPathResource(firebaseProperties.getServiceAccountPath()).getInputStream()) {
