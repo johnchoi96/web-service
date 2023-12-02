@@ -4,7 +4,3 @@ logging:
 
 scheduler:
   enabled: false
-
-gcp:
-  firebase:
-    serviceAccountPath: secrets/firebase-service-account.json
