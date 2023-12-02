@@ -45,6 +45,8 @@ public class FirebaseAppConfig {
 
     @Bean
     public Firestore getFirestore() {
+        log.info("FIrestore {}", firebaseProperties.toString());
+        log.info("Firestore content {}", firebaseProperties.getServiceAccountPath());
         return FirestoreClient.getFirestore();
     }
 }
