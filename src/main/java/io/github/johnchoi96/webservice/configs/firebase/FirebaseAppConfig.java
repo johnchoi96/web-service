@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class FirebaseAppConfig {
     private final FirebaseProperties firebaseProperties;
 
     @Bean
+    @Order(2)
     public FirebaseApp firebaseApp(GoogleCredentials credentials) {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
@@ -32,6 +34,7 @@ public class FirebaseAppConfig {
     }
 
     @Bean
+    @Order(1)
     public GoogleCredentials googleCredentials() {
         log.info("FirebaseProperties: {}", firebaseProperties.getServiceAccountPath());
         try (InputStream is = new ClassPathResource(firebaseProperties.getServiceAccountPath()).getInputStream()) {
@@ -44,9 +47,10 @@ public class FirebaseAppConfig {
     }
 
     @Bean
+    @Order(3)
     public Firestore getFirestore() {
-        log.info("FIrestore {}", firebaseProperties.toString());
-        log.info("Firestore content {}", firebaseProperties.getServiceAccountPath());
+        log.debug("FIrestore {}", firebaseProperties.toString());
+        log.debug("Firestore content {}", firebaseProperties.getServiceAccountPath());
         return FirestoreClient.getFirestore();
     }
 }
