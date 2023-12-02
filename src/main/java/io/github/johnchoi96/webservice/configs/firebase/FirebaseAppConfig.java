@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import io.github.johnchoi96.webservice.properties.api.FirebaseProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,6 +17,7 @@ import java.io.InputStream;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class FirebaseAppConfig {
 
     private final FirebaseProperties firebaseProperties;
@@ -31,9 +33,12 @@ public class FirebaseAppConfig {
 
     @Bean
     public GoogleCredentials googleCredentials() {
+        log.info("FirebaseProperties: {}", firebaseProperties.getServiceAccountPath());
         try (InputStream is = new FileInputStream(firebaseProperties.getServiceAccountPath())) {
+            log.info("Try");
             return GoogleCredentials.fromStream(is);
         } catch (IOException e) {
+            log.info("Catch");
             throw new RuntimeException(e);
         }
     }
