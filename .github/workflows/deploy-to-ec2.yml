@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     name: Build and Upload
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3.5.2
       - name: Set up JDK 17
@@ -61,7 +61,7 @@ jobs:
 
   deploy:
     name: Start the Web Service on EC2
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: [ build, clean ]
 
     steps:
@@ -81,7 +81,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -f -i ~/.ssh/id_rsa ec2-user@${{ secrets.HOST_DNS }} "nohup java -jar target/$JAR_FILE --spring.profiles.active=prod &"
   health-check:
     name: Verify the app is live
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: [ deploy ]
     steps:
       - name: Sleep for 1 minute
