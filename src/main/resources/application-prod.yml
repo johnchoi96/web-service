@@ -11,7 +11,3 @@ logging:
 
 scheduler:
   enabled: true
-
-gcp:
-  firebase:
-    serviceAccountPath: /home/ec2-user/secrets/firebase-service-account.json
