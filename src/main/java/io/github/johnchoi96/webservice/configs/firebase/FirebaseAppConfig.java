@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +34,7 @@ public class FirebaseAppConfig {
     @Bean
     public GoogleCredentials googleCredentials() {
         log.info("FirebaseProperties: {}", firebaseProperties.getServiceAccountPath());
-        try (InputStream is = new FileInputStream(firebaseProperties.getServiceAccountPath())) {
+        try (InputStream is = new ClassPathResource(firebaseProperties.getServiceAccountPath()).getInputStream()) {
             log.info("Try");
             return GoogleCredentials.fromStream(is);
         } catch (IOException e) {

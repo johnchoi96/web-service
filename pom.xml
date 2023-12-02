@@ -93,6 +93,26 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.json</include>
+                    <!-- Add additional includes for other file types if needed -->
+                </includes>
+            </resource>
+            <resource>
+                <directory>secrets</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.json</include>
+                    <!-- Add additional includes for other file types if needed -->
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>

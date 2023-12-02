@@ -14,4 +14,4 @@ scheduler:
 
 gcp:
   firebase:
-    serviceAccountPath: secrets/firebase-service-account.json
+    serviceAccountPath: firebase-service-account.json
