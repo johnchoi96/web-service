@@ -5,7 +5,3 @@ spring:
 
 server:
   port: 8080
-
-gcp:
-  firebase:
-    serviceAccountPath: secrets/firebase-service-account.json
