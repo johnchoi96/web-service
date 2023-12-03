@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import io.github.johnchoi96.webservice.properties.api.FirebaseProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,7 @@ import java.io.InputStream;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class FirebaseAppConfig {
 
     private final FirebaseProperties firebaseProperties;
@@ -29,16 +31,19 @@ public class FirebaseAppConfig {
     }
 
     @Bean
-    public GoogleCredentials googleCredentials() throws IOException {
-        if (firebaseProperties.getServiceAccount() != null) {
-            try (InputStream is = firebaseProperties.getServiceAccountAsResource().getInputStream()) {
-                return GoogleCredentials.fromStream(is);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    public GoogleCredentials googleCredentials() {
+        try {
+            if (firebaseProperties.getServiceAccount() != null) {
+                try (InputStream is = firebaseProperties.getServiceAccountAsResource().getInputStream()) {
+                    return GoogleCredentials.fromStream(is);
+                }
+            } else {
+                // Use standard credentials chain. Useful when running inside GKE
+                return GoogleCredentials.getApplicationDefault();
             }
-        } else {
-            // Use standard credentials chain. Useful when running inside GKE
-            return GoogleCredentials.getApplicationDefault();
+        } catch (IOException e) {
+            log.error("Error loading service account file: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to load GoogleCredentials from service account file", e);
         }
     }
 
