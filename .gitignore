@@ -36,7 +36,5 @@ build/
 .DS_Store
 
 ### Secret files ###
-/secrets/admin-keys.yml
-/secrets/apikeys.yml
-/secrets/firebase-service-account.json
+/secrets/
 
