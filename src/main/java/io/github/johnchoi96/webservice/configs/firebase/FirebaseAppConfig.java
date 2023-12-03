@@ -39,8 +39,6 @@ public class FirebaseAppConfig {
             firebaseInitialized = true;
         }
         return FirebaseApp.getInstance();
-
-//        return FirebaseApp.initializeApp(options);
     }
 
     @Bean
