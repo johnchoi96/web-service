@@ -31,7 +31,7 @@ public class FirebaseAppConfig {
     @Bean
     public GoogleCredentials googleCredentials() throws IOException {
         if (firebaseProperties.getServiceAccount() != null) {
-            try (InputStream is = firebaseProperties.getServiceAccount().getInputStream()) {
+            try (InputStream is = firebaseProperties.getServiceAccountAsResource().getInputStream()) {
                 return GoogleCredentials.fromStream(is);
             } catch (IOException e) {
                 throw new RuntimeException(e);

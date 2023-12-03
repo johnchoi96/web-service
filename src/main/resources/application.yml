@@ -1,11 +1,11 @@
 spring:
   config:
     import:
-      optional:file:secrets/apikeys.yml, optional:file:secrets/admin-keys.yml, app-metadata.yml
+      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, app-metadata.yml
 
 server:
   port: 8080
 
 gcp:
   firebase:
-    serviceAccount: file:secrets/firebase-service-account.json
+    serviceAccount: secrets/firebase-service-account.json
