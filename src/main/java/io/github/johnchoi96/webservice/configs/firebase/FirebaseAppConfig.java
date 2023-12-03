@@ -1,12 +1,9 @@
 package io.github.johnchoi96.webservice.configs.firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
 import io.github.johnchoi96.webservice.properties.api.FirebaseProperties;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -21,18 +18,6 @@ import java.io.InputStream;
 public class FirebaseAppConfig {
 
     private final FirebaseProperties firebaseProperties;
-
-    @PostConstruct
-    public void initializeFirebase() {
-        try {
-            FirebaseApp.initializeApp(FirebaseOptions.builder()
-                    .setCredentials(googleCredentials())
-                    .build());
-            log.info("FirebaseApp initialized successfully.");
-        } catch (Exception e) {
-            log.error("Error initializing FirebaseApp: {}", e.getMessage(), e);
-        }
-    }
 
     @Bean
     public FirebaseApp firebaseApp(GoogleCredentials credentials) {
@@ -58,10 +43,5 @@ public class FirebaseAppConfig {
             log.error("Error loading service account file: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to load GoogleCredentials from service account file", e);
         }
-    }
-
-    @Bean
-    public Firestore getFirestore() {
-        return FirestoreClient.getFirestore();
     }
 }
