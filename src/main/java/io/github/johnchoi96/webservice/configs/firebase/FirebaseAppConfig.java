@@ -1,8 +1,10 @@
 package io.github.johnchoi96.webservice.configs.firebase;
 
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.cloud.FirestoreClient;
 import io.github.johnchoi96.webservice.properties.api.FirebaseProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +21,26 @@ public class FirebaseAppConfig {
 
     private final FirebaseProperties firebaseProperties;
 
+    private static boolean firebaseInitialized = false;
+
+    @Bean
+    public Firestore firestore() {
+        return FirestoreClient.getFirestore(firebaseApp(googleCredentials()));
+    }
+
     @Bean
     public FirebaseApp firebaseApp(GoogleCredentials credentials) {
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
                 .build();
 
-        return FirebaseApp.initializeApp(options);
+        if (!firebaseInitialized) {
+            FirebaseApp.initializeApp(options);
+            firebaseInitialized = true;
+        }
+        return FirebaseApp.getInstance();
+
+//        return FirebaseApp.initializeApp(options);
     }
 
     @Bean
