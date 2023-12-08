@@ -38,3 +38,6 @@ build/
 ### Secret files ###
 /secrets/
 
+### log ###
+web-service-application.log
+

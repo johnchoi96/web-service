@@ -9,3 +9,7 @@ server:
 gcp:
   firebase:
     serviceAccount: secrets/firebase-service-account.json
+
+logging:
+  file:
+    name: web-service-application.log
