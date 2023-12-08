@@ -65,7 +65,7 @@ public class SchedulerService {
     @Scheduled(cron = "0 0 4 1 1/1 ?", zone = "America/New_York")
     public void deleteOldNotificationsInCloudFirestore() throws ExecutionException, InterruptedException {
         if (schedulerEnabled) {
-            final int DAYS = 30;
+            final int DAYS = 60;
             log.info("Starting job for deleteOldNotificationsInCloudFirestore(). Days set for {}", DAYS);
             cloudFirestoreService.deleteNotificationsOlderThanDays(DAYS);
             log.info("Finished job for deleteOldNotificationsInCloudFirestore()");
