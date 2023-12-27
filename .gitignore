@@ -39,5 +39,5 @@ build/
 /secrets/
 
 ### log ###
-web-service-application.log
+web-service-application.log*
 
