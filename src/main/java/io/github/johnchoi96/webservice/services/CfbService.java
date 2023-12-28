@@ -50,6 +50,10 @@ public class CfbService {
             return;
         }
         final List<UpsetGame> upsetGames = collectUpsetGames(Instant.now());
+        if (upsetGames.isEmpty()) {
+            log.info("No upset game for this week.");
+            return;
+        }
         final StringBuilder notificationContent = FCMBodyFactory.buildBodyForCfbUpset(currentWeek.getSeasonType(), currentWeek.getWeek(), upsetGames);
         final String notificationTitle = "This week's CFB upset report is ready.";
         final String notificationSubtitle = "Tap to see this week's CFB upsets.";
