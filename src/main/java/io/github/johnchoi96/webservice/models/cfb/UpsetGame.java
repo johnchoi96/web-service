@@ -9,15 +9,23 @@ import java.time.Instant;
 @Builder
 public class UpsetGame {
 
-    private Integer homeRank;
+    private String location;
 
-    private Integer awayRank;
+    private String bowlName;
+
+    private String winningTeamName;
 
     private Float preGameHomeWinProbability;
+
+    private Float preGameAwayWinProbability;
 
     private String homeTeamName;
 
     private String awayTeamName;
+
+    private Integer homeRank;
+
+    private Integer awayRank;
 
     private int homePoints;
 
@@ -28,10 +36,6 @@ public class UpsetGame {
     private int year;
 
     private String seasonType;
-
-    private String location;
-
-    private String bowlName;
 
     private Instant timestamp;
 

@@ -35,7 +35,7 @@ public class CfbController {
 
     @GetMapping(value = "/upsets/{timestamp}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastUpsets(@PathVariable String timestamp) throws JsonProcessingException {
-        log.info("GET /api/cfb/upsets/{timestamp}");
+        log.info("GET /api/cfb/upsets/{}", timestamp);
         try {
             // Parse the date string as LocalDate
             final LocalDate localDate = LocalDate.parse(timestamp);

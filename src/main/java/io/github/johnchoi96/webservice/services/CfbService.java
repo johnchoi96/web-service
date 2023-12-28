@@ -134,10 +134,11 @@ public class CfbService {
             log.info("Collecting game data for game ID: {}", probability.getGameId());
             var gameDetail = cfbClient.getGameData(probability.getSeasonType(), probability.getGameId()).get(0);
             if (gameDetail.isCompleted() && isUpset(probability, gameDetail)) {
-                final UpsetGame game = UpsetGame.builder()
+                final UpsetGame.UpsetGameBuilder game = UpsetGame.builder()
                         .homeRank(getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail))
                         .awayRank(getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail))
                         .preGameHomeWinProbability(probability.getHomeWinProb())
+                        .preGameAwayWinProbability(1 - probability.getHomeWinProb())
                         .homeTeamName(gameDetail.getHomeTeam())
                         .awayTeamName(gameDetail.getAwayTeam())
                         .homePoints(gameDetail.getHomePoints())
@@ -149,9 +150,13 @@ public class CfbService {
                         .bowlName(gameDetail.getNotes())
                         .timestamp(gameDetail.getStartDate())
                         .neutralSite(gameDetail.isNeutralSite())
-                        .conferenceGame(gameDetail.isConferenceGame())
-                        .build();
-                upsets.add(game);
+                        .conferenceGame(gameDetail.isConferenceGame());
+                if (gameDetail.getHomePoints() < gameDetail.getAwayPoints()) {
+                    game.winningTeamName(gameDetail.getAwayTeam());
+                } else {
+                    game.winningTeamName(gameDetail.getHomeTeam());
+                }
+                upsets.add(game.build());
             }
         });
         log.info("Finished collecting all upset game data");
@@ -263,6 +268,10 @@ public class CfbService {
         if (current == null) {
             current = Instant.now();
         }
-        return current.isAfter(start) && current.isBefore(end);
+        if (current.isAfter(start) && current.isBefore(end)) {
+            return true;
+        }
+        final int daysError = 3;
+        return Math.min(InstantUtil.getDifferenceInDays(start, current), InstantUtil.getDifferenceInDays(end, current)) <= daysError;
     }
 }
