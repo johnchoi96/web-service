@@ -31,6 +31,8 @@ public class CfbService {
 
     private final FCMService fcmService;
 
+    private Instant cachedTimestamp;
+
     private List<RankingResponseItem> completeRankingList;
 
     public void runUpsetReport() throws JsonProcessingException, FirebaseMessagingException {
@@ -63,9 +65,17 @@ public class CfbService {
     private List<RankingResponseItem> getCompleteRankingList(final int year) throws JsonProcessingException {
         if (completeRankingList == null) {
             completeRankingList = cfbClient.getAllRankings(year);
+            cachedTimestamp = Instant.now();
         }
         if (!completeRankingList.isEmpty() && completeRankingList.get(0).getSeason() != year) {
             completeRankingList = cfbClient.getAllRankings(year);
+            cachedTimestamp = Instant.now();
+        }
+        // check if completeRankingList is more than a day old
+        final Instant current = Instant.now();
+        if (InstantUtil.getDifferenceInDays(current, cachedTimestamp) >= 1) {
+            completeRankingList = cfbClient.getAllRankings(year);
+            cachedTimestamp = Instant.now();
         }
         return completeRankingList;
     }
