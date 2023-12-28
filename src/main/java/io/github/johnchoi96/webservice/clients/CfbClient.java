@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.models.cfb.calendar.CalendarResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem;
+import io.github.johnchoi96.webservice.models.cfb.rankings.RankingResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.win_probability.WinProbabilityResponseItem;
 import io.github.johnchoi96.webservice.properties.api.CollegeFootballDataProperties;
 import io.github.johnchoi96.webservice.utils.InstantUtil;
@@ -34,20 +35,59 @@ public class CfbClient {
 
     private final String GAME_DATA_URL = "https://api.collegefootballdata.com/games?year=%d&seasonType=%s&id=%d";
 
+    private final String RANKING_URL = "https://api.collegefootballdata.com/rankings?year=%d&week=%d&seasonType=%s";
+
+    private final String RANKING_ALL_URL = "https://api.collegefootballdata.com/rankings?year=%d";
+
     private HttpHeaders createHttpHeadersWithBearerToken(final String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         return headers;
     }
 
-    public List<CalendarResponseItem> getCurrentSeasonCalendar() throws JsonProcessingException {
-        var date = InstantUtil.getDate(Instant.now());
+    public List<RankingResponseItem> getAllRankings(final int year) throws JsonProcessingException {
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
         final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         final ResponseEntity<String> result = restTemplate.exchange(
-                String.format(CALENDAR_URL, date.year()),
+                String.format(RANKING_ALL_URL, year),
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(result.getBody(), new TypeReference<>() {
+        });
+    }
+
+    public List<RankingResponseItem> getRankingForWeek(final int year, final int week, final String seasonType) throws JsonProcessingException {
+        final RestTemplate restTemplate = new RestTemplate();
+        final String bearerToken = collegeFootballDataProperties.getApiKey();
+        final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
+        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        final ResponseEntity<String> result = restTemplate.exchange(
+                String.format(RANKING_URL,
+                        year,
+                        week,
+                        seasonType
+                ),
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+        final ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(result.getBody(), new TypeReference<>() {
+        });
+    }
+
+    public List<CalendarResponseItem> getCurrentSeasonCalendar(final int year) throws JsonProcessingException {
+        final RestTemplate restTemplate = new RestTemplate();
+        final String bearerToken = collegeFootballDataProperties.getApiKey();
+        final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
+        final HttpEntity<String> entity = new HttpEntity<>(headers);
+        final ResponseEntity<String> result = restTemplate.exchange(
+                String.format(CALENDAR_URL, year),
                 HttpMethod.GET,
                 entity,
                 String.class
@@ -79,7 +119,7 @@ public class CfbClient {
         });
     }
 
-    public List<GameDataResponseItem> getGameData(final String seasonType, final int gameId) throws JsonProcessingException {
+    public List<GameDataResponseItem> getGameData(final String seasonType, final int gameId) {
         var date = InstantUtil.getDate(Instant.now());
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
@@ -96,7 +136,11 @@ public class CfbClient {
                 String.class
         );
         final ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-        return mapper.readValue(result.getBody(), new TypeReference<>() {
-        });
+        try {
+            return mapper.readValue(result.getBody(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -3,11 +3,11 @@ package io.github.johnchoi96.webservice.models.cfb.calendar;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.johnchoi96.webservice.json.StringInstantDeserializer;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.Instant;
 
-@Data
+@Getter
 public class CalendarResponseItem {
     @JsonDeserialize(using = StringInstantDeserializer.class)
     private Instant firstGameStart;

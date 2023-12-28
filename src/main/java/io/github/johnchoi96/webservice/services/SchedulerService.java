@@ -26,6 +26,8 @@ public class SchedulerService {
 
     private final CloudFirestoreService cloudFirestoreService;
 
+    private final CfbService cfbService;
+
     /**
      * Sundays, Mondays, Wednesdays, and Fridays at 9am in EST.
      *
@@ -70,6 +72,21 @@ public class SchedulerService {
             log.info("Starting job for deleteOldNotificationsInCloudFirestore(). Days set for {}", DAYS);
             cloudFirestoreService.deleteNotificationsOlderThanDays(DAYS);
             log.info("Finished job for deleteOldNotificationsInCloudFirestore()");
+        }
+    }
+
+    /**
+     * At 11:00AM on Sundays.
+     *
+     * @throws JsonProcessingException    if JSON to DTO parsing went wrong
+     * @throws FirebaseMessagingException if sending notification failed
+     */
+    @Scheduled(cron = "0 0 11 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
+    public void runCurrentWeeksCfbUpsetReport() throws JsonProcessingException, FirebaseMessagingException {
+        if (schedulerEnabled) {
+            log.info("Starting job for runCurrentWeeksCfbUpsetReport()");
+            cfbService.runUpsetReport();
+            log.info("Finished job for runCurrentWeeksCfbUpsetReport()");
         }
     }
 }

@@ -1,9 +1,9 @@
 package io.github.johnchoi96.webservice.models.cfb.win_probability;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class WinProbabilityResponseItem {
     private int gameId;
 

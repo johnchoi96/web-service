@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.factories;
 
+import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import lombok.experimental.UtilityClass;
@@ -80,5 +81,31 @@ public class FCMBodyFactory {
                 priceDifference,
                 googleLink);
         return new StringBuilder(body);
+    }
+
+    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final List<GameDataResponseItem> upsetGames) {
+        final StringBuilder body = new StringBuilder("<html><body>");
+        final String headerText = seasonType.equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
+        body.append("<h1>");
+        body.append(headerText);
+        body.append("</h1>");
+        body.append("<p>Upsets:</p>");
+        body.append("<table border='1'><tr>");
+        body.append("<th>Match Desc</th>");
+        body.append("<th>Pre-Match Win Chance</th>");
+        body.append("<th>Score</th>");
+        body.append("</tr>");
+        final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td>";
+        for (final GameDataResponseItem gameData : upsetGames) {
+            final String matchDesc = String.format("%s @ %s", gameData.getAwayTeam(), gameData.getHomeTeam());
+            final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
+            final int awayWinChancePercentage = 100 - homeWinChancePercentage;
+            final String preMatchChanceText = String.format("%d%%, %d%%", awayWinChancePercentage, homeWinChancePercentage);
+            final String scoreText = String.format("%d - %d", gameData.getAwayPoints(), gameData.getHomePoints());
+            body.append(String.format(rowText, matchDesc, preMatchChanceText, scoreText));
+        }
+        body.append("</tr>");
+        body.append("</table></body></html>");
+        return body;
     }
 }

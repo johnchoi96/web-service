@@ -7,7 +7,8 @@ public enum FCMTopic {
 
     ALL("jc-alerts-all"),
     PETFINDER("jc-alerts-petfinder"),
-    METALPRICE("jc-alerts-metalprice");
+    METALPRICE("jc-alerts-metalprice"),
+    CFB("jc-alerts-cfb");
 
     private final String value;
 

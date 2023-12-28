@@ -3,12 +3,14 @@ package io.github.johnchoi96.webservice.models.cfb.game_data;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.github.johnchoi96.webservice.json.StringInstantDeserializer;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class GameDataResponseItem {
     private String venue;
 
@@ -77,4 +79,10 @@ public class GameDataResponseItem {
     private String homeTeam;
 
     private int attendance;
+
+    private Integer homeRank;
+
+    private Integer awayRank;
+
+    private Float preGameHomeWinProbability;
 }
