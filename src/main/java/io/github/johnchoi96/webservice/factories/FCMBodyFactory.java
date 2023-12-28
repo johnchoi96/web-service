@@ -1,6 +1,6 @@
 package io.github.johnchoi96.webservice.factories;
 
-import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem;
+import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import lombok.experimental.UtilityClass;
@@ -83,7 +83,7 @@ public class FCMBodyFactory {
         return new StringBuilder(body);
     }
 
-    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final List<GameDataResponseItem> upsetGames) {
+    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final List<UpsetGame> upsetGames) {
         final StringBuilder body = new StringBuilder("<html><body>");
         final String headerText = seasonType.equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
         body.append("<h1>");
@@ -96,7 +96,7 @@ public class FCMBodyFactory {
         body.append("<th>Score</th>");
         body.append("</tr>");
         final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td>";
-        for (final GameDataResponseItem gameData : upsetGames) {
+        for (final UpsetGame gameData : upsetGames) {
             final String matchDesc = getMatchDesc(gameData);
             final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
             final int awayWinChancePercentage = 100 - homeWinChancePercentage;
@@ -109,14 +109,14 @@ public class FCMBodyFactory {
         return body;
     }
 
-    private static String getMatchDesc(GameDataResponseItem gameData) {
-        String awayTeamDesc = gameData.getAwayTeam();
-        String homeTeamDesc = gameData.getHomeTeam();
+    private static String getMatchDesc(final UpsetGame gameData) {
+        String awayTeamDesc = gameData.getAwayTeamName();
+        String homeTeamDesc = gameData.getHomeTeamName();
         if (gameData.getAwayRank() != null) {
-            awayTeamDesc = String.format("#%d %s", gameData.getAwayRank(), gameData.getAwayTeam());
+            awayTeamDesc = String.format("#%d %s", gameData.getAwayRank(), gameData.getAwayTeamName());
         }
         if (gameData.getHomeRank() != null) {
-            homeTeamDesc = String.format("#%d %s", gameData.getHomeRank(), gameData.getHomeTeam());
+            homeTeamDesc = String.format("#%d %s", gameData.getHomeRank(), gameData.getHomeTeamName());
         }
         return String.format("%s @ %s", awayTeamDesc, homeTeamDesc);
     }

@@ -85,7 +85,7 @@ public class SchedulerService {
     public void runCurrentWeeksCfbUpsetReport() throws JsonProcessingException, FirebaseMessagingException {
         if (schedulerEnabled) {
             log.info("Starting job for runCurrentWeeksCfbUpsetReport()");
-            cfbService.runUpsetReport();
+            cfbService.triggerUpsetReport();
             log.info("Finished job for runCurrentWeeksCfbUpsetReport()");
         }
     }

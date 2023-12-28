@@ -21,7 +21,7 @@ public class InstantUtil {
         return Math.abs((int) daysDifference);
     }
 
-    public DateObj getDate(final Instant instant) {
+    public DateObj getDateObject(final Instant instant) {
         // Convert Instant to ZonedDateTime
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_EAST));
 

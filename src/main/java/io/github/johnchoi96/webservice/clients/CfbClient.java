@@ -98,7 +98,7 @@ public class CfbClient {
     }
 
     public List<WinProbabilityResponseItem> getPregameWinProbabilityDataForWeek(final CalendarResponseItem calendar) throws JsonProcessingException {
-        var date = InstantUtil.getDate(Instant.now());
+        var date = InstantUtil.getDateObject(Instant.now());
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
         final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
@@ -120,7 +120,7 @@ public class CfbClient {
     }
 
     public List<GameDataResponseItem> getGameData(final String seasonType, final int gameId) {
-        var date = InstantUtil.getDate(Instant.now());
+        var date = InstantUtil.getDateObject(Instant.now());
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
         final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
