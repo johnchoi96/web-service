@@ -91,10 +91,10 @@ public class CfbService {
     private CalendarResponseItem getCurrentWeek(final Instant currentTime) throws JsonProcessingException {
         var currentDate = InstantUtil.getDateObject(currentTime);
         List<CalendarResponseItem> calendar = cfbClient.getCurrentSeasonCalendar(currentDate.year());
-        CalendarResponseItem currentWeek = findCurrentWeek(calendar, Instant.now());
+        CalendarResponseItem currentWeek = findCurrentWeek(calendar, currentTime);
         if (currentWeek == null) {
             calendar = cfbClient.getCurrentSeasonCalendar(currentDate.year() - 1);
-            currentWeek = findCurrentWeek(calendar, Instant.now());
+            currentWeek = findCurrentWeek(calendar, currentTime);
         }
         return currentWeek;
     }
