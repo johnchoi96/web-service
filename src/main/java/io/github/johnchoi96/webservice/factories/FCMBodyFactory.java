@@ -97,7 +97,7 @@ public class FCMBodyFactory {
         body.append("</tr>");
         final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td>";
         for (final GameDataResponseItem gameData : upsetGames) {
-            final String matchDesc = String.format("%s @ %s", gameData.getAwayTeam(), gameData.getHomeTeam());
+            final String matchDesc = getMatchDesc(gameData);
             final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
             final int awayWinChancePercentage = 100 - homeWinChancePercentage;
             final String preMatchChanceText = String.format("%d%%, %d%%", awayWinChancePercentage, homeWinChancePercentage);
@@ -107,5 +107,17 @@ public class FCMBodyFactory {
         body.append("</tr>");
         body.append("</table></body></html>");
         return body;
+    }
+
+    private static String getMatchDesc(GameDataResponseItem gameData) {
+        String awayTeamDesc = gameData.getAwayTeam();
+        String homeTeamDesc = gameData.getHomeTeam();
+        if (gameData.getAwayRank() != null) {
+            awayTeamDesc = String.format("#%d %s", gameData.getAwayRank(), gameData.getAwayTeam());
+        }
+        if (gameData.getHomeRank() != null) {
+            homeTeamDesc = String.format("#%d %s", gameData.getHomeRank(), gameData.getHomeTeam());
+        }
+        return String.format("%s @ %s", awayTeamDesc, homeTeamDesc);
     }
 }
