@@ -95,7 +95,7 @@ public class FCMBodyFactory {
         body.append("<th>Pre-Match Win Chance</th>");
         body.append("<th>Score</th>");
         body.append("</tr>");
-        final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td>";
+        final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>";
         for (final UpsetGame gameData : upsetGames) {
             final String matchDesc = getMatchDesc(gameData);
             final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
@@ -104,7 +104,6 @@ public class FCMBodyFactory {
             final String scoreText = String.format("%d - %d", gameData.getAwayPoints(), gameData.getHomePoints());
             body.append(String.format(rowText, matchDesc, preMatchChanceText, scoreText));
         }
-        body.append("</tr>");
         body.append("</table></body></html>");
         return body;
     }
