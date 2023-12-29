@@ -48,3 +48,9 @@
 * [GET] `/send-test-notification/{topic}`
     - RequestParam: `key`
     - PathVariable `topic`: target notification topic
+
+### CFB `/api/cfb`
+
+* [GET] `/upsets`
+* [GET] `/upsets/{timestamp}`
+    - PathVariable `timestamp`: in `yyyy-MM-dd` format

@@ -42,11 +42,12 @@ public class FCMController {
             case "jc-alerts-all" -> FCMTopic.ALL;
             case "jc-alerts-petfinder" -> FCMTopic.PETFINDER;
             case "jc-alerts-metalprice" -> FCMTopic.METALPRICE;
+            case "jc-alerts-cfb" -> FCMTopic.CFB;
             default -> null;
         };
         if (topicEnum == null) {
             return ResponseEntity.badRequest().body(
-                    "Topic should be either jc-alerts-all, jc-alerts-petfinder, or jc-alerts-metalprice"
+                    "Topic should be either jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, or jc-alerts-cfb"
             );
         }
         fcmService.sendTestNotification(topicEnum);
