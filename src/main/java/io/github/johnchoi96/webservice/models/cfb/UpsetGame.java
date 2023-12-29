@@ -15,10 +15,6 @@ public class UpsetGame {
 
     private String winningTeamName;
 
-    private Float preGameHomeWinProbability;
-
-    private Float preGameAwayWinProbability;
-
     private String homeTeamName;
 
     private String awayTeamName;
@@ -26,6 +22,12 @@ public class UpsetGame {
     private Integer homeRank;
 
     private Integer awayRank;
+
+    private Float preGameHomeWinProbability;
+
+    private Float preGameAwayWinProbability;
+
+    private String upsetType;
 
     private int homePoints;
 

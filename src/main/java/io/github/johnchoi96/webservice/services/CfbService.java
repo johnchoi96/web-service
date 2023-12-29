@@ -137,10 +137,14 @@ public class CfbService {
         list.forEach(probability -> {
             log.info("Collecting game data for game ID: {}", probability.getGameId());
             var gameDetail = cfbClient.getGameData(probability.getSeasonType(), probability.getGameId()).get(0);
-            if (gameDetail.isCompleted() && isUpset(probability, gameDetail)) {
+            var homeRank = getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail);
+            var awayRank = getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail);
+            var upsetType = isUpset(probability, gameDetail, homeRank, awayRank);
+            if (gameDetail.isCompleted() && upsetType != null) {
                 final UpsetGame.UpsetGameBuilder game = UpsetGame.builder()
-                        .homeRank(getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail))
-                        .awayRank(getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail))
+                        .homeRank(homeRank)
+                        .awayRank(awayRank)
+                        .upsetType(upsetType)
                         .preGameHomeWinProbability(probability.getHomeWinProb())
                         .preGameAwayWinProbability(1 - probability.getHomeWinProb())
                         .homeTeamName(gameDetail.getHomeTeam())
@@ -169,17 +173,60 @@ public class CfbService {
 
     /**
      * Determines if the game is considered an upset.
-     * Returns true if any of the following conditions is met:
+     * Returns one of "rank", "prediction", "both", or null if any of the following conditions is met:
      * 1. Home team had lower chance of winning but won the game.
      * 2. Home team had higher chance of winning but lost the game.
+     * 3. Home team's rank was higher than away's rank but lost the game.
+     * 4. Home team's rank was lower than away's but won the game.
+     * 5. Home team was unranked, away team was ranked but home team won.
+     * 6. Home team was ranked, away team was unranked but away team won.
      *
      * @param winProbabilityResponseItem pre game win probability information
      * @param gameDataResponseItem       match information
-     * @return true if the game is considered an upset
+     * @param homeRank                   rank of home team
+     * @param awayRank                   rank of away team
+     * @return "rank" if the game is considered a rank upset, "prediction" if the game was a prediction upset,
+     * "both" if both rank and prediction upset occurred, null if no upset
      */
-    private boolean isUpset(final WinProbabilityResponseItem winProbabilityResponseItem, final GameDataResponseItem gameDataResponseItem) {
-        return (winProbabilityResponseItem.getHomeWinProb() > 0.5 && gameDataResponseItem.getAwayPoints() > gameDataResponseItem.getHomePoints()) ||
-                (winProbabilityResponseItem.getHomeWinProb() <= 0.5 && gameDataResponseItem.getAwayPoints() <= gameDataResponseItem.getHomePoints());
+    private String isUpset(
+            final WinProbabilityResponseItem winProbabilityResponseItem,
+            final GameDataResponseItem gameDataResponseItem,
+            final Integer homeRank,
+            final Integer awayRank
+    ) {
+        final Float homeWinProbability = winProbabilityResponseItem.getHomeWinProb();
+        final int homePoints = gameDataResponseItem.getHomePoints();
+        final int awayPoints = gameDataResponseItem.getAwayPoints();
+        final String RANK_TYPE = "rank";
+        final String PREDICTION_TYPE = "prediction";
+        final String BOTH_TYPE = "both";
+        String result;
+        final boolean isRankUpset = isRankUpset(homeRank, awayRank, homePoints, awayPoints);
+        final boolean isPredictionUpset = isPredictionUpset(homeWinProbability, homePoints, awayPoints);
+        if (isRankUpset && isPredictionUpset) result = BOTH_TYPE;
+        else if (isRankUpset) result = RANK_TYPE;
+        else if (isPredictionUpset) result = PREDICTION_TYPE;
+        else result = null;
+        return result;
+    }
+
+    private boolean isRankUpset(final Integer homeRank, final Integer awayRank, final Integer homePoints, final Integer awayPoints) {
+        // determine if there was a rank upset
+        if (homeRank == null && awayRank != null && homePoints > awayPoints) {
+            return true;
+        }
+        if (homeRank != null && awayRank == null && homePoints < awayPoints) {
+            return true;
+        }
+        if (homeRank != null && awayRank != null) {
+            return (homeRank > awayRank && homePoints < awayPoints) || (homeRank < awayRank && homePoints > awayPoints);
+        }
+        return false;
+    }
+
+    private boolean isPredictionUpset(final Float homeWinProbability, final Integer homePoints, final Integer awayPoints) {
+        // determine if there was a prediction upset
+        return (homeWinProbability > 0.5 && awayPoints > homePoints) || (homeWinProbability <= 0.5 && awayPoints <= homePoints);
     }
 
     private CalendarResponseItem findCurrentWeek(@NonNull final List<CalendarResponseItem> entries, Instant current) {
