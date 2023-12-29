@@ -64,7 +64,8 @@ public class FCMService {
         }
         final Map<String, String> messageData = Map.of(
                 "notification-id", notificationId,
-                "test-notification", Boolean.toString(testNotification)
+                "test-notification", Boolean.toString(testNotification),
+                "notification-topic", topic.getValue()
         );
         final Notification notification = Notification
                 .builder()
