@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
 import io.github.johnchoi96.webservice.services.CfbService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +43,19 @@ public class CfbController {
 
     @GetMapping(value = "/upsets/{timestamp}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns the list of upset matches in the week based on given timestamp.")
-    public ResponseEntity<?> getPastUpsets(@PathVariable String timestamp) throws JsonProcessingException {
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = {@Content(mediaType = "text/plain")}
+            )
+    })
+    public ResponseEntity<?> getPastUpsets(
+            @Parameter(description = "in yyyy-MM-dd format") @PathVariable String timestamp) throws JsonProcessingException {
         log.info("GET /api/cfb/upsets/{}", timestamp);
         try {
             // Parse the date string as LocalDate
