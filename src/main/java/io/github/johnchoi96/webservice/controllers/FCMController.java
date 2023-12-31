@@ -4,6 +4,9 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import io.github.johnchoi96.webservice.properties.adminkeys.AdminKeysProperties;
 import io.github.johnchoi96.webservice.services.FCMService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/v1/fcm")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "FCM Controller")
 public class FCMController {
 
     private final FCMService fcmService;
@@ -33,7 +37,10 @@ public class FCMController {
      * @throws FirebaseMessagingException if notification failed to be sent
      */
     @GetMapping(value = "/send-test-notification/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendTestNotification(@PathVariable final String topic, @RequestParam final String key) throws FirebaseMessagingException {
+    @Operation(summary = "Sends a test notification.")
+    public ResponseEntity<?> sendTestNotification(
+            @PathVariable final String topic,
+            @Parameter(description = "admin key") @RequestParam final String key) throws FirebaseMessagingException {
         log.info("GET /api/v1/fcm/send-test-notification");
         if (!adminKeysProperties.getAdminKey().equals(key)) {
             return ResponseEntity.badRequest().body("Invalid admin key");
