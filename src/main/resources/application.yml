@@ -3,6 +3,11 @@ spring:
     import:
       file:secrets/apikeys.yml, file:secrets/admin-keys.yml, app-metadata.yml
 
+springdoc:
+  packagesToScan: io.github.johnchoi96.webservice
+  swagger-ui:
+    path: /api-docs
+
 server:
   port: 8080
 

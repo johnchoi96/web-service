@@ -1,5 +1,7 @@
 # Endpoints
 
+## _Deprecated and could be outdated - Use `/api-docs` for SwaggerUI_
+
 ### Root `/`
 
 * [GET] `/`

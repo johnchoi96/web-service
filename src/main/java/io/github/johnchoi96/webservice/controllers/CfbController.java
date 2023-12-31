@@ -3,6 +3,12 @@ package io.github.johnchoi96.webservice.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
 import io.github.johnchoi96.webservice.services.CfbService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -22,11 +28,13 @@ import java.util.List;
 @RequestMapping(value = "/api/cfb")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "College Football Controller")
 public class CfbController {
 
     private final CfbService cfbService;
 
     @GetMapping(value = "/upsets", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "Returns the list of upset matches in the current week.")
     public ResponseEntity<List<UpsetGame>> getCurrentUpsets() throws JsonProcessingException {
         log.info("GET /api/cfb/upsets");
         final List<UpsetGame> upsetGames = cfbService.collectUpsetGames(Instant.now());
@@ -34,7 +42,20 @@ public class CfbController {
     }
 
     @GetMapping(value = "/upsets/{timestamp}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getPastUpsets(@PathVariable String timestamp) throws JsonProcessingException {
+    @Operation(summary = "Returns the list of upset matches in the week based on given timestamp.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    content = {@Content(mediaType = "text/plain")}
+            )
+    })
+    public ResponseEntity<?> getPastUpsets(
+            @Parameter(description = "in yyyy-MM-dd format") @PathVariable String timestamp) throws JsonProcessingException {
         log.info("GET /api/cfb/upsets/{}", timestamp);
         try {
             // Parse the date string as LocalDate
