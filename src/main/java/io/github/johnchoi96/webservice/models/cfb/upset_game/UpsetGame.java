@@ -1,4 +1,4 @@
-package io.github.johnchoi96.webservice.models.cfb;
+package io.github.johnchoi96.webservice.models.cfb.upset_game;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class UpsetGame {
 
     private int awayPoints;
 
-    private int week;
+    private Integer week;
 
     private int year;
 

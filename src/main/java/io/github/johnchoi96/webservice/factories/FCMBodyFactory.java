@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.factories;
 
-import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGame;
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import lombok.experimental.UtilityClass;
@@ -83,7 +84,7 @@ public class FCMBodyFactory {
         return new StringBuilder(body);
     }
 
-    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final List<UpsetGame> upsetGames) {
+    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final UpsetGameResponse upsetGames) {
         final StringBuilder body = new StringBuilder("<html><body>");
         final String headerText = seasonType.equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
         body.append("<h1>");
@@ -96,7 +97,7 @@ public class FCMBodyFactory {
         body.append("<th>Score</th>");
         body.append("</tr>");
         final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>";
-        for (final UpsetGame gameData : upsetGames) {
+        for (final UpsetGame gameData : upsetGames.getUpsetGames()) {
             final String matchDesc = getMatchDesc(gameData);
             final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
             final int awayWinChancePercentage = 100 - homeWinChancePercentage;
