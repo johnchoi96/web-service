@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.clients.CfbClient;
 import io.github.johnchoi96.webservice.factories.FCMBodyFactory;
-import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
+import io.github.johnchoi96.webservice.factories.cfb.UpsetGameFactory;
 import io.github.johnchoi96.webservice.models.cfb.calendar.CalendarResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.rankings.PollsItem;
 import io.github.johnchoi96.webservice.models.cfb.rankings.RankingResponseItem;
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGame;
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
 import io.github.johnchoi96.webservice.models.cfb.win_probability.WinProbabilityResponseItem;
 import io.github.johnchoi96.webservice.models.firebase.fcm.FCMTopic;
 import io.github.johnchoi96.webservice.utils.InstantUtil;
@@ -49,8 +51,8 @@ public class CfbService {
             log.info("Current week not found. Stopping execution.");
             return;
         }
-        final List<UpsetGame> upsetGames = collectUpsetGames(Instant.now());
-        if (upsetGames.isEmpty()) {
+        final UpsetGameResponse upsetGames = collectUpsetGames(Instant.now());
+        if (upsetGames.getUpsetGamesCount() == 0) {
             log.info("No upset game for this week.");
             return;
         }
@@ -69,7 +71,7 @@ public class CfbService {
      * @return list of upset games and their metadata
      * @throws JsonProcessingException if JSON parsing went bad
      */
-    public List<UpsetGame> collectUpsetGames(final Instant currentTime) throws JsonProcessingException {
+    public UpsetGameResponse collectUpsetGames(final Instant currentTime) throws JsonProcessingException {
         // make sure current time is during the football season
         final CalendarResponseItem currentWeek = getCurrentWeek(currentTime);
         if (currentWeek == null) {
@@ -77,8 +79,8 @@ public class CfbService {
             return null;
         }
         final List<WinProbabilityResponseItem> winProbabilities = cfbClient.getPregameWinProbabilityDataForWeek(currentWeek);
-        final List<UpsetGame> upsetGames = getUpsetGames(winProbabilities);
-        if (upsetGames.isEmpty()) {
+        final UpsetGameResponse upsetGames = getUpsetGames(winProbabilities);
+        if (upsetGames.getUpsetGamesCount() == 0) {
             log.info("No games were upset this week.");
             return null;
         }
@@ -133,7 +135,7 @@ public class CfbService {
         return completeRankingList;
     }
 
-    private List<UpsetGame> getUpsetGames(final List<WinProbabilityResponseItem> list) {
+    private UpsetGameResponse getUpsetGames(final List<WinProbabilityResponseItem> list) {
         final List<UpsetGame> upsets = new ArrayList<>();
         list.forEach(probability -> {
             log.info("Collecting game data for game ID: {}", probability.getGameId());
@@ -142,34 +144,12 @@ public class CfbService {
             var awayRank = getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail);
             var upsetType = isUpset(probability, gameDetail, homeRank, awayRank);
             if (gameDetail.isCompleted() && upsetType != null) {
-                final UpsetGame.UpsetGameBuilder game = UpsetGame.builder()
-                        .homeRank(homeRank)
-                        .awayRank(awayRank)
-                        .upsetType(upsetType)
-                        .preGameHomeWinProbability(probability.getHomeWinProb())
-                        .preGameAwayWinProbability(1 - probability.getHomeWinProb())
-                        .homeTeamName(gameDetail.getHomeTeam())
-                        .awayTeamName(gameDetail.getAwayTeam())
-                        .homePoints(gameDetail.getHomePoints())
-                        .awayPoints(gameDetail.getAwayPoints())
-                        .week(gameDetail.getWeek())
-                        .year(gameDetail.getSeasonYear())
-                        .seasonType(gameDetail.getSeasonType())
-                        .location(gameDetail.getVenue())
-                        .bowlName(gameDetail.getNotes())
-                        .timestamp(gameDetail.getStartDate())
-                        .neutralSite(gameDetail.isNeutralSite())
-                        .conferenceGame(gameDetail.isConferenceGame());
-                if (gameDetail.getHomePoints() < gameDetail.getAwayPoints()) {
-                    game.winningTeamName(gameDetail.getAwayTeam());
-                } else {
-                    game.winningTeamName(gameDetail.getHomeTeam());
-                }
-                upsets.add(game.build());
+                final UpsetGame game = UpsetGameFactory.build(homeRank, awayRank, upsetType, gameDetail, probability);
+                upsets.add(game);
             }
         });
         log.info("Finished collecting all upset game data");
-        return upsets;
+        return UpsetGameFactory.buildUpsetGameResponse(upsets, list.size());
     }
 
     /**

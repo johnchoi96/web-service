@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.johnchoi96.webservice.models.cfb.UpsetGame;
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
 import io.github.johnchoi96.webservice.services.CfbService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,22 +22,21 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/cfb")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "College Football Controller")
+@Tag(name = "College Football Controller", description = "Endpoints could take around 2 minutes to generate a response.")
 public class CfbController {
 
     private final CfbService cfbService;
 
     @GetMapping(value = "/upsets", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns the list of upset matches in the current week.")
-    public ResponseEntity<List<UpsetGame>> getCurrentUpsets() throws JsonProcessingException {
+    public ResponseEntity<UpsetGameResponse> getCurrentUpsets() throws JsonProcessingException {
         log.info("GET /api/cfb/upsets");
-        final List<UpsetGame> upsetGames = cfbService.collectUpsetGames(Instant.now());
+        final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(Instant.now());
         return ResponseEntity.ok(upsetGames);
     }
 
@@ -62,7 +61,7 @@ public class CfbController {
             final LocalDate localDate = LocalDate.parse(timestamp);
             // Convert LocalDate to Instant (assuming midnight as the time)
             final Instant convertedTimestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-            final List<UpsetGame> upsetGames = cfbService.collectUpsetGames(convertedTimestamp);
+            final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(convertedTimestamp);
             return ResponseEntity.ok(upsetGames);
         } catch (final DateTimeParseException e) {
             final String errorMessage = String.format("Invalid timestamp: %s\n"
