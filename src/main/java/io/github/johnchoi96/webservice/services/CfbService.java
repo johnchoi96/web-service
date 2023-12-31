@@ -59,8 +59,7 @@ public class CfbService {
         final StringBuilder notificationContent = FCMBodyFactory.buildBodyForCfbUpset(currentWeek.getSeasonType(), currentWeek.getWeek(), upsetGames);
         final String notificationTitle = "This week's CFB upset report is ready.";
         final String notificationSubtitle = "Tap to see this week's CFB upsets.";
-        // FIXME: temporarily setting topic to .ALL until JCAlerts 1.1 is deployed to App Store
-        fcmService.sendNotification(FCMTopic.ALL, notificationTitle, notificationSubtitle, notificationContent, true, false);
+        fcmService.sendNotification(FCMTopic.CFB, notificationTitle, notificationSubtitle, notificationContent, true, false);
         log.info("Finished CfbService.triggerUpsetReport()");
     }
 
