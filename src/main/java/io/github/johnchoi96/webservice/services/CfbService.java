@@ -220,7 +220,8 @@ public class CfbService {
             return true;
         }
         if (homeRank != null && awayRank != null) {
-            return (homeRank > awayRank && homePoints < awayPoints) || (homeRank < awayRank && homePoints > awayPoints);
+            // NOTE: higher the homeRank/awayRank value is, lower the actual rank
+            return (homeRank < awayRank && homePoints < awayPoints) || (homeRank > awayRank && homePoints > awayPoints);
         }
         return false;
     }
