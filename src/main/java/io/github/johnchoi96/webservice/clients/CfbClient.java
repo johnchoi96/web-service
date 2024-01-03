@@ -9,7 +9,6 @@ import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem
 import io.github.johnchoi96.webservice.models.cfb.rankings.RankingResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.win_probability.WinProbabilityResponseItem;
 import io.github.johnchoi96.webservice.properties.api.CollegeFootballDataProperties;
-import io.github.johnchoi96.webservice.utils.InstantUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -98,7 +96,6 @@ public class CfbClient {
     }
 
     public List<WinProbabilityResponseItem> getPregameWinProbabilityDataForWeek(final CalendarResponseItem calendar) throws JsonProcessingException {
-        var date = InstantUtil.getDateObject(Instant.now());
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
         final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
@@ -106,7 +103,7 @@ public class CfbClient {
         final ResponseEntity<String> result = restTemplate.exchange(
                 String.format(
                         WIN_PROBABILITY_URL,
-                        date.year(),
+                        calendar.getSeasonYear(),
                         calendar.getWeek(),
                         calendar.getSeasonType()
                 ),
@@ -119,15 +116,14 @@ public class CfbClient {
         });
     }
 
-    public List<GameDataResponseItem> getGameData(final String seasonType, final int gameId) {
-        var date = InstantUtil.getDateObject(Instant.now());
+    public List<GameDataResponseItem> getGameData(final String seasonType, final int year, final int gameId) {
         final RestTemplate restTemplate = new RestTemplate();
         final String bearerToken = collegeFootballDataProperties.getApiKey();
         final HttpHeaders headers = createHttpHeadersWithBearerToken(bearerToken);
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         final ResponseEntity<String> result = restTemplate.exchange(
                 String.format(GAME_DATA_URL,
-                        date.year(),
+                        year,
                         seasonType,
                         gameId
                 ),
