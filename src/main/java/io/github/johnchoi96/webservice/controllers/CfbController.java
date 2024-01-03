@@ -34,10 +34,26 @@ public class CfbController {
 
     @GetMapping(value = "/upsets", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns the list of upset matches in the current week.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = {@Content(mediaType = "application/json")}
+            ),
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Current week is not a CFB season.",
+                    content = {@Content(mediaType = "text/plain")}
+            )
+    })
     public ResponseEntity<UpsetGameResponse> getCurrentUpsets() throws JsonProcessingException {
         log.info("GET /api/cfb/upsets");
         final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(Instant.now());
-        return ResponseEntity.ok(upsetGames);
+        if (upsetGames == null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(upsetGames);
+        }
     }
 
     @GetMapping(value = "/upsets/{timestamp}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,7 +65,13 @@ public class CfbController {
                     content = {@Content(mediaType = "application/json")}
             ),
             @ApiResponse(
+                    responseCode = "204",
+                    description = "Timestamp is not a CFB season.",
+                    content = {@Content(mediaType = "text/plain")}
+            ),
+            @ApiResponse(
                     responseCode = "400",
+                    description = "Invalid timestamp format",
                     content = {@Content(mediaType = "text/plain")}
             )
     })
@@ -62,7 +84,11 @@ public class CfbController {
             // Convert LocalDate to Instant (assuming midnight as the time)
             final Instant convertedTimestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
             final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(convertedTimestamp);
-            return ResponseEntity.ok(upsetGames);
+            if (upsetGames == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(upsetGames);
+            }
         } catch (final DateTimeParseException e) {
             final String errorMessage = String.format("Invalid timestamp: %s\n"
                     + "Make sure timestamp is in this format: yyyy-MM-dd", timestamp);
