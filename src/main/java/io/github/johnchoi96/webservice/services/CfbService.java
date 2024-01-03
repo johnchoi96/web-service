@@ -138,7 +138,7 @@ public class CfbService {
         final List<UpsetGame> upsets = new ArrayList<>();
         list.forEach(probability -> {
             log.info("Collecting game data for game ID: {}", probability.getGameId());
-            var gameDetail = cfbClient.getGameData(probability.getSeasonType(), probability.getGameId()).get(0);
+            var gameDetail = cfbClient.getGameData(probability.getSeasonType(), probability.getSeasonYear(), probability.getGameId()).get(0);
             var homeRank = getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail);
             var awayRank = getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail);
             var upsetType = isUpset(probability, gameDetail, homeRank, awayRank);
