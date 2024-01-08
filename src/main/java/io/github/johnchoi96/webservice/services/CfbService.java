@@ -78,6 +78,7 @@ public class CfbService {
             return null;
         }
         final List<WinProbabilityResponseItem> winProbabilities = cfbClient.getPregameWinProbabilityDataForWeek(currentWeek);
+        if (winProbabilities == null) return null;
         final UpsetGameResponse upsetGames = getUpsetGames(winProbabilities);
         if (upsetGames.getUpsetGamesCount() == 0) {
             log.info("No games were upset this week.");
@@ -97,9 +98,11 @@ public class CfbService {
     private CalendarResponseItem getCurrentWeek(final Instant currentTime) throws JsonProcessingException {
         var currentDate = InstantUtil.getDateObject(currentTime);
         List<CalendarResponseItem> calendar = cfbClient.getCurrentSeasonCalendar(currentDate.year());
+        if (calendar == null) return null;
         CalendarResponseItem currentWeek = findCurrentWeek(calendar, currentTime);
         if (currentWeek == null) {
             calendar = cfbClient.getCurrentSeasonCalendar(currentDate.year() - 1);
+            if (calendar == null) return null;
             currentWeek = findCurrentWeek(calendar, currentTime);
         }
         return currentWeek;
@@ -139,6 +142,7 @@ public class CfbService {
         list.forEach(probability -> {
             log.info("Collecting game data for game ID: {}", probability.getGameId());
             var gameDetail = cfbClient.getGameData(probability.getSeasonType(), probability.getSeasonYear(), probability.getGameId()).get(0);
+            if (gameDetail == null) return;
             var homeRank = getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail);
             var awayRank = getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail);
             var upsetType = isUpset(probability, gameDetail, homeRank, awayRank);
@@ -239,6 +243,7 @@ public class CfbService {
             throw new RuntimeException(e);
         }
         int responseIndex = 0;
+        if (response == null) return null;
         if (response.isEmpty()) {
             try {
                 var allRankings = getCompleteRankingList(gameDataResponseItem.getSeasonYear());
