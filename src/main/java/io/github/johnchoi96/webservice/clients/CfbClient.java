@@ -81,7 +81,7 @@ public class CfbClient {
             );
         } catch (final HttpServerErrorException e) {
             if (attempts <= 0) {
-                log.warn("502 error never got resolved.");
+                log.error("502 error never got resolved.", e);
                 return null;
             }
             log.info("502 error occurred. Attempts left: {}", attempts);
@@ -117,7 +117,7 @@ public class CfbClient {
             );
         } catch (final HttpServerErrorException e) {
             if (attempts <= 0) {
-                log.warn("502 error never got resolved.");
+                log.error("502 error never got resolved.", e);
                 return null;
             }
             log.info("502 error occurred. Attempts left: {}", attempts);
@@ -149,7 +149,7 @@ public class CfbClient {
             );
         } catch (final HttpServerErrorException e) {
             if (attempts <= 0) {
-                log.warn("502 error never got resolved.");
+                log.error("502 error never got resolved.", e);
                 return null;
             }
             log.info("502 error occurred. Attempts left: {}", attempts);
@@ -186,7 +186,7 @@ public class CfbClient {
             );
         } catch (final HttpServerErrorException e) {
             if (attempts <= 0) {
-                log.warn("502 error never got resolved.");
+                log.error("502 error never got resolved.", e);
                 return null;
             }
             log.info("502 error occurred. Attempts left: {}", attempts);
@@ -222,7 +222,7 @@ public class CfbClient {
             );
         } catch (final HttpServerErrorException e) {
             if (attempts <= 0) {
-                log.warn("502 error never got resolved.");
+                log.error("502 error never got resolved.", e);
                 return null;
             }
             log.info("502 error occurred. Attempts left: {}", attempts);
