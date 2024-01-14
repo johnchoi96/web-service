@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/petfinder")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Petfinder Controller")
+@Tag(name = "Petfinder")
 public class PetfinderController {
 
     private final PetfinderService petfinderService;

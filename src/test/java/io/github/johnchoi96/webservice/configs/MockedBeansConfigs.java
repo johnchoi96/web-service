@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.configs;
 
+import com.github.javafaker.Faker;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
@@ -31,4 +32,7 @@ public class MockedBeansConfigs {
 
     @MockBean
     private final SwaggerUiConfig swaggerUiConfig;
+
+    @MockBean
+    private final Faker faker;
 }

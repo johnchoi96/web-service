@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.services;
 
+import com.github.javafaker.Faker;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -22,16 +23,23 @@ public class FCMService {
 
     private final CloudFirestoreService cloudFirestoreService;
 
-    public void sendTestNotification(final FCMTopic topic) throws FirebaseMessagingException {
-        StringBuilder message = new StringBuilder("this is a test message");
+    private final Faker faker;
+
+    public String sendTestNotification(final FCMTopic topic) throws FirebaseMessagingException {
+        final String testMessage = faker.lorem().sentence();
+        final StringBuilder message = new StringBuilder("Test message: ");
+        message.append(testMessage);
+        final String testNotificationTitle = "Test Notification title from rest server";
+        final String testNotificationSubtitle = "Test Notification body from rest server";
         sendNotification(
                 topic,
-                "Test Notification title from rest server",
-                "Test Notification body from rest server",
+                testNotificationTitle,
+                testNotificationSubtitle,
                 message,
                 false,
                 true
         );
+        return message.toString();
     }
 
     public void sendNotification(
