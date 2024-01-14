@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,32 +34,19 @@ public class FCMController {
     /**
      * I didn't spend too much time on security but at least it's something...
      *
-     * @param topic topic to send the notification to
-     * @param key   admin key
+     * @param key admin key
      * @return response
      * @throws FirebaseMessagingException if notification failed to be sent
      */
-    @GetMapping(value = "/send-test-notification/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/send-test-notification", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Sends a test notification.")
     public ResponseEntity<?> sendTestNotification(
-            @PathVariable final String topic,
             @Parameter(description = "admin key") @RequestParam final String key) throws FirebaseMessagingException {
         log.info("GET /api/fcm/send-test-notification");
         if (!adminKeysProperties.getAdminKey().equals(key)) {
             return ResponseEntity.badRequest().body("Invalid admin key");
         }
-        final FCMTopic topicEnum = switch (topic) {
-            case "jc-alerts-all" -> FCMTopic.ALL;
-            case "jc-alerts-petfinder" -> FCMTopic.PETFINDER;
-            case "jc-alerts-metalprice" -> FCMTopic.METALPRICE;
-            case "jc-alerts-cfb" -> FCMTopic.CFB;
-            default -> null;
-        };
-        if (topicEnum == null) {
-            return ResponseEntity.badRequest().body(
-                    "Topic should be either jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, or jc-alerts-cfb"
-            );
-        }
+        final FCMTopic topicEnum = FCMTopic.TEST_NOTIFICATION;
         fcmService.sendTestNotification(topicEnum);
         return ResponseEntity.ok().build();
     }
