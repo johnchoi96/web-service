@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/fcm")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "FCM Controller")
+@Tag(name = "Firebase Cloud Messaging", description = "Sends push notifications to the mobile app.")
 public class FCMController {
 
     private final FCMService fcmService;
@@ -35,12 +35,31 @@ public class FCMController {
     /**
      * I didn't spend too much time on security but at least it's something...
      *
-     * @param topic topic to send the notification to
-     * @param key   admin key
+     * @param key admin key
      * @return response
      * @throws FirebaseMessagingException if notification failed to be sent
      */
-    @GetMapping(value = "/send-test-notification/{topic}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/send-test-notification", produces = MediaType.TEXT_PLAIN_VALUE)
+    @Operation(summary = "Sends a test notification using the test topic.")
+    public ResponseEntity<?> sendTestNotification(
+            @Parameter(description = "admin key") @RequestParam final String key) throws FirebaseMessagingException {
+        log.info("GET /api/fcm/send-test-notification");
+        if (!adminKeysProperties.getAdminKey().equals(key)) {
+            return ResponseEntity.badRequest().body("Invalid admin key");
+        }
+        final FCMTopic topicEnum = FCMTopic.TEST_NOTIFICATION;
+        final String testMessage = fcmService.sendTestNotification(topicEnum);
+        return ResponseEntity.ok(testMessage);
+    }
+
+    /**
+     * I didn't spend too much time on security but at least it's something...
+     *
+     * @param key admin key
+     * @return response
+     * @throws FirebaseMessagingException if notification failed to be sent
+     */
+    @GetMapping(value = "/send-test-notification/{topic}", produces = MediaType.TEXT_PLAIN_VALUE)
     @Operation(summary = "Sends a test notification.")
     public ResponseEntity<?> sendTestNotification(
             @PathVariable final String topic,
@@ -54,15 +73,16 @@ public class FCMController {
             case "jc-alerts-petfinder" -> FCMTopic.PETFINDER;
             case "jc-alerts-metalprice" -> FCMTopic.METALPRICE;
             case "jc-alerts-cfb" -> FCMTopic.CFB;
+            case "jc-alerts-test" -> FCMTopic.TEST_NOTIFICATION;
             default -> null;
         };
         if (topicEnum == null) {
             return ResponseEntity.badRequest().body(
-                    "Topic should be either jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, or jc-alerts-cfb"
+                    "Topic should be one of: jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, jc-alerts-cfb, jc-alerts-test"
             );
         }
-        fcmService.sendTestNotification(topicEnum);
-        return ResponseEntity.ok().build();
+        final String testMessage = fcmService.sendTestNotification(topicEnum);
+        return ResponseEntity.ok(testMessage);
     }
 
     @GetMapping(value = "/cfb/upsets", produces = MediaType.APPLICATION_JSON_VALUE)

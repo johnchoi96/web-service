@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/version")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Version Controller")
+@Tag(name = "Version")
 public class VersionController {
 
     private final VersionService versionService;

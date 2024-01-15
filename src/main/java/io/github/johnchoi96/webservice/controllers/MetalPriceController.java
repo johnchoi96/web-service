@@ -22,7 +22,7 @@ import java.time.LocalDate;
 @RequestMapping(value = "/api/metal-price")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "MetalPrice Controller")
+@Tag(name = "MetalPrice")
 public class MetalPriceController {
 
     private final MetalPriceService metalPriceService;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/email")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Email Controller")
+@Tag(name = "Email")
 public class EmailController {
 
     private final EmailService emailService;

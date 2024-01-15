@@ -19,7 +19,7 @@ import java.time.Instant;
 @RequestMapping(value = "/api/test")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Test Controller")
+@Tag(name = "Test")
 public class TestController {
 
     private final Uptime uptime;

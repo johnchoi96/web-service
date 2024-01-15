@@ -27,7 +27,7 @@ import java.time.format.DateTimeParseException;
 @RequestMapping(value = "/api/cfb")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "College Football Controller", description = "Endpoints could take around 2 minutes to generate a response.")
+@Tag(name = "College Football", description = "Endpoints could take around 2 minutes to generate a response.")
 public class CfbController {
 
     private final CfbService cfbService;
