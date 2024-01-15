@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/fcm")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Firebase Cloud Messaging")
+@Tag(name = "Firebase Cloud Messaging", description = "Sends push notifications to the mobile app.")
 public class FCMController {
 
     private final FCMService fcmService;
