@@ -30,7 +30,7 @@ public class FCMService {
         final StringBuilder message = new StringBuilder("Test message: ");
         message.append(testMessage);
         final String testNotificationTitle = "Test Notification title from rest server";
-        final String testNotificationSubtitle = "Test Notification body from rest server";
+        final String testNotificationSubtitle = message.toString();
         sendNotification(
                 topic,
                 testNotificationTitle,
