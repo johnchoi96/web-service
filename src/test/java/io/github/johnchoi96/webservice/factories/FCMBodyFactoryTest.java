@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.factories;
 
+import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGame;
 import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.metalprice.Rates;
@@ -10,6 +11,7 @@ import io.github.johnchoi96.webservice.models.petfinder.response.Colors;
 import io.github.johnchoi96.webservice.models.petfinder.response.Contact;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -47,11 +49,14 @@ public class FCMBodyFactoryTest {
 
     @Test
     void testBuildBodyForCfbUpset() {
-        final String inputSeasonType = "";
+        final String inputSeasonType = "regular";
         final Integer inputWeek = 1;
         final UpsetGameResponse inputResponse = getDummyUpsetGameResponse();
-        final String expected = """
-                """;
+        final String expected = "<html><body><h1>CFB Week 1 Upset Report</h1>" +
+                "<p>Upsets:</p><table border='1'><tr><th>Match Desc</th>" +
+                "<th>Pre-Match Win Chance</th><th>Score</th></tr><tr>" +
+                "<td>test-away-team-name-0 @ #1 test-home-team-name-0</td>" +
+                "<td>40%, 60%</td><td>4 - 10</td></tr></table></body></html>";
         final String actual = FCMBodyFactory.buildBodyForCfbUpset(inputSeasonType, inputWeek, inputResponse).toString();
         assertEquals(expected, actual);
     }
@@ -221,6 +226,30 @@ public class FCMBodyFactoryTest {
     }
 
     private UpsetGameResponse getDummyUpsetGameResponse() {
-        return UpsetGameResponse.builder().build();
+        var upsetGames = List.of(
+                UpsetGame.builder()
+                        .location("test-location-0")
+                        .bowlName("test-bowl-name-0")
+                        .winningTeamName("test-winning-team-0")
+                        .homeTeamName("test-home-team-name-0")
+                        .awayTeamName("test-away-team-name-0")
+                        .homeRank(1)
+                        .awayRank(null)
+                        .preGameHomeWinProbability(0.6F)
+                        .preGameAwayWinProbability(0.4F)
+                        .upsetType("test-upset-type-0")
+                        .homePoints(10)
+                        .awayPoints(4)
+                        .week(1)
+                        .year(2024)
+                        .seasonType("regular")
+                        .timestamp(Instant.EPOCH)
+                        .neutralSite(true)
+                        .conferenceGame(false)
+                        .build()
+        );
+        return UpsetGameResponse.builder()
+                .upsetGames(upsetGames)
+                .build();
     }
 }
