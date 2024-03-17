@@ -3,6 +3,7 @@ package io.github.johnchoi96.webservice.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
 import io.github.johnchoi96.webservice.services.CfbService;
+import io.github.johnchoi96.webservice.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,6 +33,8 @@ public class CfbController {
 
     private final CfbService cfbService;
 
+    private final EmailService emailService;
+
     @GetMapping(value = "/upsets", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns the list of upset matches in the current week.")
     @ApiResponses(value = {
@@ -46,13 +49,19 @@ public class CfbController {
                     content = {@Content(mediaType = "text/plain")}
             )
     })
-    public ResponseEntity<UpsetGameResponse> getCurrentUpsets() throws JsonProcessingException {
+    public ResponseEntity<?> getCurrentUpsets() {
         log.info("GET /api/cfb/upsets");
-        final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(Instant.now());
-        if (upsetGames == null) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(upsetGames);
+        try {
+            final UpsetGameResponse upsetGames;
+            upsetGames = cfbService.collectUpsetGames(Instant.now());
+            if (upsetGames == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(upsetGames);
+            }
+        } catch (JsonProcessingException e) {
+            emailService.notifyException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -76,7 +85,7 @@ public class CfbController {
             )
     })
     public ResponseEntity<?> getPastUpsets(
-            @Parameter(description = "in yyyy-MM-dd format") @PathVariable String timestamp) throws JsonProcessingException {
+            @Parameter(description = "in yyyy-MM-dd format") @PathVariable String timestamp) {
         log.info("GET /api/cfb/upsets/{}", timestamp);
         try {
             // Parse the date string as LocalDate
@@ -94,6 +103,9 @@ public class CfbController {
                     + "Make sure timestamp is in this format: yyyy-MM-dd", timestamp);
             log.info(errorMessage);
             return ResponseEntity.badRequest().body(errorMessage);
+        } catch (JsonProcessingException e) {
+            emailService.notifyException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }

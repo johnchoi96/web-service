@@ -28,64 +28,70 @@ public class SchedulerService {
 
     private final CfbService cfbService;
 
+    private final EmailService emailService;
+
     /**
      * Sundays, Mondays, Wednesdays, and Fridays at 9am in EST.
-     *
-     * @throws JsonProcessingException    if JSON parsing went wrong
-     * @throws FirebaseMessagingException if sending push notification failed
      */
     @Scheduled(cron = "0 0 9 ? * SUN,MON,WED,FRI", zone = InstantUtil.TIMEZONE_US_EAST)
-    public void findDogsNear43235() throws JsonProcessingException, FirebaseMessagingException {
+    public void findDogsNear43235() {
         if (schedulerEnabled) {
             log.info("Starting job for findDogsNear43235()");
             final Integer limit = 100;
-            petfinderService.findFilteredDogsAndNotify(limit);
+            try {
+                petfinderService.findFilteredDogsAndNotify(limit);
+            } catch (JsonProcessingException | FirebaseMessagingException e) {
+                emailService.notifyException(e);
+            }
             log.info("Finished job for findDogsNear43235()");
         }
     }
 
     /**
      * Mon-Fri at 10am in EST.
-     *
-     * @throws JsonProcessingException    if JSON parsing went wrong
-     * @throws FirebaseMessagingException if sending push notification failed
      */
     @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI", zone = InstantUtil.TIMEZONE_US_EAST)
-    public void fetchGoldPriceInfo() throws JsonProcessingException, FirebaseMessagingException {
+    public void fetchGoldPriceInfo() {
         if (schedulerEnabled) {
             log.info("Starting job for fetchGoldPriceInfo()");
-            metalPriceService.analyzeGoldPriceAndNotify(LocalDate.now());
+            try {
+                metalPriceService.analyzeGoldPriceAndNotify(LocalDate.now());
+            } catch (JsonProcessingException | FirebaseMessagingException e) {
+                emailService.notifyException(e);
+            }
             log.info("Finished job for fetchGoldPriceInfo()");
         }
     }
 
     /**
      * 1st day of every month at 4am EST.
-     *
-     * @throws ExecutionException   if Firebase operation had issues
-     * @throws InterruptedException if Firebase operation had issues
      */
     @Scheduled(cron = "0 0 4 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_EAST)
-    public void deleteOldNotificationsInCloudFirestore() throws ExecutionException, InterruptedException {
+    public void deleteOldNotificationsInCloudFirestore() {
         if (schedulerEnabled) {
             final int DAYS = 60;
             log.info("Starting job for deleteOldNotificationsInCloudFirestore(). Days set for {}", DAYS);
-            cloudFirestoreService.deleteNotificationsOlderThanDays(DAYS);
+            try {
+                cloudFirestoreService.deleteNotificationsOlderThanDays(DAYS);
+            } catch (ExecutionException | InterruptedException e) {
+                emailService.notifyException(e);
+            }
             log.info("Finished job for deleteOldNotificationsInCloudFirestore()");
         }
     }
 
     /**
      * At 11:00AM on Sundays.
-     *
-     * @throws JsonProcessingException    if JSON to DTO parsing went wrong
-     * @throws FirebaseMessagingException if sending notification failed
      */
     @Scheduled(cron = "0 0 11 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
-    public void runCurrentWeeksCfbUpsetReport() throws JsonProcessingException, FirebaseMessagingException {
+    public void runCurrentWeeksCfbUpsetReport() {
         if (schedulerEnabled) {
             log.info("Starting job for runCurrentWeeksCfbUpsetReport()");
-            cfbService.triggerUpsetReport();
+            try {
+                cfbService.triggerUpsetReport();
+            } catch (JsonProcessingException | FirebaseMessagingException e) {
+                emailService.notifyException(e);
+            }
             log.info("Finished job for runCurrentWeeksCfbUpsetReport()");
         }
     }
