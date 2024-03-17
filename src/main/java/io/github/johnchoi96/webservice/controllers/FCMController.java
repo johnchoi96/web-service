@@ -46,18 +46,17 @@ public class FCMController {
     public ResponseEntity<?> sendTestNotification(
             @Parameter(description = "admin key") @RequestParam final String key) {
         log.info("GET /api/fcm/send-test-notification");
-        if (!adminKeysProperties.getAdminKey().equals(key)) {
-            return ResponseEntity.badRequest().body("Invalid admin key");
-        }
-        final FCMTopic topicEnum = FCMTopic.TEST_NOTIFICATION;
-        final String testMessage;
         try {
-            testMessage = fcmService.sendTestNotification(topicEnum);
+            if (!adminKeysProperties.getAdminKey().equals(key)) {
+                return ResponseEntity.badRequest().body("Invalid admin key");
+            }
+            final FCMTopic topicEnum = FCMTopic.TEST_NOTIFICATION;
+            final String testMessage = fcmService.sendTestNotification(topicEnum);
+            return ResponseEntity.ok(testMessage);
         } catch (FirebaseMessagingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
-        return ResponseEntity.ok(testMessage);
     }
 
     /**
@@ -72,45 +71,44 @@ public class FCMController {
             @PathVariable final String topic,
             @Parameter(description = "admin key") @RequestParam final String key) {
         log.info("GET /api/fcm/send-test-notification");
-        if (!adminKeysProperties.getAdminKey().equals(key)) {
-            return ResponseEntity.badRequest().body("Invalid admin key");
-        }
-        final FCMTopic topicEnum = switch (topic) {
-            case "jc-alerts-all" -> FCMTopic.ALL;
-            case "jc-alerts-petfinder" -> FCMTopic.PETFINDER;
-            case "jc-alerts-metalprice" -> FCMTopic.METALPRICE;
-            case "jc-alerts-cfb" -> FCMTopic.CFB;
-            case "jc-alerts-test" -> FCMTopic.TEST_NOTIFICATION;
-            default -> null;
-        };
-        if (topicEnum == null) {
-            return ResponseEntity.badRequest().body(
-                    "Topic should be one of: jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, jc-alerts-cfb, jc-alerts-test"
-            );
-        }
-        final String testMessage;
         try {
-            testMessage = fcmService.sendTestNotification(topicEnum);
+            if (!adminKeysProperties.getAdminKey().equals(key)) {
+                return ResponseEntity.badRequest().body("Invalid admin key");
+            }
+            final FCMTopic topicEnum = switch (topic) {
+                case "jc-alerts-all" -> FCMTopic.ALL;
+                case "jc-alerts-petfinder" -> FCMTopic.PETFINDER;
+                case "jc-alerts-metalprice" -> FCMTopic.METALPRICE;
+                case "jc-alerts-cfb" -> FCMTopic.CFB;
+                case "jc-alerts-test" -> FCMTopic.TEST_NOTIFICATION;
+                default -> null;
+            };
+            if (topicEnum == null) {
+                return ResponseEntity.badRequest().body(
+                        "Topic should be one of: jc-alerts-all, jc-alerts-petfinder, jc-alerts-metalprice, jc-alerts-cfb, jc-alerts-test"
+                );
+            }
+            final String testMessage = fcmService.sendTestNotification(topicEnum);
+            return ResponseEntity.ok(testMessage);
         } catch (FirebaseMessagingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
-        return ResponseEntity.ok(testMessage);
     }
 
     @GetMapping(value = "/cfb/upsets", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Triggers a CFB upset report notification.")
     public ResponseEntity<?> triggerCfbUpsetNotification(@Parameter(description = "admin key") @RequestParam final String key) {
         log.info("GET /api/fcm/cfb/upsets");
-        if (!adminKeysProperties.getAdminKey().equals(key)) {
-            return ResponseEntity.badRequest().body("Invalid admin key");
-        }
         try {
+            if (!adminKeysProperties.getAdminKey().equals(key)) {
+                return ResponseEntity.badRequest().body("Invalid admin key");
+            }
             cfbService.triggerUpsetReport();
+            return ResponseEntity.ok().build();
         } catch (JsonProcessingException | FirebaseMessagingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
-        return ResponseEntity.ok().build();
     }
 }

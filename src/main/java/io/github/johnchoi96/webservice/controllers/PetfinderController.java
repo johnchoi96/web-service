@@ -33,7 +33,7 @@ public class PetfinderController {
             return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -45,7 +45,7 @@ public class PetfinderController {
             return ResponseEntity.ok(petfinderService.findFilteredDogs(limit));
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }

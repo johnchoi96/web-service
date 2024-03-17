@@ -37,10 +37,10 @@ public class MetalPriceController {
     public ResponseEntity<String> metalPrice(
             @Parameter(description = "admin key") @RequestParam final String key) {
         log.info("GET /api/metal-price/trigger-report");
-        if (!adminKeysProperties.getAdminKey().equals(key)) {
-            return ResponseEntity.badRequest().body("Invalid admin key");
-        }
         try {
+            if (!adminKeysProperties.getAdminKey().equals(key)) {
+                return ResponseEntity.badRequest().body("Invalid admin key");
+            }
             metalPriceService.analyzeGoldPriceAndNotify(LocalDate.now());
             return ResponseEntity.ok().build();
         } catch (JsonProcessingException | FirebaseMessagingException e) {

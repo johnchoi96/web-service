@@ -49,19 +49,19 @@ public class CfbController {
                     content = {@Content(mediaType = "text/plain")}
             )
     })
-    public ResponseEntity<UpsetGameResponse> getCurrentUpsets() throws JsonProcessingException {
+    public ResponseEntity<?> getCurrentUpsets() {
         log.info("GET /api/cfb/upsets");
-        final UpsetGameResponse upsetGames;
         try {
+            final UpsetGameResponse upsetGames;
             upsetGames = cfbService.collectUpsetGames(Instant.now());
+            if (upsetGames == null) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(upsetGames);
+            }
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
-            throw e;
-        }
-        if (upsetGames == null) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.ok(upsetGames);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ public class CfbController {
             return ResponseEntity.badRequest().body(errorMessage);
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
-            throw new RuntimeException(e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }
