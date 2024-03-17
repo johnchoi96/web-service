@@ -13,6 +13,10 @@ public class InstantUtil {
     public record DateObj(int year, int month, int day) {
     }
 
+    public record DateTimeObj(int year, int month, int day, int hour,
+                              int minute, int second) {
+    }
+
     public final String TIMEZONE_US_EAST = "America/New_York";
 
     public int getDifferenceInDays(final Instant first, final Instant second) {
@@ -30,5 +34,19 @@ public class InstantUtil {
         int month = zonedDateTime.getMonth().getValue();
         int day = zonedDateTime.getDayOfMonth();
         return new DateObj(year, month, day);
+    }
+
+    public DateTimeObj getDateTimeObject(final Instant instant) {
+        // Convert Instant to ZonedDateTime
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_EAST));
+
+        // Extract Year, Month, and Day
+        int year = zonedDateTime.getYear();
+        int month = zonedDateTime.getMonth().getValue();
+        int day = zonedDateTime.getDayOfMonth();
+        int hour = zonedDateTime.getHour();
+        int minute = zonedDateTime.getMinute();
+        int second = zonedDateTime.getSecond();
+        return new DateTimeObj(year, month, day, hour, minute, second);
     }
 }

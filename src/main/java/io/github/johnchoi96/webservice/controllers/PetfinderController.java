@@ -1,6 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.github.johnchoi96.webservice.services.EmailService;
 import io.github.johnchoi96.webservice.services.PetfinderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,17 +23,29 @@ public class PetfinderController {
 
     private final PetfinderService petfinderService;
 
+    private final EmailService emailService;
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns a complete list of adoptable pets in 43235 area.")
-    public ResponseEntity<?> findDogsNear43235() throws JsonProcessingException {
+    public ResponseEntity<?> findDogsNear43235() {
         log.info("GET /api/petfinder/all");
-        return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
+        try {
+            return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
+        } catch (JsonProcessingException e) {
+            emailService.notifyException(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping(value = "/filtered", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns a list of filtered list of adoptable pets in 43235 area.")
-    public ResponseEntity<?> findFilteredDogsNear43235(@RequestParam(required = false) Integer limit) throws JsonProcessingException {
+    public ResponseEntity<?> findFilteredDogsNear43235(@RequestParam(required = false) Integer limit) {
         log.info("GET /api/petfinder/filtered");
-        return ResponseEntity.ok(petfinderService.findFilteredDogs(limit));
+        try {
+            return ResponseEntity.ok(petfinderService.findFilteredDogs(limit));
+        } catch (JsonProcessingException e) {
+            emailService.notifyException(e);
+            throw new RuntimeException(e);
+        }
     }
 }

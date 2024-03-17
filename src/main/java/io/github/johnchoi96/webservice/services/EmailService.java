@@ -14,8 +14,9 @@ import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,18 +24,20 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmailService {
 
-    @Autowired
-    private SendGridApiProperties sendGridApiProperties;
+    private final SendGridApiProperties sendGridApiProperties;
 
-    @Autowired
-    private WebAppMetadataProperties webAppMetadataProperties;
+    private final WebAppMetadataProperties webAppMetadataProperties;
+
+    private final Environment environment;
 
     private Instant latestTimestamp;
 
@@ -149,6 +152,34 @@ public class EmailService {
         final Email to = new Email(EMAIL_ADDRESS);
         final Content content = new Content("text/html", EmailBodyFactory.buildBodyForMetalPrice(prevDate, todayDate, prevRate, todayRate));
         final String EMAIL_SUBJECT = "Message from Web Service For MetalPrice";
+        final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
+
+        final SendGrid sg = new SendGrid(apiKey);
+        final Request emailRequest = new Request();
+        try {
+            emailRequest.setMethod(Method.POST);
+            emailRequest.setEndpoint("mail/send");
+            emailRequest.setBody(mail.build());
+            final Response response = sg.api(emailRequest);
+            log.debug("Response status code: {}", response.getStatusCode());
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void notifyException(final Exception exception) {
+        // determine active profile. If local, don't do anything
+        if (Arrays.asList(environment.getActiveProfiles()).contains("local")) {
+            log.info("Local profile activated. Email will not be sent.");
+            return;
+        }
+        final String apiKey = sendGridApiProperties.getApiKey();
+        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
+
+        final Email from = new Email(EMAIL_ADDRESS);
+        final Email to = new Email(EMAIL_ADDRESS);
+        final Content content = new Content("text/html", EmailBodyFactory.buildBodyForExceptionNotification(exception));
+        final String EMAIL_SUBJECT = "Exception Notification for Web Service";
         final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
 
         final SendGrid sg = new SendGrid(apiKey);

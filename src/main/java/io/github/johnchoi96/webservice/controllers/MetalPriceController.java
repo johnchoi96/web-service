@@ -3,6 +3,7 @@ package io.github.johnchoi96.webservice.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import io.github.johnchoi96.webservice.properties.adminkeys.AdminKeysProperties;
+import io.github.johnchoi96.webservice.services.EmailService;
 import io.github.johnchoi96.webservice.services.MetalPriceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,6 +30,8 @@ public class MetalPriceController {
 
     private final AdminKeysProperties adminKeysProperties;
 
+    private final EmailService emailService;
+
     @GetMapping(value = "/trigger-report", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Triggers a gold price report and sends notification.")
     public ResponseEntity<String> metalPrice(
@@ -42,6 +45,7 @@ public class MetalPriceController {
             return ResponseEntity.ok().build();
         } catch (JsonProcessingException | FirebaseMessagingException e) {
             log.error(e.getLocalizedMessage());
+            emailService.notifyException(e);
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
