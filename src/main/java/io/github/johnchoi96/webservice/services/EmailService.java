@@ -9,8 +9,6 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import io.github.johnchoi96.webservice.factories.EmailBodyFactory;
 import io.github.johnchoi96.webservice.models.EmailRequest;
-import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
-import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
 import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
@@ -22,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
@@ -118,52 +115,6 @@ public class EmailService {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             return false;
-        }
-    }
-
-    public void sendEmailForPetfinder(final List<AnimalsItem> petfinderResponse) {
-        final String apiKey = sendGridApiProperties.getApiKey();
-        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
-
-        final Email from = new Email(EMAIL_ADDRESS);
-        final Email to = new Email(EMAIL_ADDRESS);
-        final Content content = new Content("text/html", EmailBodyFactory.buildBodyForPetfinder(petfinderResponse));
-        final String EMAIL_SUBJECT = "Message from Web Service For Petfinder";
-        final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
-
-        final SendGrid sg = new SendGrid(apiKey);
-        final Request emailRequest = new Request();
-        try {
-            emailRequest.setMethod(Method.POST);
-            emailRequest.setEndpoint("mail/send");
-            emailRequest.setBody(mail.build());
-            final Response response = sg.api(emailRequest);
-            log.debug("Response status code: {}", response.getStatusCode());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    public void sendEmailForMetalPrice(final LocalDate prevDate, final LocalDate todayDate, final MetalPriceResponse prevRate, final MetalPriceResponse todayRate) {
-        final String apiKey = sendGridApiProperties.getApiKey();
-        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
-
-        final Email from = new Email(EMAIL_ADDRESS);
-        final Email to = new Email(EMAIL_ADDRESS);
-        final Content content = new Content("text/html", EmailBodyFactory.buildBodyForMetalPrice(prevDate, todayDate, prevRate, todayRate));
-        final String EMAIL_SUBJECT = "Message from Web Service For MetalPrice";
-        final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
-
-        final SendGrid sg = new SendGrid(apiKey);
-        final Request emailRequest = new Request();
-        try {
-            emailRequest.setMethod(Method.POST);
-            emailRequest.setEndpoint("mail/send");
-            emailRequest.setBody(mail.build());
-            final Response response = sg.api(emailRequest);
-            log.debug("Response status code: {}", response.getStatusCode());
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
         }
     }
 
