@@ -2,6 +2,7 @@ package io.github.johnchoi96.webservice.factories;
 
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.metalprice.Rates;
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -9,6 +10,16 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FCMBodyFactoryTest {
+
+    @Test
+    void testBuildBodyForPetfinder() {
+        throw new NotImplementedException();
+    }
+
+    @Test
+    void testBuildBodyForCfbUpset() {
+        throw new NotImplementedException();
+    }
 
     @Test
     void buildForMetalPriceIncreased() {

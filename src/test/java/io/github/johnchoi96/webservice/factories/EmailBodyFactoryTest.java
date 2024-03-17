@@ -3,7 +3,10 @@ package io.github.johnchoi96.webservice.factories;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailBodyFactoryTest {
 
@@ -33,6 +36,36 @@ public class EmailBodyFactoryTest {
                 Contact Info: Not Provided
                 """;
         assertEquals(TWO_FIELDS_EMAIL, actual);
+    }
+
+    @Test
+    void testBuildBodyForExceptionNotification_Exception() {
+        final Exception e = new Exception("TEST_EXCEPTION_MSG");
+        final String partiallyExpected = String.format("""
+                <p>Exception message: %s</p>
+                <p>Stacktrace:</p>
+                <p>
+                    %s
+                </p>
+                </body></html>
+                """, e.getLocalizedMessage(), Arrays.toString(e.getStackTrace()));
+        final String actual = EmailBodyFactory.buildBodyForExceptionNotification(e);
+        assertTrue(actual.contains(partiallyExpected));
+    }
+
+    @Test
+    void testBuildBodyForExceptionNotification_IllegalArgumentException() {
+        final Exception e = new IllegalArgumentException("TEST_EXCEPTION_MSG");
+        final String partiallyExpected = String.format("""
+                <p>Exception message: %s</p>
+                <p>Stacktrace:</p>
+                <p>
+                    %s
+                </p>
+                </body></html>
+                """, e.getLocalizedMessage(), Arrays.toString(e.getStackTrace()));
+        final String actual = EmailBodyFactory.buildBodyForExceptionNotification(e);
+        assertTrue(actual.contains(partiallyExpected));
     }
 
     private EmailRequest getCompleteRequest() {
