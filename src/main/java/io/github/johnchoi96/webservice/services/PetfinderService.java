@@ -28,8 +28,6 @@ public class PetfinderService {
 
     private final PetfinderClient petfinderClient;
 
-    private final EmailService emailService;
-
     private final FCMService fcmService;
 
     private final Set<String> breeds = Set.of(
@@ -48,7 +46,6 @@ public class PetfinderService {
 
     public void findFilteredDogsAndNotify(final Integer limit) throws JsonProcessingException, FirebaseMessagingException {
         var filteredList = findFilteredDogs(limit);
-        emailService.sendEmailForPetfinder(filteredList);
         final StringBuilder petfinderBody = FCMBodyFactory.buildBodyForPetfinder(filteredList);
         final String notificationTitle = "Message from Web Service for Petfinder";
         final String notificationBody = "Tap to see the filtered list of 43235 dogs!";

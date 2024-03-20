@@ -25,10 +25,6 @@ public class MetalPriceServiceTest {
 
     @Mock
     @Autowired
-    private EmailService emailService;
-
-    @Mock
-    @Autowired
     private FCMService fcmService;
 
     @InjectMocks
@@ -45,12 +41,10 @@ public class MetalPriceServiceTest {
         final LocalDate date = LocalDate.of(2023, 9, 14);
         doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
         doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
-        doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
         doNothing().when(fcmService).sendNotification(any(), any(), any(), any(), anyBoolean(), anyBoolean());
 
         metalPriceService.analyzeGoldPriceAndNotify(date);
         verify(metalPriceClient, times(1)).getGoldRateForDate(any());
-        verify(emailService, times(1)).sendEmailForMetalPrice(any(), any(), any(), any());
     }
 
     @Test
@@ -58,12 +52,10 @@ public class MetalPriceServiceTest {
         final LocalDate date = LocalDate.of(2023, 9, 17);
         doReturn(getDummyRate(3.45)).when(metalPriceClient).getGoldRateForDate(any());
         doReturn(getDummyRate(2.34)).when(metalPriceClient).getLatestGoldRate();
-        doNothing().when(emailService).sendEmailForMetalPrice(any(), any(), any(), any());
         doNothing().when(fcmService).sendNotification(any(), any(), any(), any(), anyBoolean(), anyBoolean());
 
         metalPriceService.analyzeGoldPriceAndNotify(date);
         verify(metalPriceClient, times(0)).getGoldRateForDate(any());
-        verify(emailService, times(0)).sendEmailForMetalPrice(any(), any(), any(), any());
     }
 
     private MetalPriceResponse getDummyRate(final double usdRate) {

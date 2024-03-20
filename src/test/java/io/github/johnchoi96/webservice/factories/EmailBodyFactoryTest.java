@@ -1,13 +1,12 @@
 package io.github.johnchoi96.webservice.factories;
 
 import io.github.johnchoi96.webservice.models.EmailRequest;
-import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
-import io.github.johnchoi96.webservice.models.metalprice.Rates;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EmailBodyFactoryTest {
 
@@ -40,69 +39,33 @@ public class EmailBodyFactoryTest {
     }
 
     @Test
-    void buildForMetalPriceIncreased() {
-        final LocalDate prevDate = LocalDate.of(2023, 9, 14);
-        final LocalDate todayDate = LocalDate.of(2023, 9, 15);
-        final MetalPriceResponse prevRate = getDummyPrevRate();
-        final MetalPriceResponse todayRate = getDummyTodayRate();
-        final String expectedBody = """
-                <html><body>
-                <h3>Gold Price is lower today!</h3>
+    void testBuildBodyForExceptionNotification_Exception() {
+        final Exception e = new Exception("TEST_EXCEPTION_MSG");
+        final String partiallyExpected = String.format("""
+                <p>Exception message: %s</p>
+                <p>Stacktrace:</p>
                 <p>
-                    Previous Gold Rate on 09/14/2023: $2.34
-                    <br />
-                    Today's Gold Rate on 09/15/2023: $3.45
-                    <br />
-                    Difference: $1.11
-                    <br />
-                    For more info, <a href='https://www.google.com/search?q=gold+price+right+now'>Click Here</a>
-                    <br />
+                    %s
                 </p>
                 </body></html>
-                """;
-        final String actual = EmailBodyFactory.buildBodyForMetalPrice(prevDate, todayDate, prevRate, todayRate);
-        assertEquals(expectedBody, actual);
+                """, e.getLocalizedMessage(), Arrays.toString(e.getStackTrace()));
+        final String actual = EmailBodyFactory.buildBodyForExceptionNotification(e);
+        assertTrue(actual.contains(partiallyExpected));
     }
 
     @Test
-    void buildForMetalPriceDecreased() {
-        final LocalDate prevDate = LocalDate.of(2023, 9, 14);
-        final LocalDate todayDate = LocalDate.of(2023, 9, 15);
-        final MetalPriceResponse prevRate = getDummyTodayRate();
-        final MetalPriceResponse todayRate = getDummyPrevRate();
-        final String expectedBody = """
-                <html><body>
-                <h3>Gold Price is lower today!</h3>
+    void testBuildBodyForExceptionNotification_IllegalArgumentException() {
+        final Exception e = new IllegalArgumentException("TEST_EXCEPTION_MSG");
+        final String partiallyExpected = String.format("""
+                <p>Exception message: %s</p>
+                <p>Stacktrace:</p>
                 <p>
-                    Previous Gold Rate on 09/14/2023: $3.45
-                    <br />
-                    Today's Gold Rate on 09/15/2023: $2.34
-                    <br />
-                    Difference: $-1.11
-                    <br />
-                    For more info, <a href='https://www.google.com/search?q=gold+price+right+now'>Click Here</a>
-                    <br />
+                    %s
                 </p>
                 </body></html>
-                """;
-        final String actual = EmailBodyFactory.buildBodyForMetalPrice(prevDate, todayDate, prevRate, todayRate);
-        assertEquals(expectedBody, actual);
-    }
-
-    private MetalPriceResponse getDummyPrevRate() {
-        final MetalPriceResponse response = new MetalPriceResponse();
-        final Rates rate = new Rates();
-        rate.setUsd(2.34);
-        response.setRates(rate);
-        return response;
-    }
-
-    private MetalPriceResponse getDummyTodayRate() {
-        final MetalPriceResponse response = new MetalPriceResponse();
-        final Rates rate = new Rates();
-        rate.setUsd(3.45);
-        response.setRates(rate);
-        return response;
+                """, e.getLocalizedMessage(), Arrays.toString(e.getStackTrace()));
+        final String actual = EmailBodyFactory.buildBodyForExceptionNotification(e);
+        assertTrue(actual.contains(partiallyExpected));
     }
 
     private EmailRequest getCompleteRequest() {
