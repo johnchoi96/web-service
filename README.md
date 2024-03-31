@@ -11,7 +11,6 @@
 ## Endpoints
 
 * [SwaggerUI at `/api-docs`](https://ec2-3-130-128-69.us-east-2.compute.amazonaws.com:8080/api-docs)
-* _Deprecated: [Documentation](ENDPOINTS.md)_
 
 ## Public IP/DNS
 

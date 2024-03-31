@@ -21,8 +21,6 @@ public class MetalPriceService {
 
     private final MetalPriceClient metalPriceClient;
 
-    private final EmailService emailService;
-
     private final FCMService fcmService;
 
     public void analyzeGoldPriceAndNotify(final LocalDate today) throws JsonProcessingException, FirebaseMessagingException {
@@ -86,10 +84,8 @@ public class MetalPriceService {
         log.info(String.format("Prev rate: $%.2f, today's rate: $%.2f",
                 previousRate.getRates().getUsd(), todayRate.getRates().getUsd()));
         if (todayRate.getRates().getUsd() < previousRate.getRates().getUsd()) {
-            // send email
-            log.info("Today's rate is lower so triggering an email");
-            emailService.sendEmailForMetalPrice(previousDate, today, previousRate, todayRate);
             // send notification
+            log.info("Today's rate is lower so triggering a notification");
             final String notificationTitle = "Message from Web Service for MetalPrice";
             final String notificationBody = "Tap to see today's Gold Rate!";
             final StringBuilder metalpriceBody = FCMBodyFactory.buildBodyForMetalPrice(previousDate, today, previousRate, todayRate);
