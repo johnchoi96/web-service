@@ -39,7 +39,7 @@ public class VersionController {
             )
     })
     public ResponseEntity<?> getAppVersion(@RequestParam("appId") final String appId) {
-        log.info("GET /api/version/app");
+        log.info("GET /api/version/app-version");
         final AppVersion appVersion = versionService.getLatestVersion(appId);
         if (appVersion == null)
             return ResponseEntity.badRequest().body("Invalid appId supplied");
