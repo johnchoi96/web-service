@@ -22,6 +22,19 @@ management:
       simple:
         enabled: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      simple:
+        enabled: true
+
 springdoc:
   packagesToScan: io.github.johnchoi96.webservice
   swagger-ui:
