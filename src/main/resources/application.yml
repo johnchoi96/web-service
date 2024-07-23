@@ -1,7 +1,13 @@
 spring:
   config:
     import:
-      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, app-metadata.yml
+      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, file:secrets/datasource.yml
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
 
 management:
   endpoints:

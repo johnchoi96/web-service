@@ -1,9 +1,0 @@
-concealthis:
-  appId: io.github.johnchoi96.ConcealThis
-  version: 4.2.1
-voa:
-  appId: io.github.johnchoi96.VOA
-  version: 2.0
-webapp:
-  appId: johnchoi-portfolio
-  version: 0.1.0

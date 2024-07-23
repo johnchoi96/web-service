@@ -10,7 +10,6 @@ import com.sendgrid.helpers.mail.objects.Email;
 import io.github.johnchoi96.webservice.factories.EmailBodyFactory;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
-import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -31,8 +29,6 @@ import java.util.stream.Stream;
 public class EmailService {
 
     private final SendGridApiProperties sendGridApiProperties;
-
-    private final WebAppMetadataProperties webAppMetadataProperties;
 
     private final Environment environment;
 
@@ -48,8 +44,7 @@ public class EmailService {
 
     @PostConstruct
     private void init() {
-        allowedAppIds = Stream.of(webAppMetadataProperties.getAppId())
-                .map(String::toLowerCase).toList();
+        allowedAppIds = List.of("johnchoi-portfolio");
     }
 
     private boolean requestAllowed(final String appId) {
