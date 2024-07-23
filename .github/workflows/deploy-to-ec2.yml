@@ -14,12 +14,11 @@ jobs:
     name: Build and Upload
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.5.2
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'corretto'
+          distribution: 'corretto' # See 'Supported distributions' for available options
+          java-version: '21'
 
       - name: Build with Maven
         run: mvn clean package
@@ -42,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v4
 
       - name: Install SSH
         run: sudo apt-get update && sudo apt-get install openssh-client -y
@@ -63,7 +62,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v4
 
       - name: Install SSH
         run: sudo apt-get update && sudo apt-get install openssh-client -y
