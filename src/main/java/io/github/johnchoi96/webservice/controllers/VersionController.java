@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import io.github.johnchoi96.webservice.models.AppVersion;
-import io.github.johnchoi96.webservice.services.VersionService;
+import io.github.johnchoi96.webservice.services.AppMetadataService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Version")
 public class VersionController {
 
-    private final VersionService versionService;
+    private final AppMetadataService appMetadataService;
 
     @GetMapping(value = "/app-version")
     @Operation(summary = "Returns the latest app version for the appId.")
@@ -40,7 +40,7 @@ public class VersionController {
     })
     public ResponseEntity<?> getAppVersion(@RequestParam("appId") final String appId) {
         log.info("GET /api/version/app-version");
-        final AppVersion appVersion = versionService.getLatestVersion(appId);
+        final AppVersion appVersion = appMetadataService.getLatestVersion(appId);
         if (appVersion == null)
             return ResponseEntity.badRequest().body("Invalid appId supplied");
         return ResponseEntity.ok(appVersion);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="johnchoi96">
+        <sql>
+            CREATE TABLE WEBSERVICE_APP_METADATA (
+            ID SERIAL PRIMARY KEY,
+            APP_ID VARCHAR(500) NOT NULL UNIQUE,
+            VERSION VARCHAR(255) NOT NULL
+            );
+        </sql>
+        <rollback>
+            DROP TABLE WEBSERVICE_APP_METADATA;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

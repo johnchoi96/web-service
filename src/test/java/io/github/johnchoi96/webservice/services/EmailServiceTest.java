@@ -5,7 +5,6 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import io.github.johnchoi96.webservice.models.EmailRequest;
 import io.github.johnchoi96.webservice.properties.api.SendGridApiProperties;
-import io.github.johnchoi96.webservice.properties.metadata.WebAppMetadataProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +20,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class EmailServiceTest {
 
@@ -52,13 +53,12 @@ public class EmailServiceTest {
     @Test
     void testSendEmail() throws IOException, NoSuchFieldException, IllegalAccessException {
         var mockedSendGrid = mock(SendGrid.class);
-        var mockedWebAppMetadataProperties = mock(WebAppMetadataProperties.class);
         var mockedSendGridApiProp = mock(SendGridApiProperties.class);
         var mockedEnvironment = mock(Environment.class);
         var mockedActiveProfiles = new String[]{"local"};
         doReturn(mockedActiveProfiles).when(mockedEnvironment).getActiveProfiles();
         doReturn(API_KEY).when(mockedSendGridApiProp).getApiKey();
-        EmailService service = spy(new EmailService(mockedSendGridApiProp, mockedWebAppMetadataProperties, mockedEnvironment));
+        EmailService service = spy(new EmailService(mockedSendGridApiProp, mockedEnvironment));
         doReturn(mockedSendGrid).when(service).makeSendGrid(API_KEY);
         doReturn(getDummyResponse(200)).when(mockedSendGrid).api(any(Request.class));
 
