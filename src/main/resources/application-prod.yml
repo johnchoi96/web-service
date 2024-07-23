@@ -1,3 +1,7 @@
+spring:
+  datasource:
+    schema: public
+
 server:
   ssl:
     key-store: certs/springboot.p12

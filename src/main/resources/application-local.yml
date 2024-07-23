@@ -1,3 +1,7 @@
+spring:
+  datasource:
+    schema: dev
+
 logging:
   level:
     root: INFO  # ERROR, WARN, INFO, DEBUG, or TRACE.
