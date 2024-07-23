@@ -1,6 +1,6 @@
 spring:
   datasource:
-    schema: public
+    schema: prod
 
 server:
   ssl:
