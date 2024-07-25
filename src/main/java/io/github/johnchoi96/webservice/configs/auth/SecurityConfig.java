@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -23,11 +25,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests ->
+                .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/actuator/**").authenticated()
                                 .anyRequest().permitAll()
                 )
+                .csrf().disable() // Disable CSRF for testing purposes. Re-enable it for production with proper configuration.
                 .httpBasic(httpBasic -> {
                     httpBasic.authenticationEntryPoint(authenticationEntryPoint());
                     httpBasic.realmName("Actuator Realm");
