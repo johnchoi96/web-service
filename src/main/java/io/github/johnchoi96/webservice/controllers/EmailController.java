@@ -30,6 +30,10 @@ public class EmailController {
             @RequestParam("appId") final String appId,
             @RequestBody final EmailRequest request) {
         log.info("POST /api/email/contactme");
+        if (request.getSubject() == null || request.getSubject().isEmpty()
+                || request.getBody() == null || request.getBody().isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid email request received");
+        }
         if (emailService.sendEmailForContactMe(request, appId)) {
             return ResponseEntity.ok("Email sent to johnchoi1003@icloud.com");
         }
