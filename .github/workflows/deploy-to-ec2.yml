@@ -5,9 +5,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 env:
   JAR_FILE: web-service-0.0.1-SNAPSHOT.jar
