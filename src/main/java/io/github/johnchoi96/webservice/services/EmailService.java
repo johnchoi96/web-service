@@ -90,10 +90,11 @@ public class EmailService {
             return false;
         }
         final String apiKey = sendGridApiProperties.getApiKey();
-        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
+        final String FROM_EMAIL_ADDRESS = "no-reply@johnchoi96.com";
+        final String TO_EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
-        final Email from = new Email(EMAIL_ADDRESS);
-        final Email to = new Email(EMAIL_ADDRESS);
+        final Email from = new Email(FROM_EMAIL_ADDRESS);
+        final Email to = new Email(TO_EMAIL_ADDRESS);
         final Content content = new Content("text/plain", EmailBodyFactory.buildBodyFromWebApp(request));
         final String EMAIL_SUBJECT = "Message from Web App";
         final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
@@ -120,10 +121,11 @@ public class EmailService {
             return;
         }
         final String apiKey = sendGridApiProperties.getApiKey();
-        final String EMAIL_ADDRESS = "johnchoi1003@icloud.com";
+        final String FROM_EMAIL_ADDRESS = "no-reply@johnchoi96.com";
+        final String TO_EMAIL_ADDRESS = "johnchoi1003@icloud.com";
 
-        final Email from = new Email(EMAIL_ADDRESS);
-        final Email to = new Email(EMAIL_ADDRESS);
+        final Email from = new Email(FROM_EMAIL_ADDRESS);
+        final Email to = new Email(TO_EMAIL_ADDRESS);
         final Content content = new Content("text/html", EmailBodyFactory.buildBodyForExceptionNotification(exception));
         final String EMAIL_SUBJECT = "Exception Notification for Web Service";
         final Mail mail = new Mail(from, EMAIL_SUBJECT, to, content);
