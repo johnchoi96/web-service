@@ -86,4 +86,4 @@ jobs:
 
       - name: Hit the endpoint
         run: |
-          curl --location --insecure 'https://${{ secrets.HOST_DNS }}:8080/api/test/ping'
+          curl --location --insecure 'https://web-service.johnchoi96.com/api/test/ping'
