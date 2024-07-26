@@ -17,7 +17,7 @@ public class SwaggerUiConfig {
                         .contact(new Contact()
                                 .name("@johnchoi96")
                                 .email("johnchoi1003@icloud.com")
-                                .url("https://johnchoi96.github.io/")
+                                .url("https://johnchoi96.com/")
                         )
                         .version("v0.0.1")
                         .license(new License()
