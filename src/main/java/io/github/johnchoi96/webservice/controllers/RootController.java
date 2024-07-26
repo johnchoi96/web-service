@@ -33,12 +33,11 @@ public class RootController {
                             </p>
                             <h4>Links:</h4>
                             <p>
-                                <a href='https://johnchoi96.github.io/'>About Me</a>
+                                <a href='https://johnchoi96.com/'>About Me</a>
                                 <br />
                                 <a href='https://www.github.com/johnchoi96'>GitHub Profile</a>
                                 <br />
                             </p>
-                           
                             </body>
                             </html>
                 """;
