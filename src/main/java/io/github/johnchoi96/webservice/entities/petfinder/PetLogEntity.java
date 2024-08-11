@@ -41,7 +41,7 @@ public class PetLogEntity {
     private String name;
 
     @Builder.Default
-    @Column(name = "LAST_ACCESSED", nullable = false, length = 200)
+    @Column(name = "LAST_ACCESSED", nullable = false)
     private Instant lastAccessed = Instant.now();
 
     @Builder.Default
