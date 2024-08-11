@@ -95,4 +95,22 @@ public class SchedulerService {
             log.info("Finished job for runCurrentWeeksCfbUpsetReport()");
         }
     }
+
+    /**
+     * 1st day of every month at 3am EST.
+     */
+    @Scheduled(cron = "0 0 3 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_EAST)
+    public void deleteOldPetfinderLogs() {
+        if (schedulerEnabled) {
+            log.info("Starting job for deleteOldPetfinderLogs()");
+            try {
+                final int MONTHS = 2;
+                petfinderService.deleteInactivePetfinderLogs(MONTHS);
+            } catch (Exception e) {
+                log.error("Error occurred while trying to delete petfinder logs", e);
+                emailService.notifyException(e);
+            }
+            log.info("Finished job for deleteOldPetfinderLogs()");
+        }
+    }
 }

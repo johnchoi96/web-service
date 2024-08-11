@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create-petfinder-tables" author="johnchoi96">
+        <sql>
+            CREATE TABLE WEBSERVICE_PETFINDER_PET_TYPE (
+            ID SERIAL PRIMARY KEY,
+            TYPE VARCHAR(100) NOT NULL UNIQUE
+            );
+
+            CREATE TABLE WEBSERVICE_PETFINDER_PET_BREED (
+            ID SERIAL PRIMARY KEY,
+            BREED VARCHAR(50) NOT NULL UNIQUE,
+            TYPE INTEGER NOT NULL,
+            CONSTRAINT fk_pet_type FOREIGN KEY (TYPE)
+            REFERENCES WEBSERVICE_PETFINDER_PET_TYPE(ID)
+            );
+
+            CREATE TABLE WEBSERVICE_PETFINDER_PET_LOG (
+            ID SERIAL PRIMARY KEY,
+            PETFINDER_ID INTEGER NOT NULL UNIQUE,
+            PET_BREED INTEGER,
+            CONSTRAINT fk_pet_breed FOREIGN KEY (PET_BREED)
+            REFERENCES WEBSERVICE_PETFINDER_PET_BREED(ID),
+            NAME VARCHAR(200) NOT NULL,
+            LAST_ACCESSED TIMESTAMP NOT NULL,
+            CREATED_AT TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
+        </sql>
+        <rollback>
+            DROP TABLE WEBSERVICE_PETFINDER_PET_LOG;
+            DROP TABLE WEBSERVICE_PETFINDER_PET_TYPE;
+            DROP TABLE WEBSERVICE_PETFINDER_PET_BREED;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert-data-to-petfinder-pet-type" author="johnchoi96">
+        <sql>
+            INSERT INTO WEBSERVICE_PETFINDER_PET_TYPE (ID, TYPE) VALUES (1, 'DOG');
+            INSERT INTO WEBSERVICE_PETFINDER_PET_TYPE (ID, TYPE) VALUES (2, 'CAT');
+            INSERT INTO WEBSERVICE_PETFINDER_PET_TYPE (ID, TYPE) VALUES (3, 'MISC');
+        </sql>
+        <rollback>
+            DELETE FROM WEBSERVICE_PETFINDER_PET_TYPE WHERE ID IN (1, 2, 3);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert-data-to-petfinder-pet-breed" author="johnchoi96">
+        <sql>
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (1, 'Shiba Inu', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (2, 'Husky', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (3, 'Siberian Husky', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (4, 'German Shepherd Dog', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (5, 'White German Shepherd', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (6, 'Jindo', 1);
+            INSERT INTO WEBSERVICE_PETFINDER_PET_BREED (ID, BREED, TYPE) VALUES (7, 'Samoyed', 1);
+        </sql>
+        <rollback>
+            DELETE FROM WEBSERVICE_PETFINDER_PET_BREED WHERE ID IN (1, 2, 3, 4, 5, 6, 7);
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

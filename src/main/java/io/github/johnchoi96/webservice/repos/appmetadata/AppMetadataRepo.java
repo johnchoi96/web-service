@@ -1,6 +1,6 @@
-package io.github.johnchoi96.webservice.repos;
+package io.github.johnchoi96.webservice.repos.appmetadata;
 
-import io.github.johnchoi96.webservice.entities.AppMetadataEntity;
+import io.github.johnchoi96.webservice.entities.appmetadata.AppMetadataEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

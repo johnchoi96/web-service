@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.services;
 
-import io.github.johnchoi96.webservice.entities.AppMetadataEntity;
-import io.github.johnchoi96.webservice.repos.AppMetadataRepo;
+import io.github.johnchoi96.webservice.entities.appmetadata.AppMetadataEntity;
+import io.github.johnchoi96.webservice.repos.appmetadata.AppMetadataRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
