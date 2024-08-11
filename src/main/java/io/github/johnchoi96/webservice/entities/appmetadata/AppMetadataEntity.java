@@ -1,4 +1,4 @@
-package io.github.johnchoi96.webservice.entities;
+package io.github.johnchoi96.webservice.entities.appmetadata;
 
 import io.github.johnchoi96.webservice.models.AppVersion;
 import jakarta.persistence.Column;

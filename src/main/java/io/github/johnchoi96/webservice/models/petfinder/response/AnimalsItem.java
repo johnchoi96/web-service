@@ -2,8 +2,11 @@ package io.github.johnchoi96.webservice.models.petfinder.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.johnchoi96.webservice.entities.petfinder.PetBreedEntity;
+import io.github.johnchoi96.webservice.entities.petfinder.PetLogEntity;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -61,4 +64,14 @@ public class AnimalsItem {
     private String age;
 
     private String status;
+
+    public static PetLogEntity buildPetLogEntity(final AnimalsItem animalsItem, final PetBreedEntity breedEntity) {
+        return PetLogEntity.builder()
+                .petfinderId(animalsItem.getId())
+                .petBreed(breedEntity)
+                .name(animalsItem.getName())
+                .lastAccessed(Instant.now())
+                .createdAt(Instant.now())
+                .build();
+    }
 }

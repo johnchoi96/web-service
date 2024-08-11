@@ -1,8 +1,8 @@
 package io.github.johnchoi96.webservice.services;
 
-import io.github.johnchoi96.webservice.entities.AppMetadataEntity;
+import io.github.johnchoi96.webservice.entities.appmetadata.AppMetadataEntity;
 import io.github.johnchoi96.webservice.models.AppVersion;
-import io.github.johnchoi96.webservice.repos.AppMetadataRepo;
+import io.github.johnchoi96.webservice.repos.appmetadata.AppMetadataRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;

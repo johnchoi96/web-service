@@ -39,10 +39,13 @@ public class PetfinderController {
 
     @GetMapping(value = "/filtered", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Returns a list of filtered list of adoptable pets in 43235 area.")
-    public ResponseEntity<?> findFilteredDogsNear43235(@RequestParam(required = false) Integer limit) {
+    public ResponseEntity<?> findFilteredDogsNear43235(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Boolean ignoreKnownPets) {
         log.info("GET /api/petfinder/filtered");
         try {
-            return ResponseEntity.ok(petfinderService.findFilteredDogs(limit));
+            if (ignoreKnownPets == null) {
+                ignoreKnownPets = false;
+            }
+            return ResponseEntity.ok(petfinderService.findFilteredDogs(limit, ignoreKnownPets));
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
             return ResponseEntity.internalServerError().body(e.getMessage());
