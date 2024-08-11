@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class PetfinderService {
 
     public void deleteInactivePetfinderLogs(final int months) {
         final LocalDateTime date = LocalDateTime.now().minusMonths(months);
-        petLogRepo.deleteLogOlderThanMonths(date);
+        petLogRepo.deleteLogOlderThanMonths(date.toInstant(ZoneOffset.UTC));
     }
 
     @Transactional
