@@ -91,6 +91,7 @@ public class PetfinderService {
             } else {
                 final PetLogEntity entry = petLogEntityOptional.get();
                 entry.setLastAccessed(Instant.now());
+                entry.setUrl(animal.getUrl());
                 entitiesToSave.add(entry);
                 if (!ignoreKnownPets) {
                     result.add(animal);
