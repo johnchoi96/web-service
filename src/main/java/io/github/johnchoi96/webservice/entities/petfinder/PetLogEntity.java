@@ -47,4 +47,7 @@ public class PetLogEntity {
     @Builder.Default
     @Column(name = "CREATED_AT", nullable = false)
     private Instant createdAt = Instant.now();
+
+    @Column(name = "URL", length = 2048)
+    private String url;
 }

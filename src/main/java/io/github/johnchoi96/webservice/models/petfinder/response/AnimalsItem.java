@@ -72,6 +72,7 @@ public class AnimalsItem {
                 .name(animalsItem.getName())
                 .lastAccessed(Instant.now())
                 .createdAt(Instant.now())
+                .url(animalsItem.getUrl())
                 .build();
     }
 }
