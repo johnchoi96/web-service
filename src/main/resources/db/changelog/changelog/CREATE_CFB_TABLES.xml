@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create-cfb-tables" author="johnchoi96">
+        <sql>
+            CREATE TABLE WEBSERVICE_CFB_TEAM (
+            ID SERIAL PRIMARY KEY,
+            TEAM_NAME VARCHAR(300) NOT NULL UNIQUE
+            );
+
+            CREATE TABLE WEBSERVICE_CFB_UPSET_TYPE (
+            ID SERIAL PRIMARY KEY,
+            UPSET_TYPE VARCHAR(100) NOT NULL UNIQUE
+            );
+
+            CREATE TABLE WEBSERVICE_CFB_SEASON_TYPE (
+            ID SERIAL PRIMARY KEY,
+            SEASON_TYPE VARCHAR(50) NOT NULL UNIQUE
+            );
+
+            CREATE TABLE WEBSERVICE_CFB_UPSET (
+            ID SERIAL PRIMARY KEY,
+            LOCATION VARCHAR(500),
+            BOWL_NAME VARCHAR(250),
+            WINNING_TEAM INTEGER NOT NULL,
+            CONSTRAINT fk_cfb_winning_team FOREIGN KEY (WINNING_TEAM)
+            REFERENCES WEBSERVICE_CFB_TEAM(ID),
+            HOME_TEAM INTEGER NOT NULL,
+            CONSTRAINT fk_cfb_home_team FOREIGN KEY (HOME_TEAM)
+            REFERENCES WEBSERVICE_CFB_TEAM(ID),
+            AWAY_TEAM INTEGER NOT NULL,
+            CONSTRAINT fk_cfb_away_team FOREIGN KEY (AWAY_TEAM)
+            REFERENCES WEBSERVICE_CFB_TEAM(ID),
+            HOME_RANK INTEGER,
+            AWAY_RANK INTEGER,
+            PRE_MATCH_HOME_WIN_CHANCE REAL NOT NULL,
+            PRE_MATCH_AWAY_WIN_CHANCE REAL NOT NULL,
+            UPSET_TYPE INTEGER NOT NULL,
+            CONSTRAINT fk_cfb_upset_type FOREIGN KEY (UPSET_TYPE)
+            REFERENCES WEBSERVICE_CFB_UPSET_TYPE(ID),
+            HOME_SCORE INTEGER NOT NULL,
+            AWAY_SCORE INTEGER NOT NULL,
+            WEEK INTEGER NOT NULL,
+            YEAR INTEGER NOT NULL,
+            SEASON_TYPE INTEGER NOT NULL,
+            CONSTRAINT fk_cfb_season_type FOREIGN KEY (SEASON_TYPE)
+            REFERENCES WEBSERVICE_CFB_SEASON_TYPE(ID),
+            MATCH_TIMESTAMP TIMESTAMP NOT NULL,
+            NEUTRAL_SITE BOOLEAN NOT NULL,
+            CONFERENCE_GAME BOOLEAN NOT NULL
+            );
+
+            CREATE TABLE WEBSERVICE_CFB_WEEK_SUMMARY (
+            ID SERIAL PRIMARY KEY,
+            WEEK INTEGER NOT NULL,
+            YEAR INTEGER NOT NULL,
+            UPSET_MATCH_COUNT INTEGER NOT NULL,
+            TOTAL_MATCH_COUNT INTEGER NOT NULL,
+            RANK_UPSET_COUNT INTEGER NOT NULL,
+            PREDICTION_UPSET_COUNT INTEGER NOT NULL
+            );
+        </sql>
+        <rollback>
+            DROP TABLE WEBSERVICE_CFB_UPSET;
+            DROP TABLE WEBSERVICE_CFB_TEAM;
+            DROP TABLE WEBSERVICE_CFB_UPSET_TYPE;
+            DROP TABLE WEBSERVICE_CFB_SEASON_TYPE;
+            DROP TABLE WEBSERVICE_CFB_WEEK_SUMMARY;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert-data-to-cfb-upset-type" author="johnchoi96">
+        <sql>
+            INSERT INTO WEBSERVICE_CFB_UPSET_TYPE (ID, UPSET_TYPE) VALUES (1, 'prediction');
+            INSERT INTO WEBSERVICE_CFB_UPSET_TYPE (ID, UPSET_TYPE) VALUES (2, 'rank');
+            INSERT INTO WEBSERVICE_CFB_UPSET_TYPE (ID, UPSET_TYPE) VALUES (3, 'both');
+        </sql>
+        <rollback>
+            DELETE FROM WEBSERVICE_CFB_UPSET_TYPE WHERE ID IN (1, 2, 3);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="insert-data-to-cfb-season-type" author="johnchoi96">
+        <sql>
+            INSERT INTO WEBSERVICE_CFB_SEASON_TYPE (ID, SEASON_TYPE) VALUES (1, 'regular');
+            INSERT INTO WEBSERVICE_CFB_SEASON_TYPE (ID, SEASON_TYPE) VALUES (2, 'postseason');
+        </sql>
+        <rollback>
+            DELETE FROM WEBSERVICE_CFB_SEASON_TYPE WHERE ID IN (1, 2);
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
