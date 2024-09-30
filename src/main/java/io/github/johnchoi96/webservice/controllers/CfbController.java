@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
+import io.github.johnchoi96.webservice.models.cfb.api_response.CfbUpsetMatchResponse;
 import io.github.johnchoi96.webservice.services.CfbService;
 import io.github.johnchoi96.webservice.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,8 +52,8 @@ public class CfbController {
     public ResponseEntity<?> getCurrentUpsets() {
         log.info("GET /api/cfb/upsets");
         try {
-            final UpsetGameResponse upsetGames;
-            upsetGames = cfbService.collectUpsetGames(Instant.now());
+            final CfbUpsetMatchResponse upsetGames;
+            upsetGames = cfbService.getCfbUpsetMatches(Instant.now());
             if (upsetGames == null) {
                 return ResponseEntity.noContent().build();
             } else {
@@ -92,7 +92,7 @@ public class CfbController {
             final LocalDate localDate = LocalDate.parse(timestamp);
             // Convert LocalDate to Instant (assuming midnight as the time)
             final Instant convertedTimestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-            final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(convertedTimestamp);
+            final CfbUpsetMatchResponse upsetGames = cfbService.getCfbUpsetMatches(convertedTimestamp);
             if (upsetGames == null) {
                 return ResponseEntity.noContent().build();
             } else {

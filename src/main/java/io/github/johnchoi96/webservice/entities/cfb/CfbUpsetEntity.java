@@ -2,6 +2,8 @@ package io.github.johnchoi96.webservice.entities.cfb;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -24,6 +26,7 @@ import java.time.Instant;
 public class CfbUpsetEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
@@ -52,10 +55,10 @@ public class CfbUpsetEntity {
     private Integer awayRank;
 
     @Column(name = "PRE_MATCH_HOME_WIN_CHANCE", nullable = false)
-    private Double preMatchHomeWinChance;
+    private Float preMatchHomeWinChance;
 
     @Column(name = "PRE_MATCH_AWAY_WIN_CHANCE", nullable = false)
-    private Double preMatchAwayWinChance;
+    private Float preMatchAwayWinChance;
 
     @ManyToOne
     @JoinColumn(name = "UPSET_TYPE", nullable = false)
@@ -67,15 +70,9 @@ public class CfbUpsetEntity {
     @Column(name = "AWAY_SCORE", nullable = false)
     private Integer awayScore;
 
-    @Column(name = "WEEK", nullable = false)
-    private Integer week;
-
-    @Column(name = "YEAR", nullable = false)
-    private Integer year;
-
     @ManyToOne
-    @JoinColumn(name = "SEASON_TYPE", nullable = false)
-    private CfbSeasonTypeEntity seasonType;
+    @JoinColumn(name = "CFB_WEEK", nullable = false)
+    private CfbWeekSummaryEntity cfbWeek;
 
     @Column(name = "MATCH_TIMESTAMP", nullable = false)
     private Instant matchTimestamp;

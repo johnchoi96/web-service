@@ -1,7 +1,8 @@
 package io.github.johnchoi96.webservice.factories;
 
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGame;
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
+import io.github.johnchoi96.webservice.entities.cfb.CfbSeasonTypeEntity;
+import io.github.johnchoi96.webservice.entities.cfb.CfbUpsetEntity;
+import io.github.johnchoi96.webservice.models.cfb.api_response.CfbUpsetMatchResponse;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.petfinder.response.AnimalsItem;
 import lombok.experimental.UtilityClass;
@@ -84,9 +85,9 @@ public class FCMBodyFactory {
         return new StringBuilder(body);
     }
 
-    public StringBuilder buildBodyForCfbUpset(final String seasonType, final Integer week, final UpsetGameResponse upsetGames) {
+    public StringBuilder buildBodyForCfbUpset(final CfbSeasonTypeEntity seasonType, final Integer week, final CfbUpsetMatchResponse upsetGames) {
         final StringBuilder body = new StringBuilder("<html><body>");
-        final String headerText = seasonType.equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
+        final String headerText = seasonType.getSeasonType().equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
         body.append("<h1>");
         body.append(headerText);
         body.append("</h1>");
@@ -97,26 +98,26 @@ public class FCMBodyFactory {
         body.append("<th>Score</th>");
         body.append("</tr>");
         final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>";
-        for (final UpsetGame gameData : upsetGames.getUpsetGames()) {
+        for (final CfbUpsetEntity gameData : upsetGames.getUpsetGames()) {
             final String matchDesc = getMatchDesc(gameData);
-            final int homeWinChancePercentage = (int) (gameData.getPreGameHomeWinProbability() * 100);
+            final int homeWinChancePercentage = (int) (gameData.getPreMatchHomeWinChance() * 100);
             final int awayWinChancePercentage = 100 - homeWinChancePercentage;
             final String preMatchChanceText = String.format("%d%%, %d%%", awayWinChancePercentage, homeWinChancePercentage);
-            final String scoreText = String.format("%d - %d", gameData.getAwayPoints(), gameData.getHomePoints());
+            final String scoreText = String.format("%d - %d", gameData.getAwayScore(), gameData.getHomeScore());
             body.append(String.format(rowText, matchDesc, preMatchChanceText, scoreText));
         }
         body.append("</table></body></html>");
         return body;
     }
 
-    private static String getMatchDesc(final UpsetGame gameData) {
-        String awayTeamDesc = gameData.getAwayTeamName();
-        String homeTeamDesc = gameData.getHomeTeamName();
+    private static String getMatchDesc(final CfbUpsetEntity gameData) {
+        String awayTeamDesc = gameData.getAwayTeam().getTeamName();
+        String homeTeamDesc = gameData.getHomeTeam().getTeamName();
         if (gameData.getAwayRank() != null) {
-            awayTeamDesc = String.format("#%d %s", gameData.getAwayRank(), gameData.getAwayTeamName());
+            awayTeamDesc = String.format("#%d %s", gameData.getAwayRank(), gameData.getAwayTeam().getTeamName());
         }
         if (gameData.getHomeRank() != null) {
-            homeTeamDesc = String.format("#%d %s", gameData.getHomeRank(), gameData.getHomeTeamName());
+            homeTeamDesc = String.format("#%d %s", gameData.getHomeRank(), gameData.getHomeTeam().getTeamName());
         }
         return String.format("%s @ %s", awayTeamDesc, homeTeamDesc);
     }
