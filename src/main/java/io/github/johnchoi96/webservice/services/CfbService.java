@@ -72,6 +72,10 @@ public class CfbService {
     public void triggerUpsetReport() throws JsonProcessingException, FirebaseMessagingException {
         log.info("Starting CfbService.triggerUpsetReport()");
         final CfbUpsetMatchResponse response = getCfbUpsetMatches(Instant.now());
+        if (response == null) {
+            log.error("Could not fetch the upset match response.");
+            return;
+        }
         final StringBuilder notificationContent = FCMBodyFactory.buildBodyForCfbUpset(response.getWeekSummary().getSeasonType(), response.getWeekSummary().getWeek(), response);
         final String notificationTitle = "This week's CFB upset report is ready.";
         final String notificationSubtitle = "Tap to see this week's CFB upsets.";
@@ -113,7 +117,7 @@ public class CfbService {
         }
 
         final List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(weekSummaryEntity.get());
-        return CfbUpsetMatchResponse.builder().upsetGames(upsetGames).weekSummary(weekSummaryEntity.orElse(null)).build();
+        return CfbUpsetMatchResponse.builder().upsetGames(upsetGames).weekSummary(weekSummaryEntity.get()).build();
     }
 
     /**

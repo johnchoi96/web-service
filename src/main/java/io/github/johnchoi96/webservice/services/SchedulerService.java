@@ -97,6 +97,10 @@ public class SchedulerService {
         }
     }
 
+    /**
+     * At 9:30AM on Sundays.
+     * Collects CFB Upset matches and persists them in the DB.
+     */
     @Scheduled(cron = "0 30 9 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
     public void collectCfbUpsetMatches() {
         if (schedulerEnabled) {
