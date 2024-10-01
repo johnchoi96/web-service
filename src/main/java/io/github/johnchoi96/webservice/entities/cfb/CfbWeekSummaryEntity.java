@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "WEBSERVICE_CFB_WEEK_SUMMARY")
 @Getter
@@ -49,4 +51,10 @@ public class CfbWeekSummaryEntity {
     @ManyToOne
     @JoinColumn(name = "SEASON_TYPE", nullable = false)
     private CfbSeasonTypeEntity seasonType;
+
+    @Column(name = "START_TIMESTAMP", nullable = false)
+    private Instant start;
+
+    @Column(name = "END_TIMESTAMP", nullable = false)
+    private Instant end;
 }

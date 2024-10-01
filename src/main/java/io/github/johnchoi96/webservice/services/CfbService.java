@@ -31,7 +31,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,25 +79,81 @@ public class CfbService {
         log.info("Finished CfbService.triggerUpsetReport()");
     }
 
+    /**
+     * Looks up CFB upset matches by Instant, if not found, calls API.
+     *
+     * @param time of CFB week
+     * @return response
+     * @throws JsonProcessingException if API call went wrong
+     */
     public CfbUpsetMatchResponse getCfbUpsetMatches(final Instant time) throws JsonProcessingException {
-        final CalendarResponseItem currentWeek = getCurrentWeek(time);
-        if (currentWeek == null) {
-            log.info("Current week not found. Stopping execution.");
+        return getCfbUpsetMatches(time, 3);
+    }
+
+    private CfbUpsetMatchResponse getCfbUpsetMatches(final Instant time, final int tries) throws JsonProcessingException {
+        // get week summary
+        Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time);
+
+        if (weekSummaryEntity.isEmpty()) {
+            // try subtracting 3 days
+            weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time.minus(Duration.ofDays(3)));
+            if (weekSummaryEntity.isEmpty()) {
+                // we never queried for this week so call the API and insert to DB
+                final CalendarResponseItem currentWeek = getCurrentWeek(time);
+                if (currentWeek == null) {
+                    log.info("Current week is not a CFB week. Stopping execution.");
+                    return null;
+                }
+                collectUpsetGames(currentWeek.getLastGameStart());
+                if (tries <= 0) {
+                    return null;
+                }
+                return getCfbUpsetMatches(time, tries - 1);
+            }
+        }
+
+        final List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(weekSummaryEntity.get());
+        return CfbUpsetMatchResponse.builder().upsetGames(upsetGames).weekSummary(weekSummaryEntity.orElse(null)).build();
+    }
+
+    /**
+     * Looks up CFB upset matches by week and year. If not found, calls API.
+     *
+     * @param week of the CFB season
+     * @param year of the CFB season
+     * @return response
+     */
+    public CfbUpsetMatchResponse getCfbUpsetMatches(final int week, final int year) throws JsonProcessingException {
+        if (year > Year.now().getValue()) {
             return null;
         }
-        List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(currentWeek.getWeek(), currentWeek.getSeasonYear());
         // get week summary
-        Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(currentWeek.getWeek(), currentWeek.getSeasonYear());
-        if (upsetGames.isEmpty() || weekSummaryEntity.isEmpty()) {
-            if (weekSummaryEntity.isPresent()) {
-                log.info("No upset game for this week.");
+        Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(week, year);
+        if (weekSummaryEntity.isEmpty()) {
+            final List<CalendarResponseItem> response = cfbClient.getCurrentSeasonCalendar(year);
+            int left = 0, right = response.size();
+            while (left < right) {
+                final int midpoint = left + (right - left) / 2;
+                if (response.get(midpoint).getWeek() == week) {
+                    collectUpsetGames(response.get(midpoint).getLastGameStart());
+                    break;
+                }
+                if (response.get(midpoint).getWeek() < week) {
+                    left = midpoint;
+                } else {
+                    right = midpoint + 1;
+                }
+            }
+            if (left >= right) {
                 return null;
             }
-            collectUpsetGames(currentWeek.getLastGameStart());
-
-            upsetGames = cfbUpsetRepo.getUpsetMatches(currentWeek.getWeek(), currentWeek.getSeasonYear());
-            weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(currentWeek.getWeek(), currentWeek.getSeasonYear());
+            weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(week, year);
+            if (weekSummaryEntity.isEmpty()) {
+                log.info("No upset game for this week in DB.");
+                return null;
+            }
         }
+        final List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(week, year);
         return CfbUpsetMatchResponse.builder().upsetGames(upsetGames).weekSummary(weekSummaryEntity.orElse(null)).build();
     }
 
@@ -134,6 +192,8 @@ public class CfbService {
                 .seasonType(seasonTypeEntity.orElseGet(() -> cfbSeasonTypeRepo.save(CfbSeasonTypeEntity.builder()
                         .seasonType(currentWeek.getSeasonType())
                         .build())))
+                .start(currentWeek.getFirstGameStart())
+                .end(currentWeek.getLastGameStart())
                 .build());
         // insert matches
         final List<CfbUpsetEntity> upsetMatchesToInsert = new ArrayList<>();
