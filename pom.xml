@@ -13,6 +13,18 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Web Service</name>
     <description>Personal Web Service</description>
+    <developers>
+        <developer>
+            <id>johnchoi96</id>
+            <name>John Choi</name>
+            <url>https://johnchoi96.com</url>
+            <roles>
+                <role>Owner</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>America/New_York</timezone>
+        </developer>
+    </developers>
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2023.0.3</spring-cloud.version>

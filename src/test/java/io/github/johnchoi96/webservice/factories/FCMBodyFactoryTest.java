@@ -1,7 +1,11 @@
 package io.github.johnchoi96.webservice.factories;
 
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGame;
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
+import io.github.johnchoi96.webservice.entities.cfb.CfbSeasonTypeEntity;
+import io.github.johnchoi96.webservice.entities.cfb.CfbTeamEntity;
+import io.github.johnchoi96.webservice.entities.cfb.CfbUpsetEntity;
+import io.github.johnchoi96.webservice.entities.cfb.CfbUpsetTypeEntity;
+import io.github.johnchoi96.webservice.entities.cfb.CfbWeekSummaryEntity;
+import io.github.johnchoi96.webservice.models.cfb.api_response.CfbUpsetMatchResponse;
 import io.github.johnchoi96.webservice.models.metalprice.MetalPriceResponse;
 import io.github.johnchoi96.webservice.models.metalprice.Rates;
 import io.github.johnchoi96.webservice.models.petfinder.response.Address;
@@ -49,13 +53,13 @@ public class FCMBodyFactoryTest {
 
     @Test
     void testBuildBodyForCfbUpset() {
-        final String inputSeasonType = "regular";
+        final CfbSeasonTypeEntity inputSeasonType = CfbSeasonTypeEntity.builder().id(1L).seasonType("regular").build();
         final Integer inputWeek = 1;
-        final UpsetGameResponse inputResponse = getDummyUpsetGameResponse();
+        final CfbUpsetMatchResponse inputResponse = getDummyUpsetGameResponse();
         final String expected = "<html><body><h1>CFB Week 1 Upset Report</h1>" +
                 "<p>Upsets:</p><table border='1'><tr><th>Match Desc</th>" +
                 "<th>Pre-Match Win Chance</th><th>Score</th></tr><tr>" +
-                "<td>test-away-team-name-0 @ #1 test-home-team-name-0</td>" +
+                "<td>Bar @ #1 Foo</td>" +
                 "<td>40%, 60%</td><td>4 - 10</td></tr></table></body></html>";
         final String actual = FCMBodyFactory.buildBodyForCfbUpset(inputSeasonType, inputWeek, inputResponse).toString();
         assertEquals(expected, actual);
@@ -225,31 +229,31 @@ public class FCMBodyFactoryTest {
         return List.of(item0, item1, item2);
     }
 
-    private UpsetGameResponse getDummyUpsetGameResponse() {
-        var upsetGames = List.of(
-                UpsetGame.builder()
+    private CfbUpsetMatchResponse getDummyUpsetGameResponse() {
+        final CfbWeekSummaryEntity weekSummary = CfbWeekSummaryEntity.builder().id(4L).week(3).year(2024).build();
+        final List<CfbUpsetEntity> upsetGames = List.of(
+                CfbUpsetEntity.builder()
                         .location("test-location-0")
                         .bowlName("test-bowl-name-0")
-                        .winningTeamName("test-winning-team-0")
-                        .homeTeamName("test-home-team-name-0")
-                        .awayTeamName("test-away-team-name-0")
+                        .winningTeam(CfbTeamEntity.builder().id(1L).teamName("Foo").build())
+                        .homeTeam(CfbTeamEntity.builder().id(1L).teamName("Foo").build())
+                        .awayTeam(CfbTeamEntity.builder().id(2L).teamName("Bar").build())
                         .homeRank(1)
                         .awayRank(null)
-                        .preGameHomeWinProbability(0.6F)
-                        .preGameAwayWinProbability(0.4F)
-                        .upsetType("test-upset-type-0")
-                        .homePoints(10)
-                        .awayPoints(4)
-                        .week(1)
-                        .year(2024)
-                        .seasonType("regular")
-                        .timestamp(Instant.EPOCH)
+                        .preMatchHomeWinChance(0.6F)
+                        .preMatchAwayWinChance(0.4F)
+                        .upsetType(CfbUpsetTypeEntity.builder().id(3L).upsetType("both").build())
+                        .homeScore(10)
+                        .awayScore(4)
+                        .cfbWeek(weekSummary)
+                        .matchTimestamp(Instant.EPOCH)
                         .neutralSite(true)
                         .conferenceGame(false)
                         .build()
         );
-        return UpsetGameResponse.builder()
+        return CfbUpsetMatchResponse.builder()
                 .upsetGames(upsetGames)
+                .weekSummary(weekSummary)
                 .build();
     }
 }

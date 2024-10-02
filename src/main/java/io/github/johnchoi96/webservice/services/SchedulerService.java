@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
 
@@ -93,6 +94,23 @@ public class SchedulerService {
                 emailService.notifyException(e);
             }
             log.info("Finished job for runCurrentWeeksCfbUpsetReport()");
+        }
+    }
+
+    /**
+     * At 9:30AM on Sundays.
+     * Collects CFB Upset matches and persists them in the DB.
+     */
+    @Scheduled(cron = "0 30 9 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
+    public void collectCfbUpsetMatches() {
+        if (schedulerEnabled) {
+            log.info("Starting job for collectCfbUpsetMatches");
+            try {
+                cfbService.collectUpsetGames(Instant.now());
+            } catch (JsonProcessingException e) {
+                emailService.notifyException(e);
+            }
+            log.info("Finished job for collectCfbUpsetMatches");
         }
     }
 

@@ -1,7 +1,7 @@
 package io.github.johnchoi96.webservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.github.johnchoi96.webservice.models.cfb.upset_game.UpsetGameResponse;
+import io.github.johnchoi96.webservice.models.cfb.api_response.CfbUpsetMatchResponse;
 import io.github.johnchoi96.webservice.services.CfbService;
 import io.github.johnchoi96.webservice.services.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
@@ -45,15 +46,29 @@ public class CfbController {
             ),
             @ApiResponse(
                     responseCode = "204",
-                    description = "Current week is not a CFB season.",
+                    description = "Week is not a CFB season.",
+                    content = {@Content(mediaType = "text/plain")}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Week and Year must be supplied",
                     content = {@Content(mediaType = "text/plain")}
             )
     })
-    public ResponseEntity<?> getCurrentUpsets() {
+    public ResponseEntity<?> getCurrentUpsets(
+            @Parameter(description = "Optional week of CFB season") @RequestParam(required = false) final Integer week,
+            @Parameter(description = "Optional year of CFB season") @RequestParam(required = false) final Integer year) {
         log.info("GET /api/cfb/upsets");
         try {
-            final UpsetGameResponse upsetGames;
-            upsetGames = cfbService.collectUpsetGames(Instant.now());
+            CfbUpsetMatchResponse upsetGames;
+            if (week != null || year != null) {
+                if (week == null || year == null) {
+                    return ResponseEntity.badRequest().body("Week and Year must be supplied");
+                }
+                upsetGames = cfbService.getCfbUpsetMatches(week, year);
+            } else {
+                upsetGames = cfbService.getCfbUpsetMatches(Instant.now());
+            }
             if (upsetGames == null) {
                 return ResponseEntity.noContent().build();
             } else {
@@ -90,9 +105,13 @@ public class CfbController {
         try {
             // Parse the date string as LocalDate
             final LocalDate localDate = LocalDate.parse(timestamp);
+            if (localDate.isAfter(LocalDate.now())) {
+                final String errorMessage = "Cannot take a future date";
+                return ResponseEntity.badRequest().body(errorMessage);
+            }
             // Convert LocalDate to Instant (assuming midnight as the time)
             final Instant convertedTimestamp = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-            final UpsetGameResponse upsetGames = cfbService.collectUpsetGames(convertedTimestamp);
+            final CfbUpsetMatchResponse upsetGames = cfbService.getCfbUpsetMatches(convertedTimestamp);
             if (upsetGames == null) {
                 return ResponseEntity.noContent().build();
             } else {
