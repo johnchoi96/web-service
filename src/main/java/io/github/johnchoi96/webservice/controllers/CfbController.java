@@ -62,7 +62,7 @@ public class CfbController {
         try {
             CfbUpsetMatchResponse upsetGames;
             if (week != null || year != null) {
-                if (week == null || year == null) {
+                if (week == null || year == null || week <= 0 || year <= 1900) {
                     return ResponseEntity.badRequest().body("Week and Year must be supplied");
                 }
                 upsetGames = cfbService.getCfbUpsetMatches(week, year);
