@@ -143,9 +143,9 @@ public class CfbService {
                     break;
                 }
                 if (response.get(midpoint).getWeek() < week) {
-                    left = midpoint;
+                    left = midpoint + 1;
                 } else {
-                    right = midpoint + 1;
+                    right = midpoint;
                 }
             }
             if (left >= right) {
