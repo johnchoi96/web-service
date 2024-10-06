@@ -120,7 +120,7 @@ public class CfbService {
             collectUpsetGames(currentWeek.getLastGameStart());
             return getCfbUpsetMatches(time, tries + 1);
         }
-        if (!weekSummaryEntity.get().isFinalized()) {
+        if (!weekSummaryEntity.get().isFinalized() && tries <= 1) {
             final CalendarResponseItem currentWeek = getCurrentWeek(time);
             if (currentWeek == null) {
                 log.info("Current week is not finalized and current week is not a CFB week. Stopping execution.");
@@ -217,7 +217,8 @@ public class CfbService {
                         .seasonType(currentWeek.getSeasonType())
                         .build())))
                 .start(currentWeek.getFirstGameStart())
-                .end(currentWeek.getLastGameStart())
+                // NOTE: add 6 hours to the last game start of the week because game usually takes less than 6 hours to complete
+                .end(currentWeek.getLastGameStart().plus(Duration.ofHours(6)))
                 .build()));
         // insert matches
         final List<CfbUpsetEntity> upsetMatchesToInsert = new ArrayList<>();
@@ -256,8 +257,7 @@ public class CfbService {
         });
         cfbUpsetRepo.saveAll(upsetMatchesToInsert);
 
-        // NOTE: add 6 hours to the last game start of the week because game usually takes less than 6 hours to complete
-        if (Instant.now().isAfter(cfbWeek.getEnd().plus(Duration.ofHours(6)))) {
+        if (Instant.now().isAfter(cfbWeek.getEnd())) {
             cfbWeek.setFinalized(true);
             cfbWeekSummaryRepo.save(cfbWeek);
         }
