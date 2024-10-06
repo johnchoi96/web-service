@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 @UtilityClass
 public class FCMBodyFactory {
@@ -86,6 +87,13 @@ public class FCMBodyFactory {
     }
 
     public StringBuilder buildBodyForCfbUpset(final CfbSeasonTypeEntity seasonType, final Integer week, final CfbUpsetMatchResponse upsetGames) {
+        final PriorityQueue<CfbUpsetEntity> sortedByPercentageList = new PriorityQueue<>((o1, o2) -> {
+            final float o1Diff = Math.abs(o1.getPreMatchHomeWinChance() - o1.getPreMatchAwayWinChance());
+            final float o2Diff = Math.abs(o2.getPreMatchHomeWinChance() - o2.getPreMatchAwayWinChance());
+            return Float.compare(o2Diff, o1Diff);
+        });
+        sortedByPercentageList.addAll(upsetGames.getUpsetGames());
+
         final StringBuilder body = new StringBuilder("<html><body>");
         final String headerText = seasonType.getSeasonType().equals("regular") ? String.format("CFB Week %d Upset Report", week) : "CFB Postseason Upset Report";
         body.append("<h1>");
@@ -98,7 +106,7 @@ public class FCMBodyFactory {
         body.append("<th>Score</th>");
         body.append("</tr>");
         final String rowText = "<tr><td>%s</td><td>%s</td><td>%s</td></tr>";
-        for (final CfbUpsetEntity gameData : upsetGames.getUpsetGames()) {
+        for (final CfbUpsetEntity gameData : sortedByPercentageList) {
             final String matchDesc = getMatchDesc(gameData);
             final int homeWinChancePercentage = (int) (gameData.getPreMatchHomeWinChance() * 100);
             final int awayWinChancePercentage = 100 - homeWinChancePercentage;
