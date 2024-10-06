@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="alter-cfb-week-summary-table" author="johnchoi96">
+        <sql>
+            ALTER TABLE WEBSERVICE_CFB_WEEK_SUMMARY ADD FINALIZED BOOLEAN NOT NULL DEFAULT FALSE;
+        </sql>
+        <rollback>
+            ALTER TABLE WEBSERVICE_CFB_WEEK_SUMMARY DROP COLUMN FINALIZED;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

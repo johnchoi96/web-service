@@ -57,4 +57,7 @@ public class CfbWeekSummaryEntity {
 
     @Column(name = "END_TIMESTAMP", nullable = false)
     private Instant end;
+
+    @Column(name = "FINALIZED", nullable = false)
+    private boolean isFinalized = false;
 }

@@ -91,29 +91,42 @@ public class CfbService {
      * @throws JsonProcessingException if API call went wrong
      */
     public CfbUpsetMatchResponse getCfbUpsetMatches(final Instant time) throws JsonProcessingException {
-        return getCfbUpsetMatches(time, 3);
+        return getCfbUpsetMatches(time, 1);
     }
 
     private CfbUpsetMatchResponse getCfbUpsetMatches(final Instant time, final int tries) throws JsonProcessingException {
         // get week summary
         Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time);
+        // check the DB for the past 5 days
+        if (weekSummaryEntity.isEmpty()) {
+            for (int i = 1; i < 5; i++) {
+                weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time.minus(Duration.ofDays(i)));
+                if (weekSummaryEntity.isPresent()) {
+                    break;
+                }
+            }
+        }
 
         if (weekSummaryEntity.isEmpty()) {
-            // try subtracting 3 days
-            weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time.minus(Duration.ofDays(3)));
-            if (weekSummaryEntity.isEmpty()) {
-                // we never queried for this week so call the API and insert to DB
-                final CalendarResponseItem currentWeek = getCurrentWeek(time);
-                if (currentWeek == null) {
-                    log.info("Current week is not a CFB week. Stopping execution.");
-                    return null;
-                }
-                collectUpsetGames(currentWeek.getLastGameStart());
-                if (tries <= 0) {
-                    return null;
-                }
-                return getCfbUpsetMatches(time, tries - 1);
+            // we never queried for this week so call the API and insert to DB
+            final CalendarResponseItem currentWeek = getCurrentWeek(time);
+            if (currentWeek == null) {
+                log.info("Current week is not a CFB week. Stopping execution.");
+                return null;
             }
+            if (tries > 5) {
+                return null;
+            }
+            collectUpsetGames(currentWeek.getLastGameStart());
+            return getCfbUpsetMatches(time, tries + 1);
+        }
+        if (!weekSummaryEntity.get().isFinalized()) {
+            final CalendarResponseItem currentWeek = getCurrentWeek(time);
+            if (currentWeek == null) {
+                log.info("Current week is not finalized and current week is not a CFB week. Stopping execution.");
+                return null;
+            }
+            collectUpsetGames(time);
         }
 
         final List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(weekSummaryEntity.get());
@@ -157,6 +170,9 @@ public class CfbService {
                 return null;
             }
         }
+        if (!weekSummaryEntity.get().isFinalized()) {
+            collectUpsetGames(weekSummaryEntity.get().getEnd());
+        }
         final List<CfbUpsetEntity> upsetGames = cfbUpsetRepo.getUpsetMatches(week, year);
         return CfbUpsetMatchResponse.builder().upsetGames(upsetGames).weekSummary(weekSummaryEntity.orElse(null)).build();
     }
@@ -175,6 +191,12 @@ public class CfbService {
             log.info("Current week not found. Stopping execution.");
             return;
         }
+        // insert to the CFB_WEEK_SUMMARY table
+        final Optional<CfbWeekSummaryEntity> optionalCfbWeek = cfbWeekSummaryRepo.getCfbWeekSummary(currentWeek.getWeek(), currentWeek.getSeasonYear());
+        if (optionalCfbWeek.isPresent() && optionalCfbWeek.get().isFinalized()) {
+            log.info("Current week already in the DB. Stopping execution.");
+            return;
+        }
         final List<WinProbabilityResponseItem> winProbabilities = cfbClient.getPregameWinProbabilityDataForWeek(currentWeek);
         if (winProbabilities == null) return;
         final UpsetGameResponse upsetGames = getUpsetGames(winProbabilities);
@@ -184,9 +206,7 @@ public class CfbService {
         }
 
         final Optional<CfbSeasonTypeEntity> seasonTypeEntity = cfbSeasonTypeRepo.getSeasonType(currentWeek.getSeasonType());
-
-        // insert to the CFB_WEEK_SUMMARY table
-        final CfbWeekSummaryEntity cfbWeek = cfbWeekSummaryRepo.save(CfbWeekSummaryEntity.builder()
+        final CfbWeekSummaryEntity cfbWeek = optionalCfbWeek.orElseGet(() -> cfbWeekSummaryRepo.save(CfbWeekSummaryEntity.builder()
                 .week(currentWeek.getWeek())
                 .year(currentWeek.getSeasonYear())
                 .upsetMatchCount(upsetGames.getUpsetGamesCount())
@@ -198,11 +218,10 @@ public class CfbService {
                         .build())))
                 .start(currentWeek.getFirstGameStart())
                 .end(currentWeek.getLastGameStart())
-                .build());
+                .build()));
         // insert matches
         final List<CfbUpsetEntity> upsetMatchesToInsert = new ArrayList<>();
         upsetGames.getUpsetGames().forEach(match -> {
-            final CfbUpsetEntity.CfbUpsetEntityBuilder builder = CfbUpsetEntity.builder();
             // check if home team exists
             final Optional<CfbTeamEntity> optionalHomeTeam = cfbTeamRepo.getTeamWithName(match.getHomeTeamName());
             final CfbTeamEntity homeTeam = optionalHomeTeam.orElseGet(() -> cfbTeamRepo.save(CfbTeamEntity.builder()
@@ -211,27 +230,36 @@ public class CfbService {
             final Optional<CfbTeamEntity> optionalAwayTeam = cfbTeamRepo.getTeamWithName(match.getAwayTeamName());
             final CfbTeamEntity awayTeam = optionalAwayTeam.orElseGet(() -> cfbTeamRepo.save(CfbTeamEntity.builder()
                     .teamName(match.getAwayTeamName()).build()));
-            builder.location(match.getLocation());
-            builder.bowlName(match.getBowlName());
+            CfbUpsetEntity cfbUpsetEntity = cfbUpsetRepo.getUpsetMatch(homeTeam, awayTeam, cfbWeek);
+            if (cfbUpsetEntity == null) {
+                cfbUpsetEntity = new CfbUpsetEntity();
+                cfbUpsetEntity.setHomeTeam(homeTeam);
+                cfbUpsetEntity.setAwayTeam(awayTeam);
+                cfbUpsetEntity.setCfbWeek(cfbWeek);
+            }
+            cfbUpsetEntity.setLocation(match.getLocation());
+            cfbUpsetEntity.setBowlName(match.getBowlName());
             final Optional<CfbTeamEntity> winningTeam = cfbTeamRepo.getTeamWithName(match.getWinningTeamName());
-            winningTeam.ifPresent(builder::winningTeam);
-            builder.homeTeam(homeTeam);
-            builder.awayTeam(awayTeam);
-            builder.homeRank(match.getHomeRank());
-            builder.awayRank(match.getAwayRank());
-            builder.preMatchHomeWinChance(match.getPreGameHomeWinProbability());
-            builder.preMatchAwayWinChance(match.getPreGameAwayWinProbability());
+            winningTeam.ifPresent(cfbUpsetEntity::setWinningTeam);
+            cfbUpsetEntity.setHomeRank(match.getHomeRank());
+            cfbUpsetEntity.setAwayRank(match.getAwayRank());
+            cfbUpsetEntity.setPreMatchHomeWinChance(match.getPreGameHomeWinProbability());
+            cfbUpsetEntity.setPreMatchAwayWinChance(match.getPreGameAwayWinProbability());
             final Optional<CfbUpsetTypeEntity> upsetTypeEntity = cfbUpsetTypeRepo.getUpsetType(match.getUpsetType());
-            upsetTypeEntity.ifPresent(builder::upsetType);
-            builder.homeScore(match.getHomePoints());
-            builder.awayScore(match.getAwayPoints());
-            builder.cfbWeek(cfbWeek);
-            builder.matchTimestamp(match.getTimestamp());
-            builder.neutralSite(match.getNeutralSite());
-            builder.conferenceGame(match.getConferenceGame());
-            upsetMatchesToInsert.add(builder.build());
+            upsetTypeEntity.ifPresent(cfbUpsetEntity::setUpsetType);
+            cfbUpsetEntity.setHomeScore(match.getHomePoints());
+            cfbUpsetEntity.setAwayScore(match.getAwayPoints());
+            cfbUpsetEntity.setMatchTimestamp(match.getTimestamp());
+            cfbUpsetEntity.setNeutralSite(match.getNeutralSite());
+            cfbUpsetEntity.setConferenceGame(match.getConferenceGame());
+            upsetMatchesToInsert.add(cfbUpsetEntity);
         });
         cfbUpsetRepo.saveAll(upsetMatchesToInsert);
+
+        if (Instant.now().isAfter(cfbWeek.getEnd())) {
+            cfbWeek.setFinalized(true);
+            cfbWeekSummaryRepo.save(cfbWeek);
+        }
     }
 
     /**
