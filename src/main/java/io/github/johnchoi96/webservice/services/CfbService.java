@@ -99,7 +99,7 @@ public class CfbService {
         Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time);
         // check the DB for the past 5 days
         if (weekSummaryEntity.isEmpty()) {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 1; i < 5; i++) {
                 weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time.minus(Duration.ofDays(i)));
                 if (weekSummaryEntity.isPresent()) {
                     break;
