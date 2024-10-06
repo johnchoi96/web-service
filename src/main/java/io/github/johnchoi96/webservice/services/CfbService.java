@@ -256,7 +256,8 @@ public class CfbService {
         });
         cfbUpsetRepo.saveAll(upsetMatchesToInsert);
 
-        if (Instant.now().isAfter(cfbWeek.getEnd())) {
+        // NOTE: add 6 hours to the last game start of the week because game usually takes less than 6 hours to complete
+        if (Instant.now().isAfter(cfbWeek.getEnd().plus(Duration.ofHours(6)))) {
             cfbWeek.setFinalized(true);
             cfbWeekSummaryRepo.save(cfbWeek);
         }
