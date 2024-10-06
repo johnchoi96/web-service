@@ -1,5 +1,6 @@
 package io.github.johnchoi96.webservice.repos.cfb;
 
+import io.github.johnchoi96.webservice.entities.cfb.CfbTeamEntity;
 import io.github.johnchoi96.webservice.entities.cfb.CfbUpsetEntity;
 import io.github.johnchoi96.webservice.entities.cfb.CfbWeekSummaryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,4 +25,14 @@ public interface CfbUpsetRepo extends JpaRepository<CfbUpsetEntity, Long> {
             where entity.cfbWeek = :CFB_WEEK_ENTITY
             """)
     List<CfbUpsetEntity> getUpsetMatches(@Param("CFB_WEEK_ENTITY") CfbWeekSummaryEntity cfbWeekSummaryEntity);
+
+    @Query(value = """
+            select entity from CfbUpsetEntity entity
+            where entity.homeTeam = :HOME_TEAM_ENTITY
+            and entity.awayTeam = :AWAY_TEAM_ENTITY
+            and entity.cfbWeek = :CFB_WEEK_ENTITY
+            """)
+    CfbUpsetEntity getUpsetMatch(@Param("HOME_TEAM_ENTITY") final CfbTeamEntity homeTeam,
+                                 @Param("AWAY_TEAM_ENTITY") final CfbTeamEntity awayTeam,
+                                 @Param("CFB_WEEK_ENTITY") final CfbWeekSummaryEntity cfbWeekEntity);
 }
