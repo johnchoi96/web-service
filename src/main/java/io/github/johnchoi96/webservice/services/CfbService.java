@@ -65,6 +65,7 @@ public class CfbService {
 
     /**
      * Collects upset games for the current time and sends a push notification with the constructed report.
+     * Sets the current week as finalized.
      *
      * @throws JsonProcessingException    if JSON parsing went bad
      * @throws FirebaseMessagingException if push notification failed
@@ -76,11 +77,30 @@ public class CfbService {
             log.error("Could not fetch the upset match response.");
             return;
         }
+        // set current week as finalized
+        final CfbWeekSummaryEntity cfbWeek = response.getWeekSummary();
+        if (setCfbWeekToFinal(cfbWeek, true)) {
+            response.setWeekSummary(cfbWeek);
+        }
+
         final StringBuilder notificationContent = FCMBodyFactory.buildBodyForCfbUpset(response.getWeekSummary().getSeasonType(), response.getWeekSummary().getWeek(), response);
         final String notificationTitle = "This week's CFB upset report is ready.";
         final String notificationSubtitle = "Tap to see this week's CFB upsets.";
         fcmService.sendNotification(FCMTopic.CFB, notificationTitle, notificationSubtitle, notificationContent, true, false);
         log.info("Finished CfbService.triggerUpsetReport()");
+    }
+
+    @Transactional
+    private boolean setCfbWeekToFinal(final CfbWeekSummaryEntity cfbWeek, final boolean setToFinal) {
+        if (cfbWeek.getId() == null) return false;
+        try {
+            cfbWeek.setFinalized(setToFinal);
+            cfbWeekSummaryRepo.save(cfbWeek);
+        } catch (final Exception e) {
+            log.error("Something went wrong while trying to set cfbWeek to final", e);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -99,7 +119,7 @@ public class CfbService {
         Optional<CfbWeekSummaryEntity> weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time);
         // check the DB for the past 5 days
         if (weekSummaryEntity.isEmpty()) {
-            for (int i = 1; i < 5; i++) {
+            for (int i = 1; i <= 5; i++) {
                 weekSummaryEntity = cfbWeekSummaryRepo.getCfbWeekSummary(time.minus(Duration.ofDays(i)));
                 if (weekSummaryEntity.isPresent()) {
                     break;
@@ -257,10 +277,8 @@ public class CfbService {
         });
         cfbUpsetRepo.saveAll(upsetMatchesToInsert);
 
-        if (Instant.now().isAfter(cfbWeek.getEnd())) {
-            cfbWeek.setFinalized(true);
-            cfbWeekSummaryRepo.save(cfbWeek);
-        }
+        // set cfbWeek to final if current time is after the cfbWeek's end time
+        setCfbWeekToFinal(cfbWeek, Instant.now().isAfter(cfbWeek.getEnd()));
     }
 
     /**
