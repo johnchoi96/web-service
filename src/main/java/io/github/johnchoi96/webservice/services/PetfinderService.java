@@ -21,6 +21,7 @@ import io.github.johnchoi96.webservice.repos.petfinder.PetBreedRepo;
 import io.github.johnchoi96.webservice.repos.petfinder.PetLogRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,6 +34,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PetfinderService {
 
     private final PetfinderClient petfinderClient;
@@ -49,7 +51,11 @@ public class PetfinderService {
     }
 
     public void findFilteredDogsAndNotify(final Integer limit) throws JsonProcessingException, FirebaseMessagingException {
-        var filteredList = findFilteredDogs(limit, true);
+        final List<AnimalsItem> filteredList = findFilteredDogs(limit, true);
+        if (filteredList.isEmpty()) {
+            log.info("No new pet to notify");
+            return;
+        }
         final StringBuilder petfinderBody = FCMBodyFactory.buildBodyForPetfinder(filteredList);
         final String notificationTitle = "Message from Web Service for Petfinder";
         final String notificationBody = "Tap to see the filtered list of 43235 dogs!";
