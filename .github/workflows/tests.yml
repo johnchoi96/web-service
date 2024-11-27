@@ -28,6 +28,13 @@ jobs:
       - name: Run Unit Tests
         run: mvn test
 
+      - name: Create dummy yml files
+        run: |
+          mkdir secrets/
+          cp src/test/resources/admin-keys.yml secrets/
+          cp src/test/resources/apikeys.yml secrets/
+          cp src/test/resources/datasource.yml secrets/
+
       - name: Start Application
         run: |
           java -jar target/web-service-0.0.1-SNAPSHOT.jar &
@@ -44,3 +51,4 @@ jobs:
         run: |
           kill $(cat app_pid.txt)
           rm app_pid.txt
+          rm -rf secrets/
