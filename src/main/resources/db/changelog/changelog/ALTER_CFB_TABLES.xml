@@ -13,4 +13,18 @@
             ALTER TABLE WEBSERVICE_CFB_WEEK_SUMMARY DROP COLUMN FINALIZED;
         </rollback>
     </changeSet>
+
+    <changeSet id="alter-cfb-team-table-last-appeared-column" author="johnchoi96">
+        <sql>
+            ALTER TABLE WEBSERVICE_CFB_TEAM ADD LAST_APPEARED INTEGER;
+            ALTER TABLE WEBSERVICE_CFB_TEAM
+            ADD CONSTRAINT FK_CFB_TEAM_LAST_APPEARED
+            FOREIGN KEY (LAST_APPEARED)
+            REFERENCES WEBSERVICE_CFB_WEEK_SUMMARY(ID);
+        </sql>
+        <rollback>
+            ALTER TABLE WEBSERVICE_CFB_TEAM DROP CONSTRAINT FK_CFB_TEAM_LAST_APPEARED;
+            ALTER TABLE WEBSERVICE_CFB_TEAM DROP COLUMN LAST_APPEARED;
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

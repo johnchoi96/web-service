@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "WEBSERVICE_CFB_WEEK_SUMMARY")
@@ -23,7 +24,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CfbWeekSummaryEntity {
+public class CfbWeekSummaryEntity implements Comparable<CfbWeekSummaryEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,4 +61,12 @@ public class CfbWeekSummaryEntity {
 
     @Column(name = "FINALIZED", nullable = false)
     private boolean isFinalized = false;
+
+    @Override
+    public int compareTo(final CfbWeekSummaryEntity o) {
+        if (!Objects.equals(this.year, o.year)) {
+            return this.year.compareTo(o.year);
+        }
+        return this.week.compareTo(o.week);
+    }
 }

@@ -274,6 +274,18 @@ public class CfbService {
             cfbUpsetEntity.setNeutralSite(match.getNeutralSite());
             cfbUpsetEntity.setConferenceGame(match.getConferenceGame());
             upsetMatchesToInsert.add(cfbUpsetEntity);
+
+            final List<CfbTeamEntity> updatedTeam = new ArrayList<>();
+            // update team's last appeared
+            if (homeTeam.getLastAppeared() == null || homeTeam.getLastAppeared().compareTo(cfbWeek) < 0) {
+                homeTeam.setLastAppeared(cfbWeek);
+                updatedTeam.add(homeTeam);
+            }
+            if (awayTeam.getLastAppeared() == null || awayTeam.getLastAppeared().compareTo(cfbWeek) < 0) {
+                awayTeam.setLastAppeared(cfbWeek);
+                updatedTeam.add(awayTeam);
+            }
+            cfbTeamRepo.saveAll(updatedTeam);
         });
         cfbUpsetRepo.saveAll(upsetMatchesToInsert);
 
