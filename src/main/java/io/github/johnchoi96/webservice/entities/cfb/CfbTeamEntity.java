@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,4 +30,8 @@ public class CfbTeamEntity {
 
     @Column(name = "TEAM_NAME", length = 300, nullable = false)
     private String teamName;
+
+    @ManyToOne
+    @JoinColumn(name = "LAST_APPEARED")
+    private CfbWeekSummaryEntity lastAppeared;
 }
