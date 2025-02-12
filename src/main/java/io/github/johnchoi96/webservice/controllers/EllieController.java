@@ -25,17 +25,17 @@ public class EllieController {
 
     @GetMapping(value = "/check")
     public ResponseEntity<Boolean> checkPassword(@RequestParam final String password) {
-//        if (!isAfterValentines()) {
-//            return ResponseEntity.badRequest().build();
-//        }
+        if (!isAfterValentines()) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(service.checkPassword(password));
     }
 
     @GetMapping(value = "/payload")
     public ResponseEntity<ElliePayload> getPayload() {
-//        if (!isAfterValentines()) {
-//            return ResponseEntity.badRequest().build();
-//        }
+        if (!isAfterValentines()) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(service.getPayload());
     }
 
