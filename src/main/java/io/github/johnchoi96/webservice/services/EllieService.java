@@ -23,6 +23,10 @@ public class EllieService {
                 .helloKorean(ellieProperties.getHelloKorean())
                 .offerAcceptedTitle(ellieProperties.getOfferAcceptedTitle())
                 .offerAcceptedBody(ellieProperties.getOfferAcceptedBody())
+                .offerAcceptedTooltip(ellieProperties.getOfferAcceptedTooltip())
+                .authenticationTooltip(ellieProperties.getAuthenticationTooltip())
+                .modalMessage(ellieProperties.getModalMessage())
+                .modalTitle(ellieProperties.getModalTitle())
                 .build();
     }
 }
