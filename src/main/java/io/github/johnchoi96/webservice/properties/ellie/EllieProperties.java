@@ -22,4 +22,8 @@ public class EllieProperties {
     private String offerAcceptedTitle;
 
     private String offerAcceptedBody;
+
+    private String offerAcceptedTooltip;
+
+    private String authenticationTooltip;
 }
