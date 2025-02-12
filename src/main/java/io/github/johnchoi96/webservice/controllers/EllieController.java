@@ -5,6 +5,8 @@ import io.github.johnchoi96.webservice.services.EllieService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +25,11 @@ public class EllieController {
 
     private final EllieService service;
 
+    private final Environment environment;
+
     @GetMapping(value = "/check")
     public ResponseEntity<Boolean> checkPassword(@RequestParam final String password) {
-        if (!isAfterValentines()) {
+        if (!isLocal() && !isAfterValentines()) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(service.checkPassword(password));
@@ -33,7 +37,7 @@ public class EllieController {
 
     @GetMapping(value = "/payload")
     public ResponseEntity<ElliePayload> getPayload() {
-        if (!isAfterValentines()) {
+        if (!isLocal() && !isAfterValentines()) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(service.getPayload());
@@ -46,5 +50,9 @@ public class EllieController {
         );
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/New_York"));
         return now.isAfter(targetDate);
+    }
+
+    private boolean isLocal() {
+        return environment.acceptsProfiles(Profiles.of("local"));
     }
 }
