@@ -26,4 +26,8 @@ public class EllieProperties {
     private String offerAcceptedTooltip;
 
     private String authenticationTooltip;
+
+    private String modalMessage;
+
+    private String modalTitle;
 }

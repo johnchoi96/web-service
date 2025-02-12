@@ -25,6 +25,8 @@ public class EllieService {
                 .offerAcceptedBody(ellieProperties.getOfferAcceptedBody())
                 .offerAcceptedTooltip(ellieProperties.getOfferAcceptedTooltip())
                 .authenticationTooltip(ellieProperties.getAuthenticationTooltip())
+                .modalMessage(ellieProperties.getModalMessage())
+                .modalTitle(ellieProperties.getModalTitle())
                 .build();
     }
 }
