@@ -1,7 +1,7 @@
 spring:
   config:
     import:
-      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, file:secrets/datasource.yml
+      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, file:secrets/datasource.yml, file:secrets/ellie.yml
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
