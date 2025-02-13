@@ -45,7 +45,7 @@ public class EllieController {
 
     private boolean isAfterValentines() {
         final ZonedDateTime targetDate = ZonedDateTime.of(
-                2025, 2, 14, 9, 0, 0, 0,
+                2025, 2, 14, 17, 0, 0, 0,
                 ZoneId.of("America/New_York")
         );
         final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/New_York"));
