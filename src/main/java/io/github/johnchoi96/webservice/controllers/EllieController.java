@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 @RestController
 @RequestMapping(value = "/api/ellie")
 @RequiredArgsConstructor
@@ -29,27 +26,18 @@ public class EllieController {
 
     @GetMapping(value = "/check")
     public ResponseEntity<Boolean> checkPassword(@RequestParam final String password) {
-        if (!isLocal() && !isAfterValentines()) {
-            return ResponseEntity.badRequest().build();
+        if (isLocal()) {
+            return ResponseEntity.ok(service.checkPassword(password));
         }
-        return ResponseEntity.ok(service.checkPassword(password));
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/payload")
     public ResponseEntity<ElliePayload> getPayload() {
-        if (!isLocal() && !isAfterValentines()) {
-            return ResponseEntity.badRequest().build();
+        if (isLocal()) {
+            return ResponseEntity.ok(service.getPayload());
         }
-        return ResponseEntity.ok(service.getPayload());
-    }
-
-    private boolean isAfterValentines() {
-        final ZonedDateTime targetDate = ZonedDateTime.of(
-                2025, 2, 14, 17, 0, 0, 0,
-                ZoneId.of("America/New_York")
-        );
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/New_York"));
-        return now.isAfter(targetDate);
+        return ResponseEntity.badRequest().build();
     }
 
     private boolean isLocal() {
