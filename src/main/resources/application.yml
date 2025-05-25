@@ -33,6 +33,8 @@ server:
 gcp:
   firebase:
     serviceAccount: secrets/firebase-service-account.json
+  drive:
+    serviceAccount: secrets/google-drive-service-account.json
 
 logging:
   file:
