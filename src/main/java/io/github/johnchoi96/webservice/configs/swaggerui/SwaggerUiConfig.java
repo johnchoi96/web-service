@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerUiConfig {
@@ -19,8 +22,15 @@ public class SwaggerUiConfig {
 
     @Bean
     public OpenAPI springShopOpenAPI() {
+        final List<Server> servers = new LinkedList<>();
+        final Server deployedServer = new Server().url("https://web-service.johnchoi96.com");
+        final Server localServer = new Server().url("http://localhost:8080");
+        servers.add(deployedServer);
+        if (environment.acceptsProfiles(Profiles.of("local"))) {
+            servers.addFirst(localServer);
+        }
+
         final OpenAPI config = new OpenAPI()
-                .addServersItem(new Server().url("https://web-service.johnchoi96.com"))
                 .info(new Info()
                         .title("web-service")
                         .description("@johnchoi96's personal web service")
@@ -35,9 +45,8 @@ public class SwaggerUiConfig {
                                 .url("http://springdoc.org")
                         )
                 );
-        if (environment.acceptsProfiles(Profiles.of("local"))) {
-            config.addServersItem(new Server().url("http://localhost:8080"));
-        }
+
+        config.setServers(servers);
         return config;
     }
 }
