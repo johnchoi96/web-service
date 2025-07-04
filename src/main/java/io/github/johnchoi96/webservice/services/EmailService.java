@@ -117,6 +117,7 @@ public class EmailService {
     public void notifyException(final Exception exception) {
         // determine active profile. If local, don't do anything
         if (Arrays.asList(environment.getActiveProfiles()).contains("local")) {
+            log.error("Logging exception: ", exception);
             log.info("Local profile activated. Email will not be sent.");
             return;
         }
