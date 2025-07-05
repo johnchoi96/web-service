@@ -28,8 +28,8 @@ public class UpsetGameFactory {
                 .location(gameDetail.getVenue())
                 .bowlName(gameDetail.getNotes())
                 .timestamp(gameDetail.getStartDate())
-                .neutralSite(gameDetail.isNeutralSite())
-                .conferenceGame(gameDetail.isConferenceGame());
+                .neutralSite(gameDetail.getIsNeutralSite())
+                .conferenceGame(gameDetail.getIsConferenceGame());
         if (gameDetail.getHomePoints() < gameDetail.getAwayPoints()) {
             builder.winningTeamName(gameDetail.getAwayTeam());
         } else {

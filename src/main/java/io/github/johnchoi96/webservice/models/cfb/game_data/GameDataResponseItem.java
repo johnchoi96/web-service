@@ -12,38 +12,40 @@ import java.util.List;
 public class GameDataResponseItem {
     private String venue;
 
-    private int week;
+    private Integer week;
 
     private String notes;
 
     private String awayTeam;
 
-    private boolean startTimeTBD;
+    private Boolean startTimeTBD;
 
     private String homeClassification;
 
-    private int homePostgameElo;
+    private Integer homePostgameElo;
 
-    private boolean conferenceGame;
+    @JsonProperty(value = "conferenceGame")
+    private Boolean isConferenceGame;
 
-    private int homePostgameWinProbability;
+    private Integer homePostgameWinProbability;
 
-    private int awayPregameElo;
+    private Integer awayPregameElo;
 
-    private int venueId;
+    private Integer venueId;
 
     @JsonProperty(value = "season")
-    private int seasonYear;
+    private Integer seasonYear;
 
     private String homeTeam;
 
-    private int id;
+    private Integer id;
 
     private List<Integer> awayLineScores;
 
-    private boolean neutralSite;
+    @JsonProperty(value = "neutralSite")
+    private Boolean isNeutralSite;
 
-    private int homeId;
+    private Integer homeId;
 
     private String awayConference;
 
@@ -51,30 +53,31 @@ public class GameDataResponseItem {
 
     private String homeConference;
 
-    private int awayId;
+    private Integer awayId;
 
-    private int awayPoints;
+    private Integer awayPoints;
 
-    private int homePoints;
+    private Integer homePoints;
 
-    private boolean completed;
+    @JsonProperty(value = "completed")
+    private Boolean isCompleted;
 
-    private int awayPostgameElo;
+    private Integer awayPostgameElo;
 
-    private int homePregameElo;
+    private Integer homePregameElo;
 
     private List<Integer> homeLineScores;
 
     private String highlights;
 
-    private int excitementIndex;
+    private Integer excitementIndex;
 
     private String awayClassification;
 
-    private int awayPostgameWinProbability;
+    private Integer awayPostgameWinProbability;
 
     @JsonDeserialize(using = StringInstantDeserializer.class)
     private Instant startDate;
 
-    private int attendance;
+    private Integer attendance;
 }
