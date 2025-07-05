@@ -3,7 +3,6 @@ package io.github.johnchoi96.webservice.clients;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import io.github.johnchoi96.webservice.models.cfb.calendar.CalendarResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.game_data.GameDataResponseItem;
 import io.github.johnchoi96.webservice.models.cfb.rankings.RankingResponseItem;
@@ -11,15 +10,18 @@ import io.github.johnchoi96.webservice.models.cfb.win_probability.WinProbability
 import io.github.johnchoi96.webservice.properties.api.CollegeFootballDataProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -50,6 +52,7 @@ public class CfbClient {
         return getAllRankings(year, ATTEMPTS);
     }
 
+    @Cacheable(value = "cfbRankings", key = "#year + '-' + #week + '-' + #seasonType")
     public List<RankingResponseItem> getRankingForWeek(final int year, final int week, final String seasonType) throws JsonProcessingException {
         return getRankingForWeek(year, week, seasonType, ATTEMPTS);
     }
@@ -84,9 +87,9 @@ public class CfbClient {
                 log.error("502 error never got resolved.", e);
                 return null;
             }
-            log.info("502 error occurred. Attempts left: {}", attempts);
+            log.debug("502 error occurred. Attempts left: {}", attempts);
             try {
-                log.info("Sleeping for 10 seconds");
+                log.debug("Sleeping for 10 seconds");
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
@@ -120,9 +123,9 @@ public class CfbClient {
                 log.error("502 error never got resolved.", e);
                 return null;
             }
-            log.info("502 error occurred. Attempts left: {}", attempts);
+            log.debug("502 error occurred. Attempts left: {}", attempts);
             try {
-                log.info("Sleeping for 10 seconds");
+                log.debug("Sleeping for 10 seconds");
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
@@ -152,9 +155,9 @@ public class CfbClient {
                 log.error("502 error never got resolved.", e);
                 return null;
             }
-            log.info("502 error occurred. Attempts left: {}", attempts);
+            log.debug("502 error occurred. Attempts left: {}", attempts);
             try {
-                log.info("Sleeping for 10 seconds");
+                log.debug("Sleeping for 10 seconds");
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
@@ -189,9 +192,9 @@ public class CfbClient {
                 log.error("502 error never got resolved.", e);
                 return null;
             }
-            log.info("502 error occurred. Attempts left: {}", attempts);
+            log.debug("502 error occurred. Attempts left: {}", attempts);
             try {
-                log.info("Sleeping for 10 seconds");
+                log.debug("Sleeping for 10 seconds");
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
@@ -221,20 +224,50 @@ public class CfbClient {
                     String.class
             );
         } catch (final HttpServerErrorException e) {
+            // NOTE: handles server errors like 502. Retries after 10 seconds
+            // until attempts value reaches 0.
             if (attempts <= 0) {
                 log.error("502 error never got resolved.", e);
                 return null;
             }
-            log.info("502 error occurred. Attempts left: {}", attempts);
+            log.debug("502 error occurred. Attempts left: {}", attempts);
             try {
-                log.info("Sleeping for 10 seconds");
+                log.debug("Sleeping for 10 seconds");
                 Thread.sleep(1000 * 10);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
             return getGameData(seasonType, year, gameId, attempts - 1);
+        } catch (final HttpClientErrorException.TooManyRequests e) {
+            /* NOTE: if getting rate-limited by the client (429 status code), do:
+            1. Get the retry-after value in seconds
+            2. Sleep for the seconds specified. If Retry-After value not available, does not sleep
+            3. Try to get the game data again
+            4. If no more attempts available, throw exception
+             */
+            log.debug("Retry-After: {} seconds", e.getResponseHeaders() != null ? e.getResponseHeaders().getFirst("Retry-After") : "");
+            int retryAfterSeconds = 0;
+            if (e.getResponseHeaders() != null && e.getResponseHeaders().getFirst("Retry-After") != null) {
+                try {
+                    retryAfterSeconds = Integer.parseUnsignedInt(Objects.requireNonNull(e.getResponseHeaders().getFirst("Retry-After")));
+                } catch (final NumberFormatException numberFormatException) {
+                    log.debug("No retry-after seconds provided");
+                }
+            }
+            if (attempts <= 0) {
+                log.error("429 error never got resolved.", e);
+                return null;
+            }
+            log.debug("429 error occurred. Attempts left: {}", attempts);
+            try {
+                log.debug("Sleeping for {} seconds", retryAfterSeconds);
+                Thread.sleep(1000L * retryAfterSeconds);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            return getGameData(seasonType, year, gameId, attempts - 1);
         }
-        final ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        final ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(result.getBody(), new TypeReference<>() {
             });
