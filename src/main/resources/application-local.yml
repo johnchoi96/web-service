@@ -4,7 +4,7 @@ spring:
 
 logging:
   level:
-    root: INFO  # ERROR, WARN, INFO, DEBUG, or TRACE.
+    root: DEBUG  # ERROR, WARN, INFO, DEBUG, or TRACE.
 
 scheduler:
   enabled: false

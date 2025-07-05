@@ -14,67 +14,67 @@ public class GameDataResponseItem {
 
     private int week;
 
-    private Float awayPostWinProb;
-
     private String notes;
-
-    private boolean startTimeTbd;
 
     private String awayTeam;
 
-    private int awayId;
+    private boolean startTimeTBD;
 
-    private Float homePostWinProb;
+    private String homeClassification;
 
-    private String seasonType;
+    private int homePostgameElo;
 
-    private int homePoints;
+    private boolean conferenceGame;
+
+    private int homePostgameWinProbability;
 
     private int awayPregameElo;
 
-    private String homeConference;
-
-    private int awayPoints;
-
-    private int homePregameElo;
+    private int venueId;
 
     @JsonProperty(value = "season")
     private int seasonYear;
 
-    private int awayPostgameElo;
-
-    private int homeId;
-
-    private int homePostgameElo;
+    private String homeTeam;
 
     private int id;
 
-    private String awayConference;
-
-    private int venueId;
-
-    @JsonDeserialize(using = StringInstantDeserializer.class)
-    private Instant startDate;
+    private List<Integer> awayLineScores;
 
     private boolean neutralSite;
 
-    private boolean conferenceGame;
+    private int homeId;
 
-    private String awayDivision;
+    private String awayConference;
 
-    private Float excitementIndex;
+    private String seasonType;
+
+    private String homeConference;
+
+    private int awayId;
+
+    private int awayPoints;
+
+    private int homePoints;
 
     private boolean completed;
 
-    private List<Integer> awayLineScores;
+    private int awayPostgameElo;
 
-    private String homeDivision;
+    private int homePregameElo;
 
     private List<Integer> homeLineScores;
 
     private String highlights;
 
-    private String homeTeam;
+    private int excitementIndex;
+
+    private String awayClassification;
+
+    private int awayPostgameWinProbability;
+
+    @JsonDeserialize(using = StringInstantDeserializer.class)
+    private Instant startDate;
 
     private int attendance;
 }
