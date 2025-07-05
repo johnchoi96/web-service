@@ -52,7 +52,7 @@ public class CfbClient {
         return getAllRankings(year, ATTEMPTS);
     }
 
-    @Cacheable(value = "cfbRankings", key = "#year + '-' + #week + '-' + #seasonType")
+    @Cacheable(value = "getRankingForWeek", key = "#year + '-' + #week + '-' + #seasonType")
     public List<RankingResponseItem> getRankingForWeek(final int year, final int week, final String seasonType) throws JsonProcessingException {
         return getRankingForWeek(year, week, seasonType, ATTEMPTS);
     }
