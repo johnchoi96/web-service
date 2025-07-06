@@ -18,6 +18,7 @@ public class WinProbabilityResponseItem {
 
     private String homeTeam;
 
+    @JsonProperty(value = "homeWinProbability")
     private Float homeWinProb;
 
     private Float spread;

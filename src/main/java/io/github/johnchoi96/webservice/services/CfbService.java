@@ -352,7 +352,7 @@ public class CfbService {
             var homeRank = getTeamRankForWeek(gameDetail.getHomeTeam(), gameDetail);
             var awayRank = getTeamRankForWeek(gameDetail.getAwayTeam(), gameDetail);
             var upsetType = isUpset(probability, gameDetail, homeRank, awayRank);
-            if (gameDetail.isCompleted() && upsetType != null) {
+            if (gameDetail.getIsCompleted() && upsetType != null) {
                 final UpsetGame game = UpsetGameFactory.build(homeRank, awayRank, upsetType, gameDetail, probability);
                 upsets.add(game);
             }

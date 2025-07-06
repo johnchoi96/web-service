@@ -12,69 +12,72 @@ import java.util.List;
 public class GameDataResponseItem {
     private String venue;
 
-    private int week;
-
-    private Float awayPostWinProb;
+    private Integer week;
 
     private String notes;
 
-    private boolean startTimeTbd;
-
     private String awayTeam;
 
-    private int awayId;
+    private Boolean startTimeTBD;
 
-    private Float homePostWinProb;
+    private String homeClassification;
 
-    private String seasonType;
+    private Integer homePostgameElo;
 
-    private int homePoints;
+    @JsonProperty(value = "conferenceGame")
+    private Boolean isConferenceGame;
 
-    private int awayPregameElo;
+    private Integer homePostgameWinProbability;
 
-    private String homeConference;
+    private Integer awayPregameElo;
 
-    private int awayPoints;
-
-    private int homePregameElo;
+    private Integer venueId;
 
     @JsonProperty(value = "season")
-    private int seasonYear;
+    private Integer seasonYear;
 
-    private int awayPostgameElo;
+    private String homeTeam;
 
-    private int homeId;
-
-    private int homePostgameElo;
-
-    private int id;
-
-    private String awayConference;
-
-    private int venueId;
-
-    @JsonDeserialize(using = StringInstantDeserializer.class)
-    private Instant startDate;
-
-    private boolean neutralSite;
-
-    private boolean conferenceGame;
-
-    private String awayDivision;
-
-    private Float excitementIndex;
-
-    private boolean completed;
+    private Integer id;
 
     private List<Integer> awayLineScores;
 
-    private String homeDivision;
+    @JsonProperty(value = "neutralSite")
+    private Boolean isNeutralSite;
+
+    private Integer homeId;
+
+    private String awayConference;
+
+    private String seasonType;
+
+    private String homeConference;
+
+    private Integer awayId;
+
+    private Integer awayPoints;
+
+    private Integer homePoints;
+
+    @JsonProperty(value = "completed")
+    private Boolean isCompleted;
+
+    private Integer awayPostgameElo;
+
+    private Integer homePregameElo;
 
     private List<Integer> homeLineScores;
 
     private String highlights;
 
-    private String homeTeam;
+    private Integer excitementIndex;
 
-    private int attendance;
+    private String awayClassification;
+
+    private Integer awayPostgameWinProbability;
+
+    @JsonDeserialize(using = StringInstantDeserializer.class)
+    private Instant startDate;
+
+    private Integer attendance;
 }
