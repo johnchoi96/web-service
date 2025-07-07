@@ -22,7 +22,7 @@ public class GoogleDriveConfig {
     private final GoogleProperties googleProperties;
 
     @Bean
-    public Drive createDrive(@Qualifier("googleDriveCredentials") GoogleCredentials credentials) throws IOException {
+    public Drive createDrive(@Qualifier("driveCredentials") GoogleCredentials credentials) throws IOException {
         try (final InputStream is = googleProperties.getServiceAccountAsResource().getInputStream()) {
             final HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(
                     credentials);
