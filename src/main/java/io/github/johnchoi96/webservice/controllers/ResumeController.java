@@ -26,7 +26,7 @@ import java.io.IOException;
 @RequestMapping(value = "/api/resume")
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Resume")
+@Tag(name = "Resume", description = "APIs related to resume.")
 public class ResumeController {
 
     private final ResumeService resumeService;
