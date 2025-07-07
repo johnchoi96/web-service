@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
@@ -22,16 +20,16 @@ public class ResumeService {
 
     private final S3Client s3Client;
 
-    public void refreshResume() {
+    public void refreshResume() throws IOException {
         try {
-            // try download the resume doc
-            final Path tempFilePath = googleDriveService.downloadResume();
-            // try to upload to S3
-            s3Service.uploadResume(tempFilePath);
-            Files.deleteIfExists(tempFilePath);
+            // get the byte array of the resume
+            final byte[] resumeFile = googleDriveService.downloadResume();
+            // upload to S3
+            s3Service.uploadResume(resumeFile);
         } catch (final IOException e) {
-            log.error("Could not update the resume doc");
+            log.error("Could not update the resume doc", e);
             emailService.notifyException(e);
+            throw e;
         }
     }
 
