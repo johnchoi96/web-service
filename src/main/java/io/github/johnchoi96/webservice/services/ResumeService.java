@@ -28,7 +28,6 @@ public class ResumeService {
             s3Service.uploadResume(resumeFile);
         } catch (final IOException e) {
             log.error("Could not update the resume doc", e);
-            emailService.notifyException(e);
             throw e;
         }
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.concurrent.ExecutionException;
@@ -28,6 +29,8 @@ public class SchedulerService {
     private final CloudFirestoreService cloudFirestoreService;
 
     private final CfbService cfbService;
+
+    private final ResumeService resumeService;
 
     private final EmailService emailService;
 
@@ -129,6 +132,24 @@ public class SchedulerService {
                 emailService.notifyException(e);
             }
             log.info("Finished job for deleteOldPetfinderLogs()");
+        }
+    }
+
+    /**
+     * Every 2 weeks on Saturday at 5am EST.
+     * Downloads copy of the resume from Google Docs and saves to the S3 bucket.
+     */
+    @Scheduled(cron = "0 0 5 ? * SAT/2", zone = InstantUtil.TIMEZONE_US_EAST)
+    public void refreshResume() {
+        if (schedulerEnabled) {
+            log.info("Starting job for refreshResume()");
+            try {
+                resumeService.refreshResume();
+            } catch (final IOException e) {
+                log.error("Error occurred while trying to refresh resume", e);
+                emailService.notifyException(e);
+            }
+            log.info("Finished job for refreshResume()");
         }
     }
 }
