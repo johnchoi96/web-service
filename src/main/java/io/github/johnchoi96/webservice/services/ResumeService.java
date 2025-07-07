@@ -16,8 +16,6 @@ public class ResumeService {
 
     private final GoogleDriveService googleDriveService;
 
-    private final EmailService emailService;
-
     private final S3Client s3Client;
 
     public void refreshResume() throws IOException {
