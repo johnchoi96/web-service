@@ -50,6 +50,7 @@ public class ResumeController {
     )
     @GetMapping(path = "/download", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> downloadResume() {
+        log.info("GET /api/resume/download");
         try {
             final byte[] resume = resumeService.getResume();
             return ResponseEntity.ok()
@@ -76,6 +77,7 @@ public class ResumeController {
     )
     @PutMapping(value = "/refresh")
     public ResponseEntity<?> refreshResume(@Parameter(description = "admin key") @RequestParam final String key) {
+        log.info("PUT /api/resume/refresh");
         if (!adminKeysProperties.getAdminKey().equals(key)) {
             return ResponseEntity.status(HttpStatusCode.UNAUTHORIZED).body("Invalid admin key");
         }
