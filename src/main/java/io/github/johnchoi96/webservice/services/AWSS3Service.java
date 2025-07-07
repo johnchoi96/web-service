@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +24,21 @@ public class AWSS3Service {
 
     private final EmailService emailService;
 
-    public void uploadResume(final Path path) {
-        s3Client.putObject(PutObjectRequest.builder()
+    public void uploadResume(final byte[] resumeFile) {
+        // Build S3 PUT request
+        final PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(s3Properties.getResume().getBucketName())
                 .key(s3Properties.getResume().getObjectName())
                 .contentType("application/pdf")
-                .build(), path);
+                .build();
+
+        // Upload to S3 bucket
+        s3Client.putObject(request, RequestBody.fromBytes(resumeFile));
+
+        log.info("Uploaded document to S3 bucket '{}' with key '{}'",
+                s3Properties.getResume().getBucketName(),
+                s3Properties.getResume().getObjectName()
+        );
     }
 
     public byte[] getResumeObject() throws IOException {
