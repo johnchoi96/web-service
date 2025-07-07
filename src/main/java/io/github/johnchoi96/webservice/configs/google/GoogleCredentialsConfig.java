@@ -11,8 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -25,37 +23,17 @@ public class GoogleCredentialsConfig {
 
     @Bean
     @Qualifier("firebaseCredentials")
-    public GoogleCredentials firebaseCredentials() {
-        try {
-            if (firebaseProperties.getServiceAccount() != null) {
-                try (InputStream is = firebaseProperties.getServiceAccountAsResource().getInputStream()) {
-                    return GoogleCredentials.fromStream(is);
-                }
-            } else {
-                // Use standard credentials chain. Useful when running inside GKE
-                return GoogleCredentials.getApplicationDefault();
-            }
-        } catch (IOException e) {
-            log.error("Error loading service account file: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to load GoogleCredentials from service account file", e);
+    public GoogleCredentials firebaseCredentials() throws IOException {
+        try (var stream = firebaseProperties.getServiceAccountAsResource().getInputStream()) {
+            return GoogleCredentials.fromStream(stream);
         }
     }
 
     @Bean
-    @Qualifier("googleDriveCredentials")
-    public GoogleCredentials googleDriveCredentials() {
-        try {
-            if (googleProperties.getServiceAccount() != null) {
-                try (InputStream is = googleProperties.getServiceAccountAsResource().getInputStream()) {
-                    return GoogleCredentials.fromStream(is).createScoped(List.of(DriveScopes.DRIVE_FILE));
-                }
-            } else {
-                // Use standard credentials chain. Useful when running inside GKE
-                return GoogleCredentials.getApplicationDefault();
-            }
-        } catch (IOException e) {
-            log.error("Error loading service account file: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to load GoogleCredentials from service account file", e);
+    @Qualifier("driveCredentials")
+    public GoogleCredentials driveCredentials() throws IOException {
+        try (var stream = googleProperties.getServiceAccountAsResource().getInputStream()) {
+            return GoogleCredentials.fromStream(stream).createScoped(DriveScopes.DRIVE);
         }
     }
 }

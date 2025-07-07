@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
+
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +27,7 @@ public class FirebaseAppConfig {
     private static boolean firebaseInitialized = false;
 
     @Bean
-    public Firestore firestore(@Qualifier("firebaseCredentials") GoogleCredentials googleCredentials) {
+    public Firestore firestore(@Qualifier("firebaseCredentials") GoogleCredentials googleCredentials) throws IOException {
         return FirestoreClient.getFirestore(firebaseApp(googleCredentialsConfig.firebaseCredentials()));
     }
 
