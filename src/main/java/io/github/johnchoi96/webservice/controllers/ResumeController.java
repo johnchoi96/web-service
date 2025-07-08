@@ -49,13 +49,17 @@ public class ResumeController {
             }
     )
     @GetMapping(path = "/download", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> downloadResume() {
+    public ResponseEntity<byte[]> downloadResume(@RequestParam(required = false, value = "attachment") Boolean isAttachment) {
         log.info("GET /api/resume/download");
         try {
             final byte[] resume = resumeService.getResume();
+            if (isAttachment == null) {
+                isAttachment = false;
+            }
+            final String attachment = isAttachment ? "attachment" : "inline";
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"resume.pdf\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, String.format("%s; filename=\"resume.pdf\"", attachment))
                     .body(resume);
         } catch (final IOException e) {
             log.error("Unable to fetch resume", e);
