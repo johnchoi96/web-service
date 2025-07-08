@@ -1,9 +1,11 @@
 package io.github.johnchoi96.webservice.configs.swaggerui;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +45,14 @@ public class SwaggerUiConfig {
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("http://springdoc.org")
+                        )
+                )
+                .components(new Components()
+                        .addSecuritySchemes(
+                                "basicAuth",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("basic")
                         )
                 );
 
