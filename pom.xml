@@ -22,12 +22,13 @@
                 <role>Owner</role>
                 <role>Developer</role>
             </roles>
-            <timezone>America/New_York</timezone>
+            <timezone>America/Chicago</timezone>
         </developer>
     </developers>
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <google-auth.version>1.34.0</google-auth.version>
     </properties>
     <dependencies>
         <!-- Springframework dependencies-->
@@ -128,6 +129,34 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>3.2.0</version>
+        </dependency>
+        <!-- Google Drive API -->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.35.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-drive</artifactId>
+            <version>v3-rev197-1.25.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <version>${google-auth.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-credentials</artifactId>
+            <version>${google-auth.version}</version>
+        </dependency>
+        <!-- AWS SDK v2 for S3 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.31.40</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <dependencyManagement>
