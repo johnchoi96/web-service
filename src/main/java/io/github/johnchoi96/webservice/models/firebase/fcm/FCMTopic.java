@@ -16,4 +16,12 @@ public enum FCMTopic {
     FCMTopic(final String value) {
         this.value = value;
     }
+
+    public static FCMTopic getTopic(final String value) {
+        try {
+            return FCMTopic.valueOf(value);
+        } catch (final IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

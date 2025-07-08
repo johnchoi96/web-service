@@ -36,6 +36,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(HttpMethod.PUT, "/api/resume/refresh").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/fcm/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/fcm/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/metal-price/trigger-report").hasRole("ADMIN")
                                 .requestMatchers("/actuator/**").authenticated()
                                 .anyRequest().permitAll()
