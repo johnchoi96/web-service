@@ -26,11 +26,11 @@ public class PetfinderController {
     private final EmailService emailService;
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Returns a complete list of adoptable pets in 43235 area.")
-    public ResponseEntity<?> findDogsNear43235() {
+    @Operation(summary = "Returns a complete list of adoptable pets in 78727 area.")
+    public ResponseEntity<?> findDogsNear78727() {
         log.info("GET /api/petfinder/all");
         try {
-            return ResponseEntity.ok(petfinderService.findAllDogsNear43235());
+            return ResponseEntity.ok(petfinderService.findAllDogsNear78727());
         } catch (JsonProcessingException e) {
             emailService.notifyException(e);
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -38,8 +38,10 @@ public class PetfinderController {
     }
 
     @GetMapping(value = "/filtered", produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Returns a list of filtered list of adoptable pets in 43235 area.")
-    public ResponseEntity<?> findFilteredDogsNear43235(@RequestParam(required = false) Integer limit, @RequestParam(required = false) Boolean ignoreKnownPets) {
+    @Operation(summary = "Returns a list of filtered list of adoptable pets in 78727 area.")
+    public ResponseEntity<?> findFilteredDogsNear78727(
+            @RequestParam(required = false) Integer limit,
+            @RequestParam(required = false) Boolean ignoreKnownPets) {
         log.info("GET /api/petfinder/filtered");
         try {
             if (ignoreKnownPets == null) {

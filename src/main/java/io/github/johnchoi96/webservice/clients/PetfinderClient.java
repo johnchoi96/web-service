@@ -39,8 +39,8 @@ public class PetfinderClient {
         return sb.substring(0, sb.length() - 1);
     }
 
-    public List<PetfinderResponse> findAllDogsNear43235(final Set<String> breeds) throws JsonProcessingException {
-        log.info("Starting PetfinderClient.findAllDogsNear43235(Set<String>)");
+    public List<PetfinderResponse> findAllDogsNear78727(final Set<String> breeds) throws JsonProcessingException {
+        log.info("Starting PetfinderClient.findAllDogsNear78727(Set<String>)");
         final String clientId = petfinderApiProperties.getClientId();
         final String clientSecret = petfinderApiProperties.getClientSecret();
         final String tokenUri = petfinderApiProperties.getBearerToken().getUri();
@@ -52,9 +52,13 @@ public class PetfinderClient {
         final String uri = "https://api.petfinder.com/v2/animals";
         int currentPage = 1;
         int finalPage;
-        List<PetfinderResponse> responseList = new ArrayList<>();
+        final List<PetfinderResponse> responseList = new ArrayList<>();
+        final int ZIP_CODE = 78727;
         do {
-            final ResponseEntity<String> result = restTemplate.exchange(String.format("%s?type=dog&location=43235&breed=%s&page=%d", uri, concatenateBreeds(breeds), currentPage), HttpMethod.GET, entity, String.class);
+            final ResponseEntity<String> result = restTemplate.exchange(
+                    String.format("%s?type=dog&location=%d&breed=%s&page=%d",
+                            uri, ZIP_CODE, concatenateBreeds(breeds), currentPage),
+                    HttpMethod.GET, entity, String.class);
 
             final ObjectMapper mapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
             final PetfinderResponse response = mapper.readValue(result.getBody(), PetfinderResponse.class);
@@ -63,7 +67,7 @@ public class PetfinderClient {
             log.info("Querying page {} out of {}", currentPage++, finalPage);
             responseList.add(response);
         } while (currentPage <= finalPage);
-        log.info("Finished PetfinderClient.findAllDogsNear43235(Set<String>)");
+        log.info("Finished PetfinderClient.findAllDogsNear78727(Set<String>)");
         return responseList;
     }
 }
