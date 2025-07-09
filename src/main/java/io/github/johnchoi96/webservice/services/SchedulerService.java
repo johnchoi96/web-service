@@ -38,16 +38,16 @@ public class SchedulerService {
      * Sundays, Mondays, Wednesdays, and Fridays at 9am in CST.
      */
     @Scheduled(cron = "0 0 9 ? * SUN,MON,WED,FRI", zone = InstantUtil.TIMEZONE_US_CENTRAL)
-    public void findDogsNear43235() {
+    public void findDogsNear78727() {
         if (schedulerEnabled) {
-            log.info("Starting job for findDogsNear43235()");
+            log.info("Starting job for findDogsNear78727()");
             final Integer limit = 100;
             try {
                 petfinderService.findFilteredDogsAndNotify(limit);
             } catch (JsonProcessingException | FirebaseMessagingException e) {
                 emailService.notifyException(e);
             }
-            log.info("Finished job for findDogsNear43235()");
+            log.info("Finished job for findDogsNear78727()");
         }
     }
 

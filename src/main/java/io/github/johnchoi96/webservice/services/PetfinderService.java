@@ -45,9 +45,9 @@ public class PetfinderService {
 
     private final PetLogRepo petLogRepo;
 
-    public List<PetfinderResponse> findAllDogsNear43235() throws JsonProcessingException {
+    public List<PetfinderResponse> findAllDogsNear78727() throws JsonProcessingException {
         final Set<String> breeds = petBreedRepo.getBreedList();
-        return petfinderClient.findAllDogsNear43235(breeds);
+        return petfinderClient.findAllDogsNear78727(breeds);
     }
 
     public void findFilteredDogsAndNotify(final Integer limit) throws JsonProcessingException, FirebaseMessagingException {
@@ -58,12 +58,12 @@ public class PetfinderService {
         }
         final StringBuilder petfinderBody = FCMBodyFactory.buildBodyForPetfinder(filteredList);
         final String notificationTitle = "Message from Web Service for Petfinder";
-        final String notificationBody = "Tap to see the filtered list of 43235 dogs!";
+        final String notificationBody = "Tap to see the filtered list of 78727 dogs!";
         fcmService.sendNotification(FCMTopic.PETFINDER, notificationTitle, notificationBody, petfinderBody, true, false);
     }
 
     public List<AnimalsItem> findFilteredDogs(final Integer limit, final boolean ignoreKnownPets) throws JsonProcessingException {
-        final List<PetfinderResponse> petfinderResponses = findAllDogsNear43235();
+        final List<PetfinderResponse> petfinderResponses = findAllDogsNear78727();
         List<AnimalsItem> result = new ArrayList<>();
         petfinderResponses.forEach(response -> result.addAll(response.getAnimals()));
         List<AnimalsItem> list = result.stream().filter(animal -> {
