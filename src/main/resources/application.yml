@@ -23,7 +23,7 @@ management:
         enabled: true
 
 springdoc:
-  packagesToScan: io.github.johnchoi96.webservice
+  packagesToScan: com.johnchoi96.webservice
   swagger-ui:
     path: /api-docs
 

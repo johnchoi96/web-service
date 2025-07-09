@@ -5,7 +5,7 @@
     <envs>
       <env name="spring.profiles.active" value="local" />
     </envs>
-    <option name="MAIN_CLASS_NAME" value="io.github.johnchoi96.webservice.WebServiceApplication" />
+    <option name="MAIN_CLASS_NAME" value="com.johnchoi96.webservice.WebServiceApplication" />
     <module name="web-service" />
     <method v="2">
       <option name="Make" enabled="true" />
