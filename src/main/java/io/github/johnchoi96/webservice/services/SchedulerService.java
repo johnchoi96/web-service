@@ -35,9 +35,9 @@ public class SchedulerService {
     private final EmailService emailService;
 
     /**
-     * Sundays, Mondays, Wednesdays, and Fridays at 9am in EST.
+     * Sundays, Mondays, Wednesdays, and Fridays at 9am in CST.
      */
-    @Scheduled(cron = "0 0 9 ? * SUN,MON,WED,FRI", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 9 ? * SUN,MON,WED,FRI", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void findDogsNear43235() {
         if (schedulerEnabled) {
             log.info("Starting job for findDogsNear43235()");
@@ -52,9 +52,9 @@ public class SchedulerService {
     }
 
     /**
-     * Mon-Fri at 10am in EST.
+     * Mon-Fri at 10am in CST.
      */
-    @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 10 ? * MON,TUE,WED,THU,FRI", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void fetchGoldPriceInfo() {
         if (schedulerEnabled) {
             log.info("Starting job for fetchGoldPriceInfo()");
@@ -68,9 +68,9 @@ public class SchedulerService {
     }
 
     /**
-     * 1st day of every month at 4am EST.
+     * 1st day of every month at 4am CST.
      */
-    @Scheduled(cron = "0 0 4 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 4 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void deleteOldNotificationsInCloudFirestore() {
         if (schedulerEnabled) {
             final int DAYS = 60;
@@ -85,9 +85,9 @@ public class SchedulerService {
     }
 
     /**
-     * At 11:00AM on Sundays.
+     * At 11:00AM CST on Sundays.
      */
-    @Scheduled(cron = "0 0 11 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 11 * * SUN", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void runCurrentWeeksCfbUpsetReport() {
         if (schedulerEnabled) {
             log.info("Starting job for runCurrentWeeksCfbUpsetReport()");
@@ -101,10 +101,10 @@ public class SchedulerService {
     }
 
     /**
-     * At 9:30AM on Sundays.
+     * At 9:30AM CST on Sundays.
      * Collects CFB Upset matches and persists them in the DB.
      */
-    @Scheduled(cron = "0 30 9 * * SUN", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 30 9 * * SUN", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void collectCfbUpsetMatches() {
         if (schedulerEnabled) {
             log.info("Starting job for collectCfbUpsetMatches");
@@ -118,9 +118,9 @@ public class SchedulerService {
     }
 
     /**
-     * 1st day of every month at 3am EST.
+     * 1st day of every month at 3am CST.
      */
-    @Scheduled(cron = "0 0 3 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 3 1 1/1 ?", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void deleteOldPetfinderLogs() {
         if (schedulerEnabled) {
             log.info("Starting job for deleteOldPetfinderLogs()");
@@ -136,10 +136,10 @@ public class SchedulerService {
     }
 
     /**
-     * Every 2 weeks on Saturday at 5am EST.
+     * Every 2 weeks on Saturday at 5am CST.
      * Downloads copy of the resume from Google Docs and saves to the S3 bucket.
      */
-    @Scheduled(cron = "0 0 5 ? * SAT/2", zone = InstantUtil.TIMEZONE_US_EAST)
+    @Scheduled(cron = "0 0 5 ? * SAT/2", zone = InstantUtil.TIMEZONE_US_CENTRAL)
     public void refreshResume() {
         if (schedulerEnabled) {
             log.info("Starting job for refreshResume()");
