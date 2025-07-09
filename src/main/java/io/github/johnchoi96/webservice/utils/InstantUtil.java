@@ -17,7 +17,7 @@ public class InstantUtil {
                               int minute, int second) {
     }
 
-    public final String TIMEZONE_US_EAST = "America/New_York";
+    public final String TIMEZONE_US_CENTRAL = "America/Chicago";
 
     public int getDifferenceInDays(final Instant first, final Instant second) {
         final Duration duration = Duration.between(first, second);
@@ -27,7 +27,7 @@ public class InstantUtil {
 
     public DateObj getDateObject(final Instant instant) {
         // Convert Instant to ZonedDateTime
-        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_EAST));
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_CENTRAL));
 
         // Extract Year, Month, and Day
         int year = zonedDateTime.getYear();
@@ -38,7 +38,7 @@ public class InstantUtil {
 
     public DateTimeObj getDateTimeObject(final Instant instant) {
         // Convert Instant to ZonedDateTime
-        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_EAST));
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of(TIMEZONE_US_CENTRAL));
 
         // Extract Year, Month, and Day
         int year = zonedDateTime.getYear();
