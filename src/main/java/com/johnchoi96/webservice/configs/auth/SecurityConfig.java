@@ -67,13 +67,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "https://johnchoi96.com"
-        ));
+
+        if (environment.acceptsProfiles(Profiles.of("local"))) {
+            config.setAllowedOriginPatterns(List.of("*")); // this is OK in dev
+        } else {
+            config.setAllowedOrigins(List.of("https://johnchoi96.com"));
+        }
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // important for cookies or auth headers
+        config.setAllowCredentials(true); // needed if using basic auth or cookies
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
