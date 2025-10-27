@@ -25,7 +25,7 @@ public class AuthController {
         final String email = jwt.getClaimAsString("email");
 
         if (!userService.isActiveUser(email)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access denied");
         }
 
         return ResponseEntity.ok().build();
