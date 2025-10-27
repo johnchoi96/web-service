@@ -27,18 +27,18 @@ public class AppMetadataEntity {
     @Column(name = "ID")
     private Long id;
 
-    @Column(name = "APP_ID")
+    @Column(name = "APP_ID", unique = true)
     private String appId;
 
     @Column(name = "VERSION")
     private String version;
 
     /**
-     * This has to match the bucket name in S3, if applicable.
-     * If bucketName is null, not distributable
+     * This has to match the folder name in S3, if applicable.
+     * If appName is null, not distributable
      */
-    @Column(name = "BUCKET_NAME")
-    private String bucketName;
+    @Column(name = "APP_NAME")
+    private String appName;
 
     @Column(name = "VIEW_PERMISSION")
     @Enumerated(EnumType.STRING)

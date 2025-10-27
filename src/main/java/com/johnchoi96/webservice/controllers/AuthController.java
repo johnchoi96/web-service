@@ -1,6 +1,7 @@
 package com.johnchoi96.webservice.controllers;
 
 import com.johnchoi96.webservice.services.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/auth")
 @RequiredArgsConstructor
 @Slf4j
+@Hidden
 public class AuthController {
 
     private final UserService userService;

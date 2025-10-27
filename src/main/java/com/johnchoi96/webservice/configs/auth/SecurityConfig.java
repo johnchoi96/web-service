@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.PUT, "/api/resume/refresh").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/app-distribution/upload").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/fcm/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/fcm/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/metal-price/trigger-report").hasRole("ADMIN")

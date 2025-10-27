@@ -24,6 +24,16 @@ public class AppMetadataService {
 
     public List<AppMetadataEntity> getDistributableAppsForRole(@NonNull final UserRole userRole) {
         final List<AppMetadataEntity> apps = appMetadataRepo.getAllApps();
-        return apps.stream().filter(app -> app.getBucketName() != null && userRole.canAccess(app.getRequiredPermission())).toList();
+        return apps.stream().filter(app -> app.getAppName() != null && userRole.canAccess(app.getRequiredPermission())).toList();
+    }
+
+    public Optional<AppMetadataEntity> getAppMetadataByBundleId(@NonNull final String appId) {
+        return appMetadataRepo.getAppMetadataWithAppId(appId);
+    }
+
+    public void updateVersion(@NonNull final AppMetadataEntity appMetadata, @NonNull final String newVersion) {
+        appMetadata.setVersion(newVersion);
+
+        appMetadataRepo.save(appMetadata);
     }
 }

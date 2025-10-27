@@ -13,6 +13,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://securetoken.google.com/johnchoi96-ui
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
 
 management:
   endpoints:

@@ -55,4 +55,46 @@ public class AWSS3Service {
             throw e;
         }
     }
+
+    public void uploadIpa(final byte[] ipaFile, final String appName) {
+        // Build S3 PUT request
+        final String ipaFilePath = String.format("%s/%s",
+                appName,
+                s3Properties.getAppleIpa().getIpaFile()
+        );
+        final PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(s3Properties.getAppleIpa().getBucketName())
+                .key(ipaFilePath)
+                .contentType("application/ipa")
+                .build();
+
+        // Upload to S3 bucket
+        s3Client.putObject(request, RequestBody.fromBytes(ipaFile));
+
+        log.info("Uploaded IPA file to S3 bucket '{}' with path '{}'",
+                s3Properties.getAppleIpa().getBucketName(),
+                ipaFilePath
+        );
+    }
+
+    public void uploadManifestPlist(final byte[] manifestFile, final String appName) {
+        // Build S3 PUT request
+        final String manifestFilePath = String.format("%s/%s",
+                appName,
+                s3Properties.getAppleIpa().getManifestFile()
+        );
+        final PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(s3Properties.getAppleIpa().getBucketName())
+                .key(manifestFilePath)
+                .contentType("application/plist")
+                .build();
+
+        // Upload to S3 bucket
+        s3Client.putObject(request, RequestBody.fromBytes(manifestFile));
+
+        log.info("Uploaded manifest to S3 bucket '{}' with path '{}'",
+                s3Properties.getAppleIpa().getBucketName(),
+                manifestFilePath
+        );
+    }
 }
