@@ -1,13 +1,18 @@
 spring:
   config:
     import:
-      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, file:secrets/datasource.yml, file:secrets/ellie.yml
+      file:secrets/apikeys.yml, file:secrets/admin-keys.yml, file:secrets/datasource.yml
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://securetoken.google.com/johnchoi96-ui
 
 management:
   endpoints:
