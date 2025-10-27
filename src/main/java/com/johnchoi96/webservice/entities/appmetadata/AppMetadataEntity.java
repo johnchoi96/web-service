@@ -40,7 +40,7 @@ public class AppMetadataEntity {
     @Column(name = "APP_NAME")
     private String appName;
 
-    @Column(name = "VIEW_PERMISSION")
+    @Column(name = "ACCESS_PERMISSION")
     @Enumerated(EnumType.STRING)
     private UserRole requiredPermission;
 
