@@ -10,5 +10,6 @@
     <include file="changelog/CREATE_CFB_TABLES.xml" relativeToChangelogFile="true"/>
     <include file="changelog/ALTER_CFB_TABLES.xml" relativeToChangelogFile="true"/>
     <include file="changelog/CREATE_USER_TABLES.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/ALTER_APP_METADATA_TABLE.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -21,6 +21,7 @@ public class AuthController {
 
     @GetMapping("/check-access")
     public ResponseEntity<String> checkUserAccess(@AuthenticationPrincipal Jwt jwt) {
+        log.info("GET /api/auth/check-access");
         final String email = jwt.getClaimAsString("email");
 
         if (!userService.isActiveUser(email)) {

@@ -1,8 +1,11 @@
 package com.johnchoi96.webservice.entities.appmetadata;
 
+import com.johnchoi96.webservice.entities.user.UserRole;
 import com.johnchoi96.webservice.models.AppVersion;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,6 +32,17 @@ public class AppMetadataEntity {
 
     @Column(name = "VERSION")
     private String version;
+
+    /**
+     * This has to match the bucket name in S3, if applicable.
+     * If bucketName is null, not distributable
+     */
+    @Column(name = "BUCKET_NAME")
+    private String bucketName;
+
+    @Column(name = "VIEW_PERMISSION")
+    @Enumerated(EnumType.STRING)
+    private UserRole requiredPermission;
 
     public AppVersion buildResponse() {
         return AppVersion.builder().version(this.getVersion()).build();

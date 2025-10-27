@@ -15,8 +15,12 @@ public class UserService {
 
     private final UserRepo userRepo;
 
+    public Optional<UserEntity> getUserByEmail(final String email) {
+        return userRepo.getUserByEmail(email);
+    }
+
     public boolean isActiveUser(final String email) {
-        final Optional<UserEntity> optionalUserEntity = userRepo.getUserByEmail(email);
+        final Optional<UserEntity> optionalUserEntity = getUserByEmail(email);
         final boolean userPresent = optionalUserEntity.isPresent() && optionalUserEntity.get().isActive();
         // if user does not exist, add the record to the database for future review
         if (!userPresent) {

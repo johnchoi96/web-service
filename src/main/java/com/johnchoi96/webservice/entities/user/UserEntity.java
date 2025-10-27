@@ -33,9 +33,6 @@ public class UserEntity {
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    /**
-     * If role is null, user is authenticated but is not
-     */
     @Builder.Default
     @Column(name = "ROLE", nullable = false)
     @Enumerated(EnumType.STRING)

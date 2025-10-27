@@ -1,12 +1,14 @@
 package com.johnchoi96.webservice.services;
 
 import com.johnchoi96.webservice.entities.appmetadata.AppMetadataEntity;
+import com.johnchoi96.webservice.entities.user.UserRole;
 import com.johnchoi96.webservice.models.AppVersion;
 import com.johnchoi96.webservice.repos.appmetadata.AppMetadataRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +20,10 @@ public class AppMetadataService {
     public AppVersion getLatestVersion(@NonNull final String appId) {
         final Optional<AppMetadataEntity> entity = appMetadataRepo.getAppMetadataWithAppId(appId);
         return entity.map(AppMetadataEntity::buildResponse).orElse(null);
+    }
+
+    public List<AppMetadataEntity> getDistributableAppsForRole(@NonNull final UserRole userRole) {
+        final List<AppMetadataEntity> apps = appMetadataRepo.getAllApps();
+        return apps.stream().filter(app -> app.getBucketName() != null && userRole.canAccess(app.getRequiredPermission())).toList();
     }
 }
