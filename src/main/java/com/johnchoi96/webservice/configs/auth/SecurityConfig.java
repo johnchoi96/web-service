@@ -71,7 +71,10 @@ public class SecurityConfig {
         if (environment.acceptsProfiles(Profiles.of("local"))) {
             config.setAllowedOriginPatterns(List.of("*")); // this is OK in dev
         } else {
-            config.setAllowedOriginPatterns(List.of("https://*.johnchoi96.com"));
+            config.setAllowedOriginPatterns(List.of(
+                    "https://johnchoi96.com",
+                    "https://*.johnchoi96.com"
+            ));
         }
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
