@@ -15,8 +15,8 @@ spring:
           issuer-uri: https://securetoken.google.com/johnchoi96-ui
   servlet:
     multipart:
-      max-file-size: 200MB
-      max-request-size: 200MB
+      max-file-size: 700MB
+      max-request-size: 700MB
 
 management:
   endpoints:
