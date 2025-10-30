@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -56,20 +57,21 @@ public class AWSS3Service {
         }
     }
 
-    public void uploadIpa(final byte[] ipaFile, final String appName) {
+    public void uploadIpa(final InputStream ipaInputStream, final long fileSize, final String appName) {
         // Build S3 PUT request
         final String ipaFilePath = String.format("%s/%s",
                 appName,
                 s3Properties.getAppleIpa().getIpaFile()
         );
+
         final PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(s3Properties.getAppleIpa().getBucketName())
                 .key(ipaFilePath)
-                .contentType("application/ipa")
+                .contentType("application/octet-stream")
                 .build();
 
-        // Upload to S3 bucket
-        s3Client.putObject(request, RequestBody.fromBytes(ipaFile));
+        // Upload stream to S3
+        s3Client.putObject(request, RequestBody.fromInputStream(ipaInputStream, fileSize));
 
         log.info("Uploaded IPA file to S3 bucket '{}' with path '{}'",
                 s3Properties.getAppleIpa().getBucketName(),
