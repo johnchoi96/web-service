@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,20 +65,20 @@ public class AppDistributionService {
     }
 
     public void uploadIpa(final String appId, final String newVersion, final MultipartFile file) throws IOException {
-        // get app name with appId
         final Optional<AppMetadataEntity> optionalAppMetadataEntity = appMetadataService.getAppMetadataByBundleId(appId);
         if (optionalAppMetadataEntity.isEmpty()) {
             throw new IllegalArgumentException("Invalid app ID.");
         }
         final AppMetadataEntity appMetadata = optionalAppMetadataEntity.get();
-        // upload IPA file to S3
-        awss3Service.uploadIpa(file.getBytes(), appMetadata.getAppName());
-        // create manifest.plist
+
+        try (InputStream inputStream = file.getInputStream()) {
+            awss3Service.uploadIpa(inputStream, file.getSize(), appMetadata.getAppName());
+        }
+
+        // create and upload manifest.plist as byte[]
         final byte[] manifestPlistFile = buildManifestPlist(appMetadata, newVersion);
-        // upload manifest.plist file to S3
         awss3Service.uploadManifestPlist(manifestPlistFile, appMetadata.getAppName());
 
-        // upload successful, update our own database with the new version
         appMetadataService.updateVersion(appMetadata, newVersion);
     }
 
