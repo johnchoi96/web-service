@@ -4,6 +4,7 @@ import com.johnchoi96.webservice.entities.appmetadata.AppMetadataEntity;
 import com.johnchoi96.webservice.entities.user.UserRole;
 import com.johnchoi96.webservice.models.AppVersion;
 import com.johnchoi96.webservice.repos.appmetadata.AppMetadataRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class AppMetadataService {
         return appMetadataRepo.getAppMetadataWithAppId(appId);
     }
 
+    @Transactional
     public void updateVersion(@NonNull final AppMetadataEntity appMetadata, @NonNull final String newVersion) {
         appMetadata.setVersion(newVersion);
 

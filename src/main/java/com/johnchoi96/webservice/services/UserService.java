@@ -2,6 +2,7 @@ package com.johnchoi96.webservice.services;
 
 import com.johnchoi96.webservice.entities.user.UserEntity;
 import com.johnchoi96.webservice.repos.user.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class UserService {
         return userRepo.getUserByEmail(email);
     }
 
+    @Transactional
     public boolean isActiveUser(final String email) {
         final Optional<UserEntity> optionalUserEntity = getUserByEmail(email);
         final boolean userPresent = optionalUserEntity.isPresent() && optionalUserEntity.get().isActive();
