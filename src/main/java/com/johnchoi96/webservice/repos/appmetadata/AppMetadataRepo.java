@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,4 +17,7 @@ public interface AppMetadataRepo extends JpaRepository<AppMetadataEntity, Long> 
             where entity.appId = :APP_ID
             """)
     Optional<AppMetadataEntity> getAppMetadataWithAppId(@Param("APP_ID") final String appId);
+
+    @Query(value = "select entity from AppMetadataEntity entity")
+    List<AppMetadataEntity> getAllApps();
 }

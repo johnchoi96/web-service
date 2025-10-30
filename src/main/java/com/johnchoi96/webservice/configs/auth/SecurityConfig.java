@@ -19,6 +19,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -32,21 +39,48 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(withDefaults())
+                .csrf(AbstractHttpConfigurer::disable) // done on purpose until this is taken care of
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.PUT, "/api/resume/refresh").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/app-distribution/upload").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/fcm/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/fcm/**").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/api/metal-price/trigger-report").hasRole("ADMIN")
                                 .requestMatchers("/actuator/**").authenticated()
+                                .requestMatchers("/api/auth/**").authenticated()
                                 .anyRequest().permitAll()
                 )
-                .csrf(AbstractHttpConfigurer::disable) // done on purpose until this is taken care of
                 .httpBasic(httpBasic -> {
                     httpBasic.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
                     httpBasic.realmName("Actuator Realm");
-                });
+                })
+                .oauth2ResourceServer(oauth -> oauth
+                        .jwt(jwtConfigurer -> {
+                            // No custom config for now
+                        })
+                );
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        if (environment.acceptsProfiles(Profiles.of("local"))) {
+            config.setAllowedOriginPatterns(List.of("*")); // this is OK in dev
+        } else {
+            config.setAllowedOrigins(List.of("https://johnchoi96.com"));
+        }
+
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true); // needed if using basic auth or cookies
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

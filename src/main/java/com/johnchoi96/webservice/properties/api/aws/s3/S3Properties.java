@@ -13,5 +13,7 @@ public class S3Properties {
 
     private ResumeProperty resume;
 
+    private AppleIPAProperty appleIpa;
+
     private CredentialsProperty credentials;
 }
